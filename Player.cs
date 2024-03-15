@@ -196,11 +196,11 @@ namespace Project_jUMPKING
                 {
                     //충돌 검사
                     switch (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right))
-                    {
+                    {                        
                         case 1:
                             _direction_right *= -1;
                             speedX *= 0.8;
-                            return;
+                            break;
                         case 2:
                             _direction_right = -1;
                             speedX = 0.5;
@@ -212,12 +212,6 @@ namespace Project_jUMPKING
                             speedY = 0;
                             break;
                     }
-                
-                    //if (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right) == 1) // 벽과 충돌 했을 때
-                    //{
-                    //    _direction_right *= -1;
-                    //    speedX *= 0.8;
-                    //}
                     colisionTop = background.Collide((int)_positionX, (int)_positionY, 3) == 1;
                     if (colisionTop) // 천장과 충돌 했을 때
                     {

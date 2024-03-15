@@ -270,7 +270,7 @@ namespace Project_jUMPKING
             Console.Write(sb);            
             for (int i = 1; i < _background.GetLength(0)-1; i++)
             {
-                for (int j = 0; j < _background.GetLength(1)-1; j++)
+                for (int j = 1; j < _background.GetLength(1)-1; j++)
                 {
                     if (j > height - 62)
                     {
@@ -327,9 +327,9 @@ namespace Project_jUMPKING
                     {
                         for (int i = 0; i < 11; i++)
                         {
-                            Console.SetCursorPosition(200, 45 - i * 2);
+                            Console.SetCursorPosition(200, 41 - i * 2);
                             Console.Write("        ");
-                            Console.SetCursorPosition(200, 44 - i * 2);
+                            Console.SetCursorPosition(200, 40 - i * 2);
                             Console.Write("        ");
                         }
                     }
@@ -346,19 +346,26 @@ namespace Project_jUMPKING
                 }
                 continue;
             }
-            if (height < 0)
-            {
-                Console.SetCursorPosition(200, 25);
-            }
             if(power == 1 || power == 52)
             {
                 Console.BackgroundColor = color;
                 for(int i = 0; i < 11; i++)
                 {
-                    Console.SetCursorPosition(200, height + 41- i * 2);
-                    Console.Write("        ");
-                    Console.SetCursorPosition(200, height + 40 - i * 2);
-                    Console.Write("        ");
+                    if(height < 0)
+                    {
+                        Console.SetCursorPosition(200, 41 - i * 2);
+                        Console.Write("        ");
+                        Console.SetCursorPosition(200, 40 - i * 2);
+                        Console.Write("        ");
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(200, height + 41 - i * 2);
+                        Console.Write("        ");
+                        Console.SetCursorPosition(200, height + 40 - i * 2);
+                        Console.Write("        ");
+                    }
+
                 }
             }
             else if (power % 5 == 0)
@@ -397,10 +404,21 @@ namespace Project_jUMPKING
                         break;
                 }
                 Console.BackgroundColor = color;
-                Console.SetCursorPosition(202, height + 42 - (power / 5) * 2);
-                Console.Write("    ");
-                Console.SetCursorPosition(202, height + 41 - (power / 5) * 2);
-                Console.Write("    ");
+                if(height < 0)
+                {
+                    Console.SetCursorPosition(202, 42 - (power / 5) * 2);
+                    Console.Write("    ");
+                    Console.SetCursorPosition(202, 41 - (power / 5) * 2);
+                    Console.Write("    ");
+                }
+                else
+                {
+                    Console.SetCursorPosition(202, height + 42 - (power / 5) * 2);
+                    Console.Write("    ");
+                    Console.SetCursorPosition(202, height + 41 - (power / 5) * 2);
+                    Console.Write("    ");
+                }
+
 
             }
             Console.ResetColor();
