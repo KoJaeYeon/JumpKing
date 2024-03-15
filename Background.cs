@@ -434,31 +434,53 @@ namespace Project_jUMPKING
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        if (_background[positionX + (i + 3) * direction_right, positionY - 2 + j] == '▣')
-                        {
-                            return 1;
-                        }
+                        num = check(positionX - i +3 * direction_right, positionY - 2 + j);
+                        if (num > 0)
+                            return num;
                     }
                 }
+                //for (int i = 0; i < 2; i++)
+                //{
+                //    for (int j = 0; j < 4; j++)
+                //    {
+                //        check(positionX + i + 3 * direction_right, positionY - 2 + j);
+                //        Console.SetCursorPosition(positionX + i + 3 * direction_right, positionY - 2 + j);
+                //        Console.Write("-");
+                //        if (num > 0)
+                //            return num;
+                //        //if (_background[positionX + (i + 3) * direction_right, positionY - 2 + j] == '▣')
+                //        //{
+                //        //    return 1;
+                //        //}
+                //    }
+                //}
             }
             return 0;
         }
 
-        public int check(int x, int y)
+        private int check(int x, int y)
         {
-            if (_background[x,y] == '▣')
+            try
+            {
+                if (_background[x, y] == '▣')
+                {
+                    return 1;
+                }
+                else if (_background[x, y] == '↙')
+                {
+                    return 2;
+                }
+                else if (_background[x, y] == '↘')
+                {
+                    return 3;
+                }
+                return 0;
+            }
+            catch (Exception e)
             {
                 return 1;
             }
-            else if (_background[x, y] == '↙')
-            {
-                return 2;
-            }
-            else if (_background[x, y] == '↘')
-            {
-                return 3;
-            }
-            return 0;
+
         }
 
 
@@ -793,411 +815,3 @@ namespace Project_jUMPKING
         };
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

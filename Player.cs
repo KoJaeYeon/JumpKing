@@ -80,8 +80,7 @@ namespace Project_jUMPKING
 
         public void Move_LR(Background background)
         {
-            if (background.Collide((int)_positionX, (int)_positionY, _direction_right) == 1 ||
-                background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right) == 1) // 벽과 충돌 했을 때
+            if (background.Collide((int)_positionX, (int)_positionY, _direction_right) == 1) // 벽과 충돌 했을 때
             {              
             }
             else
@@ -111,7 +110,6 @@ namespace Project_jUMPKING
             int buffer = 0;
             int power = 0;
             bool keyEnter = false;
-            //Console.SetCursorPosition(205, _tempPosY);
             while (true)
             {
                 while (Console.KeyAvailable == false)
@@ -132,7 +130,6 @@ namespace Project_jUMPKING
                         else // 4-2. 입력이 발생하지 않아 KeyUp = false로 유지되었으면 계속해서 대기상태로 유지
                         {
                             buffer = 0;
-                            //Console.WriteLine("대기중");
                         }
                     }
                 }
@@ -198,12 +195,29 @@ namespace Project_jUMPKING
                 try
                 {
                     //충돌 검사
-                    if (background.Collide((int)_positionX, (int)_positionY, _direction_right) == 1 ||
-                        background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right) == 1) // 벽과 충돌 했을 때
+                    switch (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right))
                     {
-                        _direction_right *= -1;
-                        speedX *= 0.8;
+                        case 1:
+                            _direction_right *= -1;
+                            speedX *= 0.8;
+                            return;
+                        case 2:
+                            _direction_right = -1;
+                            speedX = 0.5;
+                            speedY = 0;
+                            break;
+                        case 3:
+                            _direction_right = 1;
+                            speedX = 0.5;
+                            speedY = 0;
+                            break;
                     }
+                
+                    //if (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right) == 1) // 벽과 충돌 했을 때
+                    //{
+                    //    _direction_right *= -1;
+                    //    speedX *= 0.8;
+                    //}
                     colisionTop = background.Collide((int)_positionX, (int)_positionY, 3) == 1;
                     if (colisionTop) // 천장과 충돌 했을 때
                     {

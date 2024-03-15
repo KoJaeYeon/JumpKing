@@ -6,6 +6,8 @@
         {
             Background background = new Background();
             Player player = new Player();
+            Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
+            ConsoleKeyInfo key = Console.ReadKey(true);
             while (true)
             {
                 try
@@ -19,7 +21,7 @@
                 {
                     Console.Clear();
                     Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
-                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    key = Console.ReadKey(true);
                     continue;
                 }
             }
