@@ -91,18 +91,6 @@ namespace Project_jUMPKING
             CalPos(background);
             while (Console.KeyAvailable)
                 Console.ReadKey(false);
-            //if (!background.Collide(_positionX, _positionY, _direction_right))//충돌검사//
-            //{
-
-            //    //while (!background.Collide(_positionX, _positionY, 4))
-            //    //{
-            //    //    _positionY += 1;
-            //    //    background.DrawChar(_positionX, _positionY, _direction_right);
-            //    //    Thread.Sleep(term);
-            //    //    while (Console.KeyAvailable)
-            //    //        Console.ReadKey(false);
-            //    //}
-            //}
         }
 
         public void Power(Background background)
@@ -195,7 +183,7 @@ namespace Project_jUMPKING
                 try
                 {
                     //충돌 검사
-                    switch (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right))
+                    switch (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right)) //좌우 벽과 충돌 했을 때
                     {                        
                         case 1:
                             _direction_right *= -1;
@@ -212,18 +200,21 @@ namespace Project_jUMPKING
                             speedY = 0;
                             break;
                     }
-                    colisionTop = background.Collide((int)_positionX, (int)_positionY, 3) == 1;
-                    if (colisionTop) // 천장과 충돌 했을 때
+
+                    switch (background.Collide((int)_positionX, (int)_positionY, 3)) // 천장과 충돌 했을 때
                     {
-                        if (!istouched)
-                        {
-                            istouched = true;
-                            speedY *= -1;
-                        }
+                        case 1:
+                        case 2:
+                        case 3:
+                            if (!istouched) // 속도변환 한번만 일어나게 해주는 체크 bool, 해당 체크가 없으면 순식간에 가속됨
+                            {
+                                istouched = true;
+                                speedY *= -1;
+                            }
+                            break;
                     }
 
-                    colisionGround = background.Collide((int)_positionX, (int)_positionY, 4);
-                    switch(colisionGround)
+                    switch (background.Collide((int)_positionX, (int)_positionY, 4)) // 바닥과 충돌했을때
                     {
                         case 1:
                             speedY = 0;

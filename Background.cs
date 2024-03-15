@@ -152,19 +152,27 @@ namespace Project_jUMPKING
             prePosX = positionX;
             prePosY = positionY;
 
-            Console.SetCursorPosition(positionX, positionY - 2);
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            if (direction_right == 1) Console.Write("→");
-            else if (direction_right == -1) Console.Write("←");
-            else Console.Write("↑");
-            Console.SetCursorPosition(positionX - 2, positionY - 1);
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write('▤');
-            Console.ForegroundColor = ConsoleColor.DarkBlue;
-            Console.Write('▤');
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write('▤');            
-            {
+            { // 머리
+                Console.SetCursorPosition(positionX, positionY - 2);
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                if (direction_right == 1) Console.Write("→");
+                else if (direction_right == -1) Console.Write("←");
+                else Console.Write("↑");
+            }
+
+
+            { //몸통
+                Console.SetCursorPosition(positionX - 2, positionY - 1);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write('▤');
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write('▤');
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write('▤');
+            }
+
+
+            { //다리
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.SetCursorPosition(positionX - 2, positionY);
                 Console.Write('▥');
@@ -172,7 +180,7 @@ namespace Project_jUMPKING
                 Console.Write('▥');
             }
 
-            {
+            { //발
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.SetCursorPosition(positionX - 2, positionY + 1);
                 Console.Write('▥');
@@ -427,23 +435,15 @@ namespace Project_jUMPKING
         public int Collide(int positionX, int positionY, int direction_right)
         {
             int num = 0;
-            if (direction_right == 4) // Down
+            if (direction_right > 2) // Down , Up
             {
+                positionY += direction_right == 4 ? 2 : -3;
+
                 for (int i = 0; i < 7; i++)
                 {
-                    num = check(positionX + (i - 3), positionY + 2);
+                    num = check(positionX + (i - 3), positionY);
                     if(num > 0)
                         return num;
-                }
-            }
-            else if (direction_right == 3)
-            {
-                for (int i = 0; i < 7; i++)
-                {
-                    if (_background[positionX + (i - 3), positionY - 3] == '▣')
-                    {
-                        return 1;
-                    }
                 }
             }
             else // Left or Right
@@ -457,21 +457,6 @@ namespace Project_jUMPKING
                             return num;
                     }
                 }
-                //for (int i = 0; i < 2; i++)
-                //{
-                //    for (int j = 0; j < 4; j++)
-                //    {
-                //        check(positionX + i + 3 * direction_right, positionY - 2 + j);
-                //        Console.SetCursorPosition(positionX + i + 3 * direction_right, positionY - 2 + j);
-                //        Console.Write("-");
-                //        if (num > 0)
-                //            return num;
-                //        //if (_background[positionX + (i + 3) * direction_right, positionY - 2 + j] == '▣')
-                //        //{
-                //        //    return 1;
-                //        //}
-                //    }
-                //}
             }
             return 0;
         }
