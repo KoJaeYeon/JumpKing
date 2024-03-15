@@ -14,7 +14,7 @@
                 {
                     Console.Clear();
                     background.Print_Back();
-                    //background.Print_Char(player.positionX, player.positionY, player.direction_right);
+                    background.DrawChar(player.positionX, player.positionY, player.direction_right);
                     break;
                 }
                 catch (Exception e)
@@ -26,7 +26,7 @@
                 }
             }
             while (true)
-            {
+            {               
                 player.Move(background);
                 int powerData = player.power;
                 if (powerData > 2)

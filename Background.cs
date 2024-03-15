@@ -7,7 +7,6 @@ namespace Project_jUMPKING
         public static readonly int width = 162;
         public static readonly int height = 241;
 
-        private int index = 0;
         private int prePosX = 45;
         private int prePosY = 99;
         private int jumpPosY = 10;
@@ -15,6 +14,9 @@ namespace Project_jUMPKING
 
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
+
+        private Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
+        private int item_Dic_Count;
 
         public Background()
         {
@@ -31,6 +33,7 @@ namespace Project_jUMPKING
             Save_ground();
             Save_Wall();
             Save_Plattform();
+            Save_Item();
 
             Draw_Background();
         }
@@ -113,6 +116,27 @@ namespace Project_jUMPKING
 
 
 
+        }
+
+        public void Save_Item()
+        {
+            int x, y;
+            // 1번 아이템
+            x = 82; y = height - 10;
+            item_Dic.Add(1, new Higher(x,y, _background[x,y]));
+            _background[x, y] = item_Dic[1].get_Char;
+
+            // 2번 아이템
+            x = 122; y = height - 20;
+            item_Dic.Add(2, new Further(x, y, _background[x, y]));
+            _background[x, y] = item_Dic[2].get_Char;
+
+            // 3번 아이템
+            x = 132; y = height - 30;
+            item_Dic.Add(3, new Longer(x, y, _background[x, y]));
+            _background[x, y] = item_Dic[3].get_Char;
+
+            item_Dic_Count = item_Dic.Count;
         }
         public void DrawChar(int positionX, int positionY, int direction_right)
         {
@@ -318,6 +342,26 @@ namespace Project_jUMPKING
             PowerBar(1, 0);
         }
 
+        public void Draw_Item(int time = 0)
+        {
+            for (int i = 0; i < item_Dic_Count; i++)
+            {
+                if (item_Dic[i + 1] != null && !item_Dic[i + 1].getItem)
+                {
+                    item_Dic[i + 1].PrintItem(time);
+                }
+            }
+        }
+
+        public void Get_Item(int itemNum)
+        {
+            Item item = item_Dic[itemNum];
+            int x = item.get_posX;
+            int y = item.get_posY;
+            char tempChar = item.get_tempChar;
+            item.getItem = true;
+            _background[x,y] = tempChar;
+        }
 
         public void PowerBar(int positionY, int power)
         {
@@ -476,6 +520,18 @@ namespace Project_jUMPKING
                 else if (_background[x, y] == '↘')
                 {
                     return 3;
+                }
+                else if (_background[x, y] == '1')
+                {
+                    Get_Item(1);
+                }
+                else if (_background[x, y] == '2')
+                {
+                    Get_Item(2);
+                }
+                else if (_background[x, y] == '3')
+                {
+                    Get_Item(3);
                 }
                 return 0;
             }

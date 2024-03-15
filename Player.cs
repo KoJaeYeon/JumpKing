@@ -7,7 +7,6 @@ namespace Project_jUMPKING
 
     class Player
     {
-        private double doubleX = 0, doubleY = 0;
         private double speedX = 2, speedY = 0;
         private double gravity = -0.01;
         private int _positionX, _positionY;
@@ -15,6 +14,9 @@ namespace Project_jUMPKING
         private int _direction_right = 1; // 진행방향
         private int _power; // 점프 게이지
         private int term = 20; // 좌우 입력버퍼 지우기 위한 간격
+
+        private bool[] itemcheck = new bool[10]; // 아이템 체크
+
         //디버깅용
         private int _saveX = 45, _saveY = 98, _saveDir = 0;
         public int positionX { get { return _positionX; } }
@@ -25,6 +27,7 @@ namespace Project_jUMPKING
         {
             _positionX = positionX;
             _positionY = positionY;
+            Array.Clear(itemcheck);            
         }
 
         public void Move(Background background)
@@ -35,6 +38,7 @@ namespace Project_jUMPKING
                 {
                     Thread.Sleep(4);
                     PlayerCamera(_positionY);
+                    background.Draw_Item(2);
                 }
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -100,9 +104,10 @@ namespace Project_jUMPKING
             bool keyEnter = false;
             while (true)
             {
+                background.Draw_Item(0);
                 while (Console.KeyAvailable == false)
                 {
-
+                    background.Draw_Item(0);
                     Thread.Sleep(1);
                     buffer++; // 0. while문을 돌면서 입력을 놓칠경우 발생하는 횟수를 담아놓기 위한 변수
                     if (buffer > 5) // 3. buffer가 일정 횟수 이상 담기면 검사 (1 == Thred.Sleep 속도에 따른 임의의 수)
@@ -143,7 +148,6 @@ namespace Project_jUMPKING
         {
             int temp = _power;
             int colisionGround = 0;
-            bool colisionTop = false;
             bool istouched = false;
             prePosX = _positionX;
             prePosY = _positionY;
@@ -153,12 +157,13 @@ namespace Project_jUMPKING
             gravity = -0.03;
             while (colisionGround != 1)
             {
+                background.Draw_Item(2);
                 if (power == 0)
                 {
                     Thread.Sleep(3);
                 }
                 else
-                {
+                {                    
                     Thread.Sleep(10);
                 }
                 doubleX += speedX * direction_right;
@@ -236,6 +241,8 @@ namespace Project_jUMPKING
                 {
                     _positionX = 45;
                     _positionY = 98;
+                    Console.Clear();
+                    background.Print_Back();
                     background.DrawChar(_positionX, _positionY, _direction_right);
                     speedY = 0;
                     _power = 0;
@@ -335,7 +342,7 @@ namespace Project_jUMPKING
             int power = 0;
             bool keyEnter = false;
             while (true)
-            {
+            {                
                 while (Console.KeyAvailable == false)
                 {
 
