@@ -14,7 +14,7 @@ namespace Project_jUMPKING
         private int _direction_right = 1; // 진행방향
         private int _power; // 점프 게이지
         private int term = 20; // 좌우 입력버퍼 지우기 위한 간격
-
+        int max_height= 0, min_height = 0;
         private bool[] itemcheck = new bool[10]; // 아이템 체크
 
         //디버깅용
@@ -327,10 +327,14 @@ namespace Project_jUMPKING
             }
             if (height < 0)
             {
+                min_height = 0;
+                max_height = 62;
                 Console.SetCursorPosition(0, 0);
             }
             else
             {
+                min_height = height;
+                max_height = height + 62;
                 Console.SetCursorPosition(0, height);
                 Console.SetCursorPosition(0, height + 62);
             }

@@ -342,12 +342,13 @@ namespace Project_jUMPKING
             PowerBar(1, 0);
         }
 
-        public void Draw_Item(int time = 0)
+        public void Draw_Item(int min_height, int max_height, int time = 0)
         {
             for (int i = 0; i < item_Dic_Count; i++)
             {
                 if (item_Dic[i + 1] != null && !item_Dic[i + 1].getItem)
                 {
+                    if (item_Dic[i+1].get_posY <= max_height && item_Dic[i+1].get_posY >= min_height)
                     item_Dic[i + 1].PrintItem(time);
                 }
             }
