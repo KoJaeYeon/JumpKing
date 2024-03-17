@@ -9,16 +9,20 @@ namespace Project_jUMPKING
     {
         private double speedX = 2, speedY = 0;
         private double gravity = -0.01;
-        private int _positionX, _positionY;
-        private int prePosX, prePosY;
+
+        private int _positionX, _positionY; // 캐릭터의 현재 위치
+        private int prePosX, prePosY; // 렌더링을 위한 이전 좌표 확인용 위치
         private int _direction_right = 1; // 진행방향
         private int _power; // 점프 게이지
         private int term = 20; // 좌우 입력버퍼 지우기 위한 간격
-        int max_height= 0, min_height = 0;
-        private bool[] itemcheck = new bool[10]; // 아이템 체크
+        int max_height= 0, min_height = 0; // 카메라의 높이 최대 크기
 
-        //디버깅용
-        private int _saveX = 45, _saveY = 98, _saveDir = 0;
+        private static bool[] itemcheck = new bool[10]; // 아이템 체크
+        private bool[] itemUse = new bool[10]; // 현재 사용중인 아이템
+        private int now_Item = 0;
+                
+        private int _saveX, _saveY, _saveDir;
+        private bool save = false;
         public int positionX { get { return _positionX; } }
         public int positionY { get { return _positionY; } }
         public int direction_right { get { return _direction_right; } }
@@ -27,7 +31,7 @@ namespace Project_jUMPKING
         {
             _positionX = positionX;
             _positionY = positionY;
-            Array.Clear(itemcheck);            
+            Array.Clear(itemcheck);
         }
 
         public void Move(Background background)
@@ -38,7 +42,7 @@ namespace Project_jUMPKING
                 {
                     Thread.Sleep(4);
                     PlayerCamera(_positionY);
-                    background.Draw_Item(2);
+                    background.Draw_Item(max_height, min_height, 2);
                 }
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
@@ -64,18 +68,40 @@ namespace Project_jUMPKING
                         _direction_right = 0;
                         background.DrawChar(_positionX, _positionY, _direction_right);
                         break;
-                    ///디버깅용///
                     case ConsoleKey.S:
+                        if (!itemcheck[0]) break;
                         _saveX = _positionX;
                         _saveY = _positionY;
                         _saveDir = _direction_right;
+                        save = true;
                         break;
                     case ConsoleKey.R:
+                        if (!save) break;
+                        if (!itemcheck[0]) break;                        
                         _positionX = _saveX;
                         _positionY = _saveY;
                         _direction_right = _saveDir;
                         background.DrawChar(_positionX, _positionY, _direction_right);
                         break;
+                    case ConsoleKey.D1:
+                        if (!itemcheck[1]) break;
+                        itemUse[now_Item] = false;
+                        now_Item = 1;
+                        itemUse[now_Item] = true;
+                        break;
+                    case ConsoleKey.D2:
+                        if (!itemcheck[2]) break;
+                        itemUse[now_Item] = false;
+                        now_Item = 2;
+                        itemUse[now_Item] = true;
+                        break;
+                    case ConsoleKey.D3:
+                        if (!itemcheck[3]) break;
+                        itemUse[now_Item] = false;
+                        now_Item = 3;
+                        itemUse[now_Item] = true;
+                        break;
+
                 }
 
 
@@ -104,10 +130,10 @@ namespace Project_jUMPKING
             bool keyEnter = false;
             while (true)
             {
-                background.Draw_Item(0);
+                background.Draw_Item(max_height, min_height, 0);
                 while (Console.KeyAvailable == false)
                 {
-                    background.Draw_Item(0);
+                    background.Draw_Item(max_height, min_height, 0);
                     Thread.Sleep(1);
                     buffer++; // 0. while문을 돌면서 입력을 놓칠경우 발생하는 횟수를 담아놓기 위한 변수
                     if (buffer > 5) // 3. buffer가 일정 횟수 이상 담기면 검사 (1 == Thred.Sleep 속도에 따른 임의의 수)
@@ -157,7 +183,7 @@ namespace Project_jUMPKING
             gravity = -0.03;
             while (colisionGround != 1)
             {
-                background.Draw_Item(2);
+                background.Draw_Item(max_height,min_height, 2);
                 if (power == 0)
                 {
                     Thread.Sleep(3);
@@ -313,10 +339,13 @@ namespace Project_jUMPKING
                 speedY = 1.1;
             }
             if (direction_right == 0) speedX = 0;
-
+            
         }
 
-
+        public static void Get_item(int itemNum)
+        {
+            itemcheck[itemNum] = true;
+        }
         public void PlayerCamera(int positionY)
         {
             int height = Background.height - 1;

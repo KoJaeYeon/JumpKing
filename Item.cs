@@ -37,7 +37,7 @@ namespace Project_jUMPKING
         public Item(int posX, int posY, char tempChar)
         {
             this.posX = posX;
-            this.posY = posY;   
+            this.posY = posY;
             _GetItem = false;
             _tempChar = tempChar;
         }
@@ -49,7 +49,7 @@ namespace Project_jUMPKING
                 return;
             }
             time++;
-            if(time > 50)
+            if (time > 50)
             {
                 time += 1 + i;
                 index++;
@@ -70,6 +70,33 @@ namespace Project_jUMPKING
             }
         }
     }
+    class SaveLoad : Item
+    {
+        public SaveLoad(int posX, int posY, char tempChar) : base(posX, posY, tempChar)
+        {
+            sprite[0] = sprite1;
+            sprite[1] = sprite2;
+            _Char = sprite1[2][2];
+        }
+
+        private readonly string[] sprite1 =
+        {
+        "*#*#*",
+        "#SRS#",
+        "*R0R*",
+        "#SRS#",
+        "*#*#*"
+        };
+
+        private readonly string[] sprite2 =
+        {
+        "#*#*#",
+        "*RSR*",
+        "#S0S#",
+        "*RSR*",
+        "#*#*#"
+        };
+    }
 
     class Higher : Item
     {
@@ -81,16 +108,16 @@ namespace Project_jUMPKING
         }
 
         private readonly string[] sprite1 =
-{
+        {
         "*#*#*",
         "#*1*#",
         "*111*",
         "#*1*#",
-        "*#*#*",
+        "*#*#*"
         };
 
         private readonly string[] sprite2 =
-{
+        {
         "#*#*#",
         "*#1#*",
         "#111#",
@@ -109,7 +136,7 @@ namespace Project_jUMPKING
         }
 
         private readonly string[] sprite1 =
-{
+        {
         "*#*#*",
         "#*2*#",
         "*222*",
@@ -118,7 +145,7 @@ namespace Project_jUMPKING
         };
 
         private readonly string[] sprite2 =
-{
+        {
         "#*#*#",
         "*#2#*",
         "#222#",
@@ -136,7 +163,7 @@ namespace Project_jUMPKING
             _Char = sprite1[2][2];
         }
         private readonly string[] sprite1 =
-{
+        {
         "*#*#*",
         "#*3*#",
         "*333*",
@@ -145,7 +172,7 @@ namespace Project_jUMPKING
         };
 
         private readonly string[] sprite2 =
-{
+        {
         "#*#*#",
         "*#3#*",
         "#333#",

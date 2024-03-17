@@ -121,6 +121,11 @@ namespace Project_jUMPKING
         public void Save_Item()
         {
             int x, y;
+            // 0번 아이템(세이브 로드)
+            x = 140; y = height - 10;
+            item_Dic.Add(0, new SaveLoad(x, y, _background[x, y]));
+            _background[x, y] = item_Dic[0].get_Char;
+
             // 1번 아이템
             x = 82; y = height - 10;
             item_Dic.Add(1, new Higher(x,y, _background[x,y]));
@@ -342,14 +347,14 @@ namespace Project_jUMPKING
             PowerBar(1, 0);
         }
 
-        public void Draw_Item(int min_height, int max_height, int time = 0)
+        public void Draw_Item(int max_height, int min_height, int time = 0)
         {
             for (int i = 0; i < item_Dic_Count; i++)
             {
-                if (item_Dic[i + 1] != null && !item_Dic[i + 1].getItem)
+                if (item_Dic[i] != null && !item_Dic[i].getItem)
                 {
-                    if (item_Dic[i+1].get_posY <= max_height && item_Dic[i+1].get_posY >= min_height)
-                    item_Dic[i + 1].PrintItem(time);
+                    if (item_Dic[i].get_posY <= max_height && item_Dic[i].get_posY >= min_height)
+                    item_Dic[i].PrintItem(time);
                 }
             }
         }
@@ -362,6 +367,48 @@ namespace Project_jUMPKING
             char tempChar = item.get_tempChar;
             item.getItem = true;
             _background[x,y] = tempChar;
+
+            sb2.Clear();
+            Console.SetCursorPosition(x-2,y-2);
+            for(int i = 0; i < 5; i++)
+            {
+                sb2.Append(_background[x - 2 + i, y - 2]);
+            }
+            Console.Write(sb2);
+
+            sb2.Clear();
+            Console.SetCursorPosition(x - 2, y-1);
+            for (int i = 0; i < 5; i++)
+            {
+                sb2.Append(_background[x - 2 + i, y-1]);
+            }
+            Console.Write(sb2);
+
+            sb2.Clear();
+            Console.SetCursorPosition(x - 2, y);
+            for (int i = 0; i < 5; i++)
+            {
+                sb2.Append(_background[x - 2 + i, y]);
+            }
+            Console.Write(sb2);
+
+            sb2.Clear();
+            Console.SetCursorPosition(x - 2, y+1);
+            for (int i = 0; i < 5; i++)
+            {
+                sb2.Append(_background[x - 2 + i, y+1]);
+            }
+            Console.Write(sb2);
+
+            sb2.Clear();
+            Console.SetCursorPosition(x - 2, y+2);
+            for (int i = 0; i < 5; i++)
+            {
+                sb2.Append(_background[x - 2 + i, y+2]);
+            }
+            Console.Write(sb2);
+
+            Player.Get_item(itemNum);
         }
 
         public void PowerBar(int positionY, int power)
@@ -521,6 +568,10 @@ namespace Project_jUMPKING
                 else if (_background[x, y] == '↘')
                 {
                     return 3;
+                }
+                else if (_background[x, y] == '0')
+                {
+                    Get_Item(0);
                 }
                 else if (_background[x, y] == '1')
                 {
