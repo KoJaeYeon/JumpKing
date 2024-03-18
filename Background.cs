@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.Intrinsics.X86;
+using System.Text;
 
 namespace Project_jUMPKING
 {
@@ -11,12 +12,15 @@ namespace Project_jUMPKING
         private int prePosY = 99;
         private int jumpPosY = 10;
         private char[,] _background = new char[width, height];
+        private char[] save_Char = new char[4];
 
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
 
         private Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
         private int item_Dic_Count;
+
+        private int save_posX = 0,save_posY = 0;
 
         public Background()
         {
@@ -143,6 +147,40 @@ namespace Project_jUMPKING
 
             item_Dic_Count = item_Dic.Count;
         }
+
+        public void Save_Position(int preSaveX, int preSaveY, int saveX, int saveY) //저장하는 부분 모델링
+        {
+            save_posX = saveX;
+            save_posY = saveY;
+            if(preSaveX != 0)
+            {
+                //이전 세이브 위치 배경 복원
+                _background[preSaveX - 1, preSaveY] = save_Char[0];
+                _background[preSaveX, preSaveY] = save_Char[1];
+                _background[preSaveX-1, preSaveY+1] = save_Char[2];
+                _background[preSaveX, preSaveY + 1] = save_Char[3];
+                
+                //이전 세이브 위치 배경 출력
+                Console.SetCursorPosition(preSaveX, preSaveY);
+                Console.Write("{0}{1}", _background[preSaveX - 1, preSaveY], _background[preSaveX, preSaveY]);
+                Console.SetCursorPosition(preSaveX, preSaveY + 1);
+                Console.Write("{0}{1}", _background[preSaveX - 1, preSaveY + 1], _background[preSaveX, preSaveY + 1]);
+            }
+
+            //현재 세이브 위치 배경 저장
+            save_Char[0] = _background[save_posX - 1, save_posY];
+            save_Char[1] = _background[save_posX, save_posY];
+            save_Char[2] = _background[save_posX - 1, save_posY + 1];
+            save_Char[3] = _background[save_posX, save_posY + 1];
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.SetCursorPosition(save_posX, save_posY);
+            Console.Write("##");
+            Console.SetCursorPosition(save_posX, save_posY + 1);
+            Console.Write("##");
+            Console.ResetColor();
+        }
+
         public void DrawChar(int positionX, int positionY, int direction_right)
         {
             sb2.Clear();
@@ -177,6 +215,22 @@ namespace Project_jUMPKING
                 sb2.Append(_background[prePosX - 3 + i, prePosY + 1]);
             }
             Console.Write(sb2);
+
+            if(save_posX != 0)
+            {
+                if(save_posX >= prePosX - 3 && save_posX <= prePosX + 3)
+                {
+                    if (save_posY >= prePosY - 2 && save_posY <= prePosY + 1);
+                    {
+                        Console.SetCursorPosition(save_posX, save_posY);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("##");
+                        Console.SetCursorPosition(save_posX, save_posY + 1);
+                        Console.Write("##");
+                        Console.ResetColor();
+                    }
+                }
+            }
 
             prePosX = positionX;
             prePosY = positionY;

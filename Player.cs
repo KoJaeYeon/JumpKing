@@ -21,8 +21,7 @@ namespace Project_jUMPKING
         private bool[] itemUse = new bool[10]; // 현재 사용중인 아이템
         private int now_Item = 0;
                 
-        private int _saveX, _saveY, _saveDir;
-        private bool save = false;
+        private int _saveX = 0, _saveY = 0, _saveDir = 0;
         public int positionX { get { return _positionX; } }
         public int positionY { get { return _positionY; } }
         public int direction_right { get { return _direction_right; } }
@@ -70,14 +69,15 @@ namespace Project_jUMPKING
                         break;
                     case ConsoleKey.S:
                         if (!itemcheck[0]) break;
+                        background.Save_Position(_saveX, _saveY,_positionX,_positionY);
                         _saveX = _positionX;
                         _saveY = _positionY;
                         _saveDir = _direction_right;
-                        save = true;
+                        
+                        itemUse[0] = true;
                         break;
                     case ConsoleKey.R:
-                        if (!save) break;
-                        if (!itemcheck[0]) break;                        
+                        if (!itemUse[0]) break;                      
                         _positionX = _saveX;
                         _positionY = _saveY;
                         _direction_right = _saveDir;
@@ -101,7 +101,6 @@ namespace Project_jUMPKING
                         now_Item = 3;
                         itemUse[now_Item] = true;
                         break;
-
                 }
 
 
