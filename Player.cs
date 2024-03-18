@@ -25,7 +25,7 @@ namespace Project_jUMPKING
         public int positionY { get { return _positionY; } }
         public int direction_right { get { return _direction_right; } }
         public int power { get { return _power; } }
-        public Player(int positionX = 100, int positionY = 238 - 115)
+        public Player(int positionX = 140, int positionY = 238 - 135)
         {
             _positionX = positionX;
             _positionY = positionY;

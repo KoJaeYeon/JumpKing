@@ -121,7 +121,19 @@ namespace Project_jUMPKING
             Platform(130, 100, 5,y);
 
             Platform(140, 120, 3);
+            Platform(146, 119, -3,s);
+            Platform(146, 109, -3, s);
+            Platform(146, 99, -3, s);
 
+            Platform(140, 134, 3);
+            Platform(140, 160, 3);
+            Platform(124, 168, 3);
+
+            Platform(120, 136, 3);
+
+            Platform(100, 138, 3);
+
+            Platform(70, 146, 2);
             //Column
 
             // height ~62
