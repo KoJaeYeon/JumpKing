@@ -20,10 +20,12 @@ namespace Project_jUMPKING
         public int get_posX
         {
             get { return posX; }
+            set {  posX = value; }
         }
         public int get_posY
         {
             get { return posY; }
+            set { posY = value; }
         }
         public char get_Char
         {
@@ -40,6 +42,24 @@ namespace Project_jUMPKING
             this.posY = posY;
             _GetItem = false;
             _tempChar = tempChar;
+        }
+        public virtual void Set_posX()
+        {
+        }
+        public void OnItem(int posy)
+        {
+            posY = posy;
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.SetCursorPosition(posX - 2, posY - 2);
+            Console.Write(sprite[0][0]);
+            Console.SetCursorPosition(posX - 2, posY - 1);
+            Console.Write(sprite[0][1]);
+            Console.SetCursorPosition(posX - 2, posY);
+            Console.Write(sprite[0][2]);
+            Console.SetCursorPosition(posX - 2, posY + 1);
+            Console.Write(sprite[0][3]);
+            Console.SetCursorPosition(posX - 2, posY + 2);
+            Console.Write(sprite[0][4]);
         }
 
         public void PrintItem(int i)
@@ -107,6 +127,11 @@ namespace Project_jUMPKING
             _Char = sprite1[2][2];
         }
 
+        public override void Set_posX()
+        {
+            this.posX = 184;
+        }
+
         private readonly string[] sprite1 =
         {
         "*#*#*",
@@ -133,6 +158,11 @@ namespace Project_jUMPKING
             sprite[0] = sprite1;
             sprite[1] = sprite2;
             _Char = sprite1[2][2];
+        }
+
+        public override void Set_posX()
+        {
+            this.posX = 194;
         }
 
         private readonly string[] sprite1 =
@@ -162,6 +192,12 @@ namespace Project_jUMPKING
             sprite[1] = sprite2;
             _Char = sprite1[2][2];
         }
+
+        public override void Set_posX()
+        {
+            this.posX = 204;
+        }
+
         private readonly string[] sprite1 =
         {
         "*#*#*",

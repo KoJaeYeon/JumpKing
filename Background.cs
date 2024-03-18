@@ -70,21 +70,21 @@ namespace Project_jUMPKING
             {
                 for (int j = 0; j < 160; j++)
                 {
-                    _background[i+1, j] = Lucy[j][i];
+                    _background[i+1, height - 240 + j] = Lucy[j][i];
                 }
             }
             for (int i = 0; i < 80; i++)
             {
                 for (int j = 0; j < 80; j++)
                 {
-                    _background[i + 1, j + 160] = Vinette[j][i];
+                    _background[i + 1, height - 80 + j] = Vinette[j][i];
                 }
             }
             for (int i = 0; i < 80; i++)
             {
                 for (int j = 0; j < 80; j++)
                 {
-                    _background[i + 81, j + 160] = Sumire[j][i];
+                    _background[i + 81, height - 80 + j] = Sumire[j][i];
                 }
             }
         }
@@ -220,7 +220,7 @@ namespace Project_jUMPKING
             {
                 if(save_posX >= prePosX - 3 && save_posX <= prePosX + 3)
                 {
-                    if (save_posY >= prePosY - 2 && save_posY <= prePosY + 1);
+                    if (save_posY >= prePosY - 2 && save_posY <= prePosY + 1)
                     {
                         Console.SetCursorPosition(save_posX, save_posY);
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -321,22 +321,22 @@ namespace Project_jUMPKING
             for (int i = 0; i < height - 1; i++)
             {
                 sb.Append('▣');
-                if (i < 160)
+                if (i > height - 81 )
+                {
+                    for (int j = 0; j < 80; j++)
+                    {
+                        sb.Append(Vinette[i - (height - 80)][j]);
+                    }
+                    for (int j = 0; j < 80; j++)
+                    {
+                        sb.Append(Sumire[i - (height - 80)][j]);
+                    }
+                }
+                else if (i > height - 241)
                 {
                     for (int j = 0; j < 160; j++)
                     {
-                        sb.Append(Lucy[i][j]);
-                    }
-                }
-                else if (i < 240)
-                {
-                    for (int j = 0; j < 80; j++)
-                    {
-                        sb.Append(Vinette[i - 160][j]);
-                    }
-                    for (int j = 0; j < 80; j++)
-                    {
-                        sb.Append(Sumire[i - 160][j]);
+                        sb.Append(Lucy[i - (height - 240)][j]);
                     }
                 }
                 else
@@ -398,7 +398,7 @@ namespace Project_jUMPKING
                 }
             }
             Console.ResetColor();
-            PowerBar(1, 0);
+            UIBar(1, 0);
         }
 
         public void Draw_Item(int max_height, int min_height, int time = 0)
@@ -422,7 +422,7 @@ namespace Project_jUMPKING
             item.getItem = true;
             _background[x,y] = tempChar;
 
-            sb2.Clear();
+            sb2.Clear(); // 아이템 위치 배경 초기화
             Console.SetCursorPosition(x-2,y-2);
             for(int i = 0; i < 5; i++)
             {
@@ -463,9 +463,11 @@ namespace Project_jUMPKING
             Console.Write(sb2);
 
             Player.Get_item(itemNum);
+            item_Dic[itemNum].Set_posX();
+            item_Dic[itemNum].OnItem(231);
         }
 
-        public void PowerBar(int positionY, int power)
+        public void UIBar(int positionY, int power)
         {
             int height = Background.height - 1;
             ConsoleColor color = ConsoleColor.DarkGray;
@@ -481,21 +483,62 @@ namespace Project_jUMPKING
                     {
                         for (int i = 0; i < 11; i++)
                         {
-                            Console.SetCursorPosition(200, 41 - i * 2);
-                            Console.Write("        ");
-                            Console.SetCursorPosition(200, 40 - i * 2);
-                            Console.Write("        ");
+                            Console.SetCursorPosition(198, 41 - i * 2);
+                            Console.Write("         ");
+                            Console.SetCursorPosition(198, 40 - i * 2);
+                            Console.Write("         ");
                         }
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.SetCursorPosition(185, 45);
+                        Console.Write("┌──────────┬──────────┬──────────┐ ");
+                        Console.SetCursorPosition(185, 46);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 47);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 48);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 49);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 50);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 51);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 52);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, 53);
+                        Console.Write("└──────────┴──────────┴──────────┘ ");
                     }
                     else
                     {
                         for (int i = 0; i < 11; i++)
                         {
-                            Console.SetCursorPosition(200, height + 41 - i * 2);
-                            Console.Write("        ");
-                            Console.SetCursorPosition(200, height + 40 - i * 2);
-                            Console.Write("        ");
+                            Console.SetCursorPosition(198, height + 41 - i * 2);
+                            Console.Write("         ");
+                            Console.SetCursorPosition(198, height + 40 - i * 2);
+                            Console.Write("         ");
                         }
+                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.SetCursorPosition(185, height + 45);
+                        Console.Write("┌──────────┬──────────┬──────────┐ ");
+                        Console.SetCursorPosition(185, height + 46);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 47);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 48);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 49);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 50);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 51);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 52);
+                        Console.Write("│          │          │          │ ");
+                        Console.SetCursorPosition(185, height + 53);
+                        Console.Write("└──────────┴──────────┴──────────┘ ");
+
                     }
                 }
                 continue;
@@ -507,17 +550,17 @@ namespace Project_jUMPKING
                 {
                     if(height < 0)
                     {
-                        Console.SetCursorPosition(200, 41 - i * 2);
-                        Console.Write("        ");
-                        Console.SetCursorPosition(200, 40 - i * 2);
-                        Console.Write("        ");
+                        Console.SetCursorPosition(198, 41 - i * 2);
+                        Console.Write("         ");
+                        Console.SetCursorPosition(198, 40 - i * 2);
+                        Console.Write("         ");
                     }
                     else
                     {
-                        Console.SetCursorPosition(200, height + 41 - i * 2);
-                        Console.Write("        ");
-                        Console.SetCursorPosition(200, height + 40 - i * 2);
-                        Console.Write("        ");
+                        Console.SetCursorPosition(198, height + 41 - i * 2);
+                        Console.Write("         ");
+                        Console.SetCursorPosition(198, height + 40 - i * 2);
+                        Console.Write("         ");
                     }
 
                 }
@@ -558,19 +601,19 @@ namespace Project_jUMPKING
                         break;
                 }
                 Console.BackgroundColor = color;
-                if(height < 0)
+                if(height < 0 && power!= 0)
                 {
-                    Console.SetCursorPosition(202, 42 - (power / 5) * 2);
-                    Console.Write("    ");
-                    Console.SetCursorPosition(202, 41 - (power / 5) * 2);
-                    Console.Write("    ");
+                    Console.SetCursorPosition(200, 42 - (power / 5) * 2);
+                    Console.Write("     ");
+                    Console.SetCursorPosition(200, 41 - (power / 5) * 2);
+                    Console.Write("     ");
                 }
                 else
                 {
-                    Console.SetCursorPosition(202, height + 42 - (power / 5) * 2);
-                    Console.Write("    ");
-                    Console.SetCursorPosition(202, height + 41 - (power / 5) * 2);
-                    Console.Write("    ");
+                    Console.SetCursorPosition(200, height + 42 - (power / 5) * 2);
+                    Console.Write("     ");
+                    Console.SetCursorPosition(200, height + 41 - (power / 5) * 2);
+                    Console.Write("     ");
                 }
 
 

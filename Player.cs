@@ -26,7 +26,7 @@ namespace Project_jUMPKING
         public int positionY { get { return _positionY; } }
         public int direction_right { get { return _direction_right; } }
         public int power { get { return _power; } }
-        public Player(int positionX = 80, int positionY = 220)
+        public Player(int positionX = 80, int positionY = 20)
         {
             _positionX = positionX;
             _positionY = positionY;
@@ -142,7 +142,7 @@ namespace Project_jUMPKING
                             int temp = power;
                             keyEnter = false;
                             _power = power;
-                            background.PowerBar(_positionY, 52);
+                            background.UIBar(_positionY, 52);
                             return;
                         }
                         else // 4-2. 입력이 발생하지 않아 KeyUp = false로 유지되었으면 계속해서 대기상태로 유지
@@ -160,7 +160,7 @@ namespace Project_jUMPKING
                 {
                     case ConsoleKey.Spacebar:
                         if (power <= 50) power++;
-                        background.PowerBar(_positionY, power);
+                        background.UIBar(_positionY, power);
                         break;
                 }
                 buffer = 0; // 1. 입력이 있으면 buffer를 0으로 초기화
@@ -361,8 +361,11 @@ namespace Project_jUMPKING
             }
             else
             {
-                min_height = height;
-                max_height = height + 62;
+                if(min_height != height)
+                {
+                    min_height = height;
+                    max_height = height + 62;
+                }
                 Console.SetCursorPosition(0, height);
                 Console.SetCursorPosition(0, height + 62);
             }

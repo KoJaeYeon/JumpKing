@@ -20,6 +20,7 @@
                 catch (Exception e)
                 {
                     Console.Clear();
+                    Console.ResetColor();
                     Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
                     key = Console.ReadKey(true);
                     continue;
