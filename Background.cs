@@ -17,7 +17,7 @@ namespace Project_jUMPKING
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
 
-        private Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
+        public Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
         private int item_Dic_Count;
 
         private int save_posX = 0,save_posY = 0;
@@ -90,48 +90,84 @@ namespace Project_jUMPKING
         }
         public void Save_Plattform()
         {
+            char y = 'y';
+            char z = 'z';
+            char s = 's';
+            //Row 2 ~ 160
             // height ~62
-            //Row
-            for (int i = 0; i < 6; i++) _background[21 + 2 * i, height - 20] = '▣';
-            for (int i = 0; i < 15; i++) _background[45 + 2 * i, height - 53] = '▣';
-            for (int i = 0; i < 10; i++) _background[90 + 2 * i, height - 53] = '▣';
-            for (int i = 0; i < 4; i++) _background[150 + 2 * i, height - 53] = '▣';
-            for (int i = 0; i < 3; i++) _background[39 + 2 * i, height - 58] = '▣';
+            Platform(2, 18, 20);
+            Platform(75, 20, 10);
+            Platform(122, 18, 20);
 
-            for (int i = 0; i < 1; i++) _background[44 + i, height - 11] = '↙';
-            for (int i = 0; i < 1; i++) _background[42 + i, height - 10] = '↙';
-            for (int i = 0; i < 1; i++) _background[40 + i, height - 9] = '↙';
-            for (int i = 0; i < 1; i++) _background[46 + i, height - 11] = '↘';
-            for (int i = 0; i < 1; i++) _background[48 + i, height - 10] = '↘';
-            for (int i = 0; i < 1; i++) _background[50 + i, height - 9] = '↘';
+            Platform(2, 35, 30);
+            Platform(160, 35, -30);
+
+            Platform(74, 50, 8);
+            Platform(140, 55, 3);
+
+            Platform(134, 75, 3);
+
+            Platform(96, 82, 5,z);
+
+            Platform(2, 81, 17, z , -6);            
+            Platform(36, 80, -5, s);
+
+            Platform(50, 113, 3);
+
+            Platform(90, 112, 3,s);
+            Platform(92, 113, 3);
+            Platform(98, 112,-3, s);
+
+            Platform(130, 100, 5,y);
+
+            Platform(140, 120, 3);
 
             //Column
 
             // height ~62
-            for (int i = 0; i < 3; i++) _background[34 + 2 * i, height - 63] = '▣';
-
-            for (int i = 0; i < 6; i++) _background[130 + 2 * i, height - 70] = '▣';
-            for (int i = 0; i < 7; i++) _background[31 + 2 * i, height - 87] = '▣';
-            for (int i = 0; i < 6; i++) _background[21 + 2 * i, height - 95] = '▣';
-
-            for (int i = 0; i < 15; i++) _background[82, height - (70 + i)] = '▣';
-
-
-
-
-
+        }
+        private void Platform(int startX, int startY, int length, char dir = 'x', int h = 0)
+        {
+            if (dir == 'x')
+            {
+                if (length > 0)
+                    for (int i = 0; i < length; i++) _background[startX + 2 * i, height - startY] = '▣';
+                else
+                    for (int i = 0; i < length * -1; i++) _background[startX - 2 * i, height - startY] = '▣';
+            }
+            else if (dir == 'y')
+            {
+                if (length > 0)
+                    for (int i = 0; i < length; i++) _background[startX, height - startY - i] = '▣';
+                else
+                    for (int i = 0; i < length * -1; i++) _background[startX - 2, height - startY + i] = '▣';
+            }
+            else if (dir == 'z')
+            {
+                for (int i = 0; i < length; i++) _background[startX + 2 * i, height - startY] = '▣';
+                for (int i = 0; i < length + h; i++) _background[startX, height - startY - i] = '▣';
+                for (int i = 0; i < length + h; i++) _background[startX + (length-1) * 2, height - startY - i] = '▣';
+                for (int i = 0; i < length; i++) _background[startX + 2 * i, height - startY - length - h] = '▣';
+            }
+            else if (dir == 's')
+            {
+                if (length > 0)
+                    for (int i = 0; i < length; i++) _background[startX - 2 * i, height - startY + i] = '↙';
+                else
+                    for (int i = 0; i < length * -1; i++) _background[startX + 2 * i, height - startY + i] = '↘';
+            }
         }
 
         public void Save_Item()
         {
             int x, y;
             // 0번 아이템(세이브 로드)
-            x = 140; y = height - 10;
+            x = 20; y = height - 115;
             item_Dic.Add(0, new SaveLoad(x, y, _background[x, y]));
             _background[x, y] = item_Dic[0].get_Char;
 
             // 1번 아이템
-            x = 82; y = height - 10;
+            x = 144; y = height - 105;
             item_Dic.Add(1, new Higher(x,y, _background[x,y]));
             _background[x, y] = item_Dic[1].get_Char;
 
@@ -463,8 +499,8 @@ namespace Project_jUMPKING
             Console.Write(sb2);
 
             Player.Get_item(itemNum);
-            item_Dic[itemNum].Set_posX();
-            item_Dic[itemNum].OnItem(231);
+            item_Dic[itemNum].Set_pos();
+            item_Dic[itemNum].OffItem();
         }
 
         public void UIBar(int positionY, int power)

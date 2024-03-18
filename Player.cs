@@ -8,7 +8,6 @@ namespace Project_jUMPKING
     class Player
     {
         private double speedX = 2, speedY = 0;
-        private double gravity = -0.01;
 
         private int _positionX, _positionY; // 캐릭터의 현재 위치
         private int prePosX, prePosY; // 렌더링을 위한 이전 좌표 확인용 위치
@@ -26,11 +25,12 @@ namespace Project_jUMPKING
         public int positionY { get { return _positionY; } }
         public int direction_right { get { return _direction_right; } }
         public int power { get { return _power; } }
-        public Player(int positionX = 80, int positionY = 20)
+        public Player(int positionX = 100, int positionY = 238 - 115)
         {
             _positionX = positionX;
             _positionY = positionY;
             Array.Clear(itemcheck);
+            Array.Clear(itemUse);
         }
 
         public void Move(Background background)
@@ -40,7 +40,7 @@ namespace Project_jUMPKING
                 while (Console.KeyAvailable == false)
                 {
                     Thread.Sleep(4);
-                    PlayerCamera(_positionY);
+                    PlayerCamera(_positionY, background);
                     background.Draw_Item(max_height, min_height, 2);
                 }
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -63,17 +63,37 @@ namespace Project_jUMPKING
                         background.DrawChar(_positionX, _positionY, _direction_right);
                         CameraTest();
                         break;
-                    case ConsoleKey.DownArrow:
-                        _direction_right = 0;
-                        background.DrawChar(_positionX, _positionY, _direction_right);
+                    case ConsoleKey.F1:
+                        while (true)
+                        {
+                            key = Console.ReadKey(true);
+                            switch(key.Key)
+                            {
+                                case ConsoleKey.UpArrow :
+                                    _positionY -= 1;
+                                    background.DrawChar(_positionX, _positionY, _direction_right);
+                                    break;
+                                case ConsoleKey.F1:
+                                    return;
+                                case ConsoleKey.LeftArrow:
+                                    _positionX -= 1;
+                                    background.DrawChar(_positionX, _positionY, _direction_right);
+                                    break;
+                                case ConsoleKey.RightArrow:
+                                    _positionX += 1;
+                                    background.DrawChar(_positionX, _positionY, _direction_right);
+                                    break;
+                            }
+
+                        }
                         break;
                     case ConsoleKey.S:
                         if (!itemcheck[0]) break;
-                        background.Save_Position(_saveX, _saveY,_positionX,_positionY);
+                        background.Save_Position(_saveX, _saveY, _positionX, _positionY);
                         _saveX = _positionX;
                         _saveY = _positionY;
                         _saveDir = _direction_right;
-                        
+
                         itemUse[0] = true;
                         break;
                     case ConsoleKey.R:
@@ -84,29 +104,36 @@ namespace Project_jUMPKING
                         background.DrawChar(_positionX, _positionY, _direction_right);
                         break;
                     case ConsoleKey.D1:
-                        if (!itemcheck[1]) break;
-                        itemUse[now_Item] = false;
-                        now_Item = 1;
-                        itemUse[now_Item] = true;
+                        UseItem(background, 1);
                         break;
                     case ConsoleKey.D2:
-                        if (!itemcheck[2]) break;
-                        itemUse[now_Item] = false;
-                        now_Item = 2;
-                        itemUse[now_Item] = true;
+                        UseItem(background, 2);
                         break;
                     case ConsoleKey.D3:
-                        if (!itemcheck[3]) break;
-                        itemUse[now_Item] = false;
-                        now_Item = 3;
-                        itemUse[now_Item] = true;
+                        UseItem(background, 3);
                         break;
+
                 }
 
 
             }
         }
-
+        private void UseItem(Background background,int num)
+        {
+            if (!itemcheck[num]) return;
+            if (itemUse[num])
+            {
+                itemUse[now_Item] = false;
+                background.item_Dic[now_Item].OffItem();
+                return;
+            }
+            itemUse[now_Item] = false;
+            background.item_Dic[now_Item].OffItem();
+            now_Item = num;
+            itemUse[now_Item] = true;
+            background.item_Dic[now_Item].OnItem();
+            return;
+        }
         public void Move_LR(Background background)
         {
             if (background.Collide((int)_positionX, (int)_positionY, _direction_right) == 1) // 벽과 충돌 했을 때
@@ -179,7 +206,7 @@ namespace Project_jUMPKING
             double doubleX = _positionX;
             double doubleY = _positionY;
             SetPower(temp);
-            gravity = -0.03;
+            double gravity = -0.03;
             while (colisionGround != 1)
             {
                 background.Draw_Item(max_height,min_height, 2);
@@ -195,6 +222,8 @@ namespace Project_jUMPKING
                 doubleY -= speedY;
                 if (speedY > -1)
                 { speedY += gravity; }
+                if (itemUse[3])
+                { speedY += 0.01; }
 
                 if (prePosX != (int)Math.Round(doubleX))
                 {
@@ -207,9 +236,8 @@ namespace Project_jUMPKING
                     _positionY = (int)doubleY;
                     prePosY = (int)doubleY;
                     background.DrawChar(_positionX, _positionY, _direction_right);
-                    PlayerCamera(_positionY);
+                    PlayerCamera(_positionY, background);
                 }
-
                 try
                 {
                     //충돌 검사
@@ -282,12 +310,12 @@ namespace Project_jUMPKING
 
         public void SetPower(int power)
         {
-            if (power == 0)
-            {
-                speedX = 0;
-                speedY = 0;
-            }
-            else if (power < 10)
+            //if (power == 0)
+            //{
+            //    speedX = 0;
+            //    speedY = 0;
+            //}
+            if (power < 10)
             {
                 speedX = 0.3;
                 speedY = 0.2;
@@ -337,6 +365,13 @@ namespace Project_jUMPKING
                 speedX = 0.8;
                 speedY = 1.1;
             }
+            if (itemUse[1]) speedX += 0.6;
+            else if (itemUse[2]) speedY += 0.4;
+            if (power == 0)
+            {
+                speedX = 0;
+                speedY = 0;
+            }
             if (direction_right == 0) speedX = 0;
             
         }
@@ -345,13 +380,31 @@ namespace Project_jUMPKING
         {
             itemcheck[itemNum] = true;
         }
-        public void PlayerCamera(int positionY)
+
+        public void PlayerCamera(int positionY, Background background = null)
         {
             int height = Background.height - 1;
             while (positionY < height)
             {
                 height -= 62;
                 continue;
+            }
+            if (min_height != height)
+            {
+                min_height = height;
+                max_height = height + 62;
+                for (int i = 0; i < 10; i++)
+                {
+                    if (itemcheck[i])
+                    {
+                        if (i == 0) { continue; }
+                        if (height < 0) { background.item_Dic[i].Set_posY(49); }
+                        else { background.item_Dic[i].Set_posY(height + 49); }
+                        
+                        if (itemUse[i]) background.item_Dic[i].OnItem();
+                        else background.item_Dic[i].OffItem();
+                    }
+                }
             }
             if (height < 0)
             {
@@ -361,11 +414,8 @@ namespace Project_jUMPKING
             }
             else
             {
-                if(min_height != height)
-                {
-                    min_height = height;
-                    max_height = height + 62;
-                }
+
+
                 Console.SetCursorPosition(0, height);
                 Console.SetCursorPosition(0, height + 62);
             }
