@@ -1,5 +1,6 @@
 ﻿using System.Runtime.Intrinsics.X86;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Project_jUMPKING
 {
@@ -9,6 +10,9 @@ namespace Project_jUMPKING
         public static readonly int height = 241;
 
         BackgroundImage back_Image = new BackgroundImage();
+        Princess princess = new Princess(110,17);
+
+        public Princess Princess { get { return princess; } }
 
         private int prePosX = 45;
         private int prePosY = 99;
@@ -158,6 +162,10 @@ namespace Project_jUMPKING
                 Platform(35, 146, 2);
 
                 Platform(5, 153, 5);
+
+
+                for (int i = 0; i < 41; i++) _background[20 * 2 + 2 * i, 20] = '▣';
+                for (int i = 0; i < 6; i++) _background[120, 14 + i] = '▣';
                 //Column
 
                 // height ~62
@@ -904,6 +912,31 @@ namespace Project_jUMPKING
                 return 1;
             }
 
+        }
+
+        public void Ending()
+        {
+            string[] text = princess.Text();
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            for(int i = 0; i < text.Length; i++)
+            {
+                Console.SetCursorPosition(110 - text[i].Length / 2, 12);
+                sb2.Clear();
+                for(int j = 0; j < text[i].Length + 2; j++)
+                {
+                    sb2.Append(' ');
+                }
+                Console.Write(sb2);
+                Console.SetCursorPosition(111 - text[i].Length / 2, 12);
+                foreach (char c in text[i])
+                {
+                    Console.Write(c);
+                    Thread.Sleep(100);
+                }
+                Thread.Sleep(1500);
+                Console.SetCursorPosition(111 - text[i].Length / 2,12);
+                Console.Write(sb2);
+            }
         }
     }
 }

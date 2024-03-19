@@ -22,8 +22,8 @@ namespace Project_jUMPKING
         private bool whilein = false;
 
         private int _saveX = 0, _saveY = 0, _saveDir = 0;
-        public int positionX { get { return _positionX; } }
-        public int positionY { get { return _positionY; } }
+        public int positionX { get { return _positionX; } set { _positionX = value; } }
+        public int positionY { get { return _positionY; } set { _positionY = value; } }
         public int direction_right { get { return _direction_right; } }
         public int power { get { return _power; } }
         public Player(int positionX = 37 * 2, int positionY = 238 - 150)
@@ -52,12 +52,12 @@ namespace Project_jUMPKING
                     case ConsoleKey.LeftArrow:
                         _direction_right = -1;
                         Move_LR(background);
-                        break;
+                        return;
                     case ConsoleKey.D:
                     case ConsoleKey.RightArrow:
                         _direction_right = 1;
                         Move_LR(background);
-                        break;
+                        return;
                     case ConsoleKey.Spacebar:
                         Power(background);
                         return;
@@ -122,7 +122,10 @@ namespace Project_jUMPKING
                             Console.SetCursorPosition(0, height);
                             Console.SetCursorPosition(0, height + 62);
                             menu(height);
-
+                        break;
+                    case ConsoleKey.F2:
+                        _positionX = 90;
+                        _positionY = 15;
                         break;
 
                 }
@@ -495,6 +498,10 @@ namespace Project_jUMPKING
                         if (itemUse[i]) background.item_Dic[i].OnItem();
                         else background.item_Dic[i].OffItem();
                     }
+                }
+                if(height < 0)
+                {
+                    background.Princess.Print_Princess();
                 }
             }
             if (height < 0)
