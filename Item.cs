@@ -12,6 +12,7 @@ namespace Project_jUMPKING
         protected int time = 100;
         protected char _tempChar;
         protected char _Char;
+        protected string _Text = "";
 
         public bool getItem
         {
@@ -64,6 +65,9 @@ namespace Project_jUMPKING
             Console.Write(sprite[0][3]);
             Console.SetCursorPosition(posX - 2, posY + 2);
             Console.Write(sprite[0][4]);
+
+            Console.SetCursorPosition(posX - 3, posY - 5);
+            Console.Write(_Text);
             Console.ResetColor();
         }
 
@@ -80,6 +84,9 @@ namespace Project_jUMPKING
             Console.Write(sprite[0][3]);
             Console.SetCursorPosition(posX - 2, posY + 2);
             Console.Write(sprite[0][4]);
+
+            Console.SetCursorPosition(posX -3, posY - 5);
+            Console.Write(_Text);
             Console.ResetColor();
         }
 
@@ -117,7 +124,7 @@ namespace Project_jUMPKING
         {
             sprite[0] = sprite1;
             sprite[1] = sprite2;
-            _Char = sprite1[2][2];
+            _Char = sprite[0][2][2];
         }
 
         public override void OnItem()
@@ -173,13 +180,14 @@ namespace Project_jUMPKING
         };
     }
 
-    class Higher : Item
+    class Further : Item
     {
-        public Higher(int posX, int posY, char tempChar) : base(posX, posY, tempChar)
+        public Further(int posX, int posY, char tempChar) : base(posX, posY, tempChar)
         {
             sprite[0] = sprite1;
             sprite[1] = sprite2;
-            _Char = sprite1[2][2];
+            _Char = '★';
+            _Text = "Booster";
         }
 
         public override void Set_pos()
@@ -207,13 +215,14 @@ namespace Project_jUMPKING
         };
     }
 
-    class Further : Item
+    class Higher : Item
     {
-        public Further(int posX, int posY, char tempChar) : base(posX, posY, tempChar)
+        public Higher(int posX, int posY, char tempChar) : base(posX, posY, tempChar)
         {
             sprite[0] = sprite1;
             sprite[1] = sprite2;
-            _Char = sprite1[2][2];
+            _Char = '☆';
+            _Text = "Jumper";
         }
 
         public override void Set_pos()
@@ -221,7 +230,7 @@ namespace Project_jUMPKING
             this.posX = 202;
             this.posY = 227;
         }
-
+        
         private readonly string[] sprite1 =
         {
         "*#*#*",
@@ -247,7 +256,8 @@ namespace Project_jUMPKING
         {
             sprite[0] = sprite1;
             sprite[1] = sprite2;
-            _Char = sprite1[2][2];
+            _Char = '○';
+            _Text = "Gravity";
         }
 
         public override void Set_pos()

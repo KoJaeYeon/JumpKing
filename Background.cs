@@ -8,11 +8,17 @@ namespace Project_jUMPKING
         public static readonly int width = 162;
         public static readonly int height = 241;
 
+        BackgroundImage back_Image = new BackgroundImage();
+
         private int prePosX = 45;
         private int prePosY = 99;
         private int jumpPosY = 10;
+        private int save_posX = 0,save_posY = 0;
+
         private char[,] _background = new char[width, height];
         private char[] save_Char = new char[4];
+        char[][][] Image80 = { };
+        char[][] Image160 = { };
 
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
@@ -20,9 +26,7 @@ namespace Project_jUMPKING
         public Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
         private int item_Dic_Count;
 
-        private int save_posX = 0,save_posY = 0;
-
-        public Background()
+        public Background(int map = 1)
         {
             for (int i = 0; i < _background.GetLength(0); i++)
             {
@@ -31,15 +35,18 @@ namespace Project_jUMPKING
                     _background[i, j] = ' ';
                 }
             }
-
-            //Make_backGround();
-            Save_Background();
+            Save_Map(map);
+            Save_Background(map);
             Save_ground();
             Save_Wall();
-            Save_Plattform();
-            Save_Item();
-
-            Draw_Background();
+            Save_Plattform(map);
+            Save_Item(map);
+            Draw_Background(map);
+        }
+        public void Save_Map(int map)
+        {
+            Image80 = back_Image.GetMap80(map);
+            Image160 = back_Image.GetMap160(map);
         }
         public void Save_ground()
         {
@@ -64,136 +71,208 @@ namespace Project_jUMPKING
                 _background[_background.GetLength(0) - 1, i] = '▣';
             }
         }
-        public void Save_Background()
+        public void Save_Background(int map = 1)
         {
-            for (int i = 0; i < 160; i++)
+            if (map == 1)
             {
-                for (int j = 0; j < 160; j++)
+                for (int i = 0; i < 160; i++)
                 {
-                    _background[i+1, height - 240 + j] = Lucy[j][i];
+                    for (int j = 0; j < 160; j++)
+                    {
+                        _background[i + 1, height - 240 + j] = Image160[j][i];
+                    }
+                }
+                for (int i = 0; i < 80; i++)
+                {
+                    for (int j = 0; j < 80; j++)
+                    {
+                        _background[i + 1, height - 80 + j] = Image80[0][j][i];
+                    }
+                }
+                for (int i = 0; i < 80; i++)
+                {
+                    for (int j = 0; j < 80; j++)
+                    {
+                        _background[i + 81, height - 80 + j] = Image80[1][j][i];
+                    }
                 }
             }
-            for (int i = 0; i < 80; i++)
+            else if (map == 0)
             {
-                for (int j = 0; j < 80; j++)
+                for (int i = 0; i < 160; i++)
                 {
-                    _background[i + 1, height - 80 + j] = Vinette[j][i];
-                }
-            }
-            for (int i = 0; i < 80; i++)
-            {
-                for (int j = 0; j < 80; j++)
-                {
-                    _background[i + 81, height - 80 + j] = Sumire[j][i];
+                    for (int j = 0; j < 160; j++)
+                    {
+                        _background[i + 1, height - 160 + j] = Image160[j][i];
+                    }
                 }
             }
         }
-        public void Save_Plattform()
+        public void Save_Plattform(int map = 1)
         {
             char y = 'y';
             char z = 'z';
             char s = 's';
-            //Row 2 ~ 160
-            // height ~62
-            Platform(2, 18, 20);
-            Platform(75, 20, 10);
-            Platform(122, 18, 20);
+            if(map == 1)
+            {
+                //Row 2 ~ 160
+                // height ~62
+                Platform(1, 18, 20);
+                Platform(37, 20, 10);
+                Platform(61, 18, 20);
 
-            Platform(2, 35, 30);
-            Platform(160, 35, -30);
+                Platform(1, 35, 30);
+                Platform(80, 35, -30);
 
-            Platform(74, 50, 8);
-            Platform(140, 55, 3);
+                Platform(37, 50, 8);
+                Platform(70, 55, 3);
 
-            Platform(134, 75, 3);
+                Platform(67, 75, 3);
 
-            Platform(96, 82, 5,z);
+                Platform(48, 82, 5, z);
 
-            Platform(2, 81, 17, z , -6);            
-            Platform(36, 80, -5, s);
+                Platform(1, 81, 17, z, -6);
+                Platform(18, 80, -5, s);
 
-            Platform(50, 113, 3);
+                Platform(25, 113, 3);
 
-            Platform(90, 112, 3,s);
-            Platform(92, 113, 3);
-            Platform(98, 112,-3, s);
+                Platform(45, 112, 3, s);
+                Platform(46, 113, 3);
+                Platform(49, 112, -3, s);
 
-            Platform(130, 100, 5,y);
+                Platform(65, 100, 5, y);
 
-            Platform(140, 120, 3);
-            Platform(146, 119, -3,s);
-            Platform(146, 109, -3, s);
-            Platform(146, 99, -3, s);
+                Platform(70, 120, 3);
+                Platform(73, 119, -3, s);
+                Platform(73, 109, -3, s);
+                Platform(73, 99, -3, s);
 
-            Platform(140, 134, 3);
-            Platform(140, 160, 3);
-            Platform(124, 168, 3);
+                Platform(70, 134, 3);
+                Platform(70, 160, 3);
+                Platform(62, 168, 3);
 
-            Platform(120, 136, 3);
+                Platform(60, 136, 3);
 
-            Platform(100, 138, 3);
+                Platform(50, 138, 3);
 
-            Platform(70, 146, 2);
-            //Column
+                Platform(35, 146, 2);
 
-            // height ~62
+                Platform(5, 153, 5);
+                //Column
+
+                // height ~62
+            }
+            else if(map == 0)
+            {
+                Platform(1, 10, 50);
+                Platform(20, 25, 50);
+                Platform(1, 40, 50);
+
+                Platform(65, 43, -10,s);
+                Platform(64, 33, 11, y);
+                Platform(64, 33, 11);
+
+                Platform(80, 54, -5);
+                Platform(73, 67, -5);
+
+                Platform(60, 70, -55);
+
+                Platform(1, 70, 10,z);
+
+                Platform(80,110, -47);
+                for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 112] = '※';
+                for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 113] = '※';
+                for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 114] = '※';
+                for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 115] = '※';
+                for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 116] = '※';
+
+            }
+
         }
         private void Platform(int startX, int startY, int length, char dir = 'x', int h = 0)
         {
             if (dir == 'x')
             {
                 if (length > 0)
-                    for (int i = 0; i < length; i++) _background[startX + 2 * i, height - startY] = '▣';
+                    for (int i = 0; i < length; i++) _background[startX*2 + 2 * i, height - startY] = '▣';
                 else
-                    for (int i = 0; i < length * -1; i++) _background[startX - 2 * i, height - startY] = '▣';
+                    for (int i = 0; i < length * -1; i++) _background[startX*2 - 2 * i, height - startY] = '▣';
             }
             else if (dir == 'y')
             {
                 if (length > 0)
-                    for (int i = 0; i < length; i++) _background[startX, height - startY - i] = '▣';
+                    for (int i = 0; i < length; i++) _background[startX*2, height - startY - i] = '▣';
                 else
-                    for (int i = 0; i < length * -1; i++) _background[startX - 2, height - startY + i] = '▣';
+                    for (int i = 0; i < length * -1; i++) _background[startX*2 - 2, height - startY + i] = '▣';
             }
             else if (dir == 'z')
             {
-                for (int i = 0; i < length; i++) _background[startX + 2 * i, height - startY] = '▣';
-                for (int i = 0; i < length + h; i++) _background[startX, height - startY - i] = '▣';
-                for (int i = 0; i < length + h; i++) _background[startX + (length-1) * 2, height - startY - i] = '▣';
-                for (int i = 0; i < length; i++) _background[startX + 2 * i, height - startY - length - h] = '▣';
+                for (int i = 0; i < length; i++) _background[startX*2 + 2 * i, height - startY] = '▣';
+                for (int i = 0; i < length + h; i++) _background[startX*2, height - startY - i] = '▣';
+                for (int i = 0; i < length + h; i++) _background[startX*2 + (length-1) * 2, height - startY - i] = '▣';
+                for (int i = 0; i < length; i++) _background[startX*2 + 2 * i, height - startY - length - h] = '▣';
             }
             else if (dir == 's')
             {
                 if (length > 0)
-                    for (int i = 0; i < length; i++) _background[startX - 2 * i, height - startY + i] = '↙';
+                    for (int i = 0; i < length; i++) _background[startX*2 - 2 * i, height - startY + i] = '↙';
                 else
-                    for (int i = 0; i < length * -1; i++) _background[startX + 2 * i, height - startY + i] = '↘';
+                    for (int i = 0; i < length * -1; i++) _background[startX*2 + 2 * i, height - startY + i] = '↘';
             }
         }
 
-        public void Save_Item()
+        public void Save_Item(int map = 1)
         {
-            int x, y;
-            // 0번 아이템(세이브 로드)
-            x = 20; y = height - 115;
-            item_Dic.Add(0, new SaveLoad(x, y, _background[x, y]));
-            _background[x, y] = item_Dic[0].get_Char;
+            if(map == 1)
+            {
+                int x, y;
+                // 0번 아이템(세이브 로드)
+                x = 20; y = height - 115;
+                item_Dic.Add(0, new SaveLoad(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[0].get_Char;
 
-            // 1번 아이템
-            x = 144; y = height - 105;
-            item_Dic.Add(1, new Higher(x,y, _background[x,y]));
-            _background[x, y] = item_Dic[1].get_Char;
+                // 1번 아이템
+                x = 144; y = height - 105;
+                item_Dic.Add(1, new Further(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[1].get_Char;
 
-            // 2번 아이템
-            x = 122; y = height - 20;
-            item_Dic.Add(2, new Further(x, y, _background[x, y]));
-            _background[x, y] = item_Dic[2].get_Char;
+                // 2번 아이템
+                x = 15; y = height - 168;
+                item_Dic.Add(2, new Higher(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[2].get_Char;
 
-            // 3번 아이템
-            x = 132; y = height - 30;
-            item_Dic.Add(3, new Longer(x, y, _background[x, y]));
-            _background[x, y] = item_Dic[3].get_Char;
+                // 3번 아이템
+                x = 132; y = height - 30;
+                item_Dic.Add(3, new Longer(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[3].get_Char;
 
-            item_Dic_Count = item_Dic.Count;
+                item_Dic_Count = item_Dic.Count;
+            }
+            else if (map == 0)
+            {
+                int x, y;
+                // 0번 아이템(세이브 로드)
+                x = 53; y = height - 32;
+                item_Dic.Add(0, new SaveLoad(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[0].get_Char;
+
+                //// 1번 아이템
+                x = 116; y = height - 74;
+                item_Dic.Add(1, new Further(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[1].get_Char;
+
+                //// 2번 아이템
+                x = 76; y = height - 74;
+                item_Dic.Add(2, new Higher(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[2].get_Char;
+
+                //// 3번 아이템
+                x = 37; y = height - 74;
+                item_Dic.Add(3, new Longer(x, y, _background[x, y]));
+                _background[x, y] = item_Dic[3].get_Char;
+
+                item_Dic_Count = item_Dic.Count;
+            }
         }
 
         public void Save_Position(int preSaveX, int preSaveY, int saveX, int saveY) //저장하는 부분 모델링
@@ -302,7 +381,7 @@ namespace Project_jUMPKING
                 Console.Write('▤');
             }
 
-
+            
             { //다리
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.SetCursorPosition(positionX - 2, positionY);
@@ -363,43 +442,112 @@ namespace Project_jUMPKING
             }
             Console.ResetColor();
         }
-        public void Draw_Background()
+        public void Draw_Background(int map = 1)
         {
             sb.Clear();
-            for (int i = 0; i < height - 1; i++)
+            if (map == 1)
             {
-                sb.Append('▣');
-                if (i > height - 81 )
+                for (int i = 0; i < height - 1; i++)
                 {
-                    for (int j = 0; j < 80; j++)
+                    sb.Append('▣');
+                    if (i > height - 81)
                     {
-                        sb.Append(Vinette[i - (height - 80)][j]);
+                        for (int j = 0; j < 80; j++)
+                        {
+                            sb.Append(Image80[0][i - (height - 80)][j]);
+                        }
+                        for (int j = 0; j < 80; j++)
+                        {
+                            sb.Append(Image80[1][i - (height - 80)][j]);
+                        }
                     }
-                    for (int j = 0; j < 80; j++)
+                    else if (i > height - 241)
                     {
-                        sb.Append(Sumire[i - (height - 80)][j]);
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(Image160[i - (height - 240)][j]);
+                        }
                     }
+                    else
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(' ');
+                        }
+                    }
+                    sb.Append('▣');
+                    sb.AppendLine();
                 }
-                else if (i > height - 241)
+                for (int j = 0; j < 82; j++)
                 {
-                    for (int j = 0; j < 160; j++)
-                    {
-                        sb.Append(Lucy[i - (height - 240)][j]);
-                    }
-                }
-                else
+                    sb.Append('▣');
+                }                
+                for (int i = 0; i < 40; i++)
                 {
-                    for (int j = 0; j < 160; j++)
-                    {
-                        sb.Append(' ');
-                    }
+                    sb.AppendLine();
                 }
-                sb.Append('▣');
-                sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t┌────────────────────────────────────────────────────────────────────────────────────────┐"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                       Jump King                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      1. 계속하기                                       │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      2. 저장하기                                       │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      3. 게임종료                                       │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
             }
-            for (int j = 0; j < 82; j++)
+            else if (map == 0)
             {
-                sb.Append('▣');
+                for (int i = 0; i < height - 1; i++)
+                {
+                    sb.Append('▣');
+                    if (i > height - 161)
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(Image160[i - (height - 160)][j]);
+                        }
+                    }
+                    else if (i > height - 241)
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(' ');
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(' ');
+                        }
+                    }
+                    sb.Append('▣');
+                    sb.AppendLine();
+                }
+                for (int j = 0; j < 82; j++)
+                {
+                    sb.Append('▣');
+                }
+                for (int i = 0; i < 40; i++)
+                {
+                    sb.AppendLine();
+                }
+                sb.Append("\t\t\t\t\t\t\t\t\t┌────────────────────────────────────────────────────────────────────────────────────────┐"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                       Jump King                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      1. 계속하기                                       │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      2. 저장하기 (튜토리얼은 저장불가)                 │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      3. 게임종료                                       │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
             }
         }
         public void Print_Back()
@@ -429,18 +577,22 @@ namespace Project_jUMPKING
                         Console.Write('▣');
                         continue;
                     }
-
-                    if (_background[i, j] == '↙')
+                    else if (_background[i, j] == '↙')
                     {
                         Console.SetCursorPosition(i, j);
                         Console.Write('↙');
                         continue;
                     }
-
-                    if (_background[i, j] == '↘')
+                    else if (_background[i, j] == '↘')
                     {
                         Console.SetCursorPosition(i, j);
                         Console.Write('↘');
+                        continue;
+                    }
+                    else if (_background[i, j] == '※')
+                    {
+                        Console.SetCursorPosition(i, j);
+                        Console.Write('※');
                         continue;
                     }
                 }
@@ -461,7 +613,7 @@ namespace Project_jUMPKING
             }
         }
 
-        public void Get_Item(int itemNum)
+        public void Get_Item(int itemNum, int posy)
         {
             Item item = item_Dic[itemNum];
             int x = item.get_posX;
@@ -512,6 +664,14 @@ namespace Project_jUMPKING
 
             Player.Get_item(itemNum);
             item_Dic[itemNum].Set_pos();
+            int height = Background.height - 1;
+            while (posy < height)
+            {
+                height -= 62;
+                continue;
+            }
+                if (height < 0) { item_Dic[itemNum].Set_posY(49); }
+                else { item_Dic[itemNum].Set_posY(height + 49); }
             item_Dic[itemNum].OffItem();
         }
 
@@ -716,19 +876,26 @@ namespace Project_jUMPKING
                 }
                 else if (_background[x, y] == '0')
                 {
-                    Get_Item(0);
+                    Get_Item(0,y);
                 }
-                else if (_background[x, y] == '1')
-                {
-                    Get_Item(1);
+                else if (_background[x, y] == '★')
+                {                    
+                    Get_Item(1,y);
                 }
-                else if (_background[x, y] == '2')
+                else if (_background[x, y] == '☆')
                 {
-                    Get_Item(2);
+                    Get_Item(2, y);
                 }
-                else if (_background[x, y] == '3')
+                else if (_background[x, y] == '○')
                 {
-                    Get_Item(3);
+                    Get_Item(3, y);
+                }
+                else if (_background[x, y] == '※')
+                {
+                    Program.TutorialClear();
+                    Console.Clear();
+                    return 10;
+                    
                 }
                 return 0;
             }
@@ -738,336 +905,5 @@ namespace Project_jUMPKING
             }
 
         }
-
-
-
-        public readonly char[][] Lucy =
-        {
-          "@@@@@@@@@@@@@@@@@@@@@@*~.          .  -=*:::  ............ ,-, .........      .--.       ..          .;$;.,~,             -:.   .  -!!-!@@@@@@@@@@@@*~~#@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@@@#;,          ..  -$;::- ............ ,~~..........,.      .~,        ..          ,~!!,-,.            .-:.   . .-=-:=@@@@@@@@@@@!-:@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@@@$-.          .. .:=:;~. .............~~-.......   ...      ,-.        ..          .~!;~,.             .~~.  .. .!;~;@@@@@@@@@@@;~!@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@@#*.           .  ,;=;:, .............-;, .....      ..       --         ..           -=!~.               ~-. ... ,*;-$@@@@@@@@@#;:$@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@@=~ .         ..  ,;#!, ..............;-  .                   ,-,         ..           .==:               .~~  ..  !!~-#@@@@@@@@=:;#@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@@*..          ..  ~=$,...............-:.                       ,-          ..           ,*=~               .--  .. ,;!.$@@@@@@@@!:!@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@=~ .         ... ,!*~.............. ,~~                        .,,       .  .            -!*,               .-,...  ~*~:$@@@@@@@;:*@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@@;, .         .. .;!: ............   ,~-                         .-       ..  .            -*!,               ,-,... ,;*-*@@@@@@#;!$@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@#~ .          ...~=:  ............   -~.                          -.      .-.  .            ,$:.               ,-, ,  -$-;$@@@@#=!=#@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@!, .         .  -$~. ............    --                           ,-.      .,.               -*;                .,... .:*:;@@@@#==$#@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@@@-...           ~!;..............    .--                           .~,       ,,.     .        .;*;                .,....,*;;$@@@$==$#@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@#=...           -!!,........ ....     ,-,                            --.       ,,     ..        ,;=~                .,,.  ;!;!@@#$==$@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@$;... .        .**- .......  ...      --.                            .-,       .,,     ..        -*$-           .    ,-,  .;!:#@#$==#@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@=.  . .       .*=: ,....,.  .,.       --.                             ,-        .-      ,,        -#!,          ..    --,  :!;$@#===#@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@@* .  .       .-$:......,.   ,.        -,                              ,-        .,,.    .--        -=:           ,.    ,~, ,:**##==$#@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@$; .. .       -!;, ......   .,         -,                              ,-.        .,.     ,~-.       !!~          ...   .,~,.-*$##$=$@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@*- .. .      .;=,.......   ...        .-,                              .-,         ,.      ,~-.      -**.          ..     -~,,;@#$$=#@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@@;    ..      ;=; ....,.    ..         ,-.                              .--         .,.      -:-       :=:          .,,     -~,,#@#$=@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@$: . ..      ,!!.....,.    ..          -,.                               ,-          ,,       -~-  ... .:=.          .,-.    --,;##$$@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@*- ....      ;!- .....     ..          ~,                                .-          .,.      .-:.  ,-. -=;,          .,-.   .,,~$@##@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@:. ....     -=:.......    ..          .~.                                .-.         .,,       .~~. .~,.,:=-          ..--,    .,!#@#@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@@~  ....    ,**- ,....     .           .~.                                .~.          .-        .;-. --,..=:.         ...-~.     -*@@@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@@#- ....     -$-......     ..           ,~.                     .          .~,          .-,        ,;~ ,,-,.;*:          . .-!,     -=@@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@#*, ....    -!*......     ..           .,-.                     .          .~,        .  ,-.        ::-.,,,,,*;.          ...-;~.   .~$@@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@#:......    :*~....,.     ..           .--                      ..         .~,        .  .:,        ,:;.,,,, ;!~      ... ....~:~.   .:$@@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@$- .,..    ,;! .....     ..            .~.                      ..         .~-        .. .:-.    ..  -!~..,,.~!*      ...  ..  ~;~.    ;$@@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@$. .,..    ;*: .....     ..            ,~                       ,.         .:-.        .. ::,     .   -=,.,,,.:=-     .......,  -*:.    ;#@@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@@= .,,..    *;. ....     ..             ,-                       ,,.        ,;~.        .. ,;-     .,  .;;-.--.-*=,    ......... .,;;-   .:$@@@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@$! ,,,.    ~*: .....     ..            .--                       ,,.        ,!:.        ,,..;~      ,,  ,!:,.-..:#~.   ............-:;~.  .~=#@@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@=~ ,-,.   .*;- ,....    ..             ,-,                       ,,.        ,;:.        .,, ::,     .,,  :;~.,..-#!-  ............. ,:;:-.  ~*#@@@@@@".ToCharArray(),
-          "@@@@@@@@@@@*, --..   ,$~  ....     ,.             --                        ,,.        .:~. .,,..  .,, ~:~      ,-,..:;.,,.,==:. .............. .~=*~.  ,!#@@@@@".ToCharArray(),
-          "@@@@@@@@@@@!  --.   ,;=-......    .-             .-,           .        .   -,. ..     .-~,,,,,,,,  .-.,:: ..    .--.-:;....;!;-. ........ ,-, .. .*$!.  .:@@@@@".ToCharArray(),
-          "@@@@@@@@@#$: .-,.   -=;.......   .,,         .   --,          ..        ..  ,-,.,,.    .~~,,,,,,,-,..,,,~:,,,,,...,,,,-;-. .-;:~, ........ ,-~ ... ,*$*:, .-*#@@".ToCharArray(),
-          "@@@@@@@@#!!~ -~,    ~=-....,..  .,-.        .   .~-. .       .,.    ... .. .,-,,,,,. . .~:-,,,,,,,,..,,.-:-,,,,,,.,,,.,~;,  ,::~~...........,~..... ~=@$!:, -;=@".ToCharArray(),
-          "@@@@@@@$!~;~ ~-,   ,;*.,,..,.  .,--        .,   ,:,         .,-. ..,,,,.,. .,--,,,,,....~:-,,,,,,,,,,,,.-:~.,,,,,,,-,,..;~. .;:~:,...........--..., ,;##@#!-,,~=".ToCharArray(),
-          "@@@@@@@! ;!~.:-.   :*; ,,..,. .,--,       .,.  ,:-. .      .,--,,---,,,,,. ,,--,,,,,,,..~:-,,,,,,,,,,,-.-:;..,,,,,,~~,..,;~  ::::-...........,~.... .~*;$@@@$:. ".ToCharArray(),
-          "@@@@@@!. *;,.:,.   ;*-.,...,,,,,~-.       ,- .,-:. .,    .,,,,-,,,,,,,,,,. ,,--,,,,,,,.,~:-,,,,,,,,,,,---~*,.,,,,,,,~~,..-:~ ~:::-............~,.... -*:=@@@@#$=".ToCharArray(),
-          "@@@@@!- ,=~..:,.  .!!.,,..,,,,,,~-       ,,,..,~~ .,.  ..,,,,--,,,,,,,,,,..,,--,,,,,,,,,~*~,,,,,,,,,,,--,~*-,,,,,,,.,~~, .~;,-::~~............--, .. ,;;!=@@@@@@".ToCharArray(),
-          "@@@@$- .~=-.-~.   -*; ,,..,,,,,-~, ..   .,,.,.-~, ,,. .,-,,,,~~,,,,,,,,,,,.,-~-.,,,,,,..~$:,.,,,,,,,,,,-,-*~,.,,,,,,.-~~. ,::-~:~~,............-,... .~*:*@@@@@@".ToCharArray(),
-          "@@@#:. .;=-.~~.   ;*: -,,,,,,,.~~, ,   ,-,,,,,~~  -, .,-,,,.-:-,,,,,,,,,,,,.-~-.,,,,,,..~$:,.,,,,,,,,,,-,-!:,.,,,,,,,.-:,  .!;~~:~,........... --. .. ,$:;#@@@@@".ToCharArray(),
-          "@@#!.. ,*!,.~~.   *!- ,,,,,,,,,:-. , .,-,,,,.::, ~,. -,,,,,,~;,,,,,,,,,,,,,.-~-.,,,,,,.,:$:,.,,,,,,,,,,-,,;;-,,,,,,,,..,;,  .**:-:,........... ,-- ....*;:!@@@@@".ToCharArray(),
-          "@#*~,. -=~.,:-.  .=;,.,,,,,,,,-:,..,.,-,,,,,-~-.--..,-,,,,.-:;,,,,,,,,,,,,,.-~-.,,,,,,.,:$:..,,,,,...,.--,:;~,.,,,,,... ~~,  -;*:~,.............--.... ~!:~@@@@@".ToCharArray(),
-          "@*:-,  ~$, ,:,.  ,=~.,,,,,,,,,~:..,,,,,,,,,,~,,,~,.,,,,,,,.~;:,,,,,,,,,,,,,.~-,,,,,,,,.,;#:..,,,,......-,,:;~,.,,,,......~~.  -;!:-............ ,-, .. .!;-=@@@@".ToCharArray(),
-          "=:--. .:=. -:,. .~=~.,,,,,,,.-:-..-,,,,,,,,-~.,~-.,,,,,,,.,:;:.,,,,,,,,,,,,,~-,,,,,,,,.,;#;..,,,...... -,,~;:,..,....... -:~   ,**~............ .-~...  !;,~$@@@".ToCharArray(),
-          "--, . -!*..-:.. .;*-.-,,,,,,,-;..,,,,,,,,,-~ ,~~.,,,,,,,,.~;;~.,,,,,,,,,,,,,~-..,,,,,.,~!#;, ,,....... --,~:;:, ......... ~*,   .*!- .............:.... :!: *@@@".ToCharArray(),
-          "-,. , ~*;..~: . ,*!-.-,,,,,.,~:.,,,,,,,,,--..:~,.,,,,,,,.,~;:-.,,,,,,,,.,,,,~,...,,,,.,:*=;- ......... --,;:;;~ ......... ,:$:,  ,:;~  ...........~-... ~!; ,*@@".ToCharArray(),
-          "..... :*- ,:; . ,=!,.-,,,,,.-:~.,,,,,,,,--,,-:-.,,,,,,,..--::,.,,,,,,,..,,,-~,...,,,,.,;=*;- ......... ~-,!:~:; ...........-$=!~-.,~~-. ..........,~, . ,;!. ~=@".ToCharArray(),
-          " ... .;*. -:; . ,=;,.,,,,,,.:;-.,,,,,,,,-,,,~~-.,,,,,,..,-,:~.,,,,,,,..,,..~~,.,..,,,.-;=!;~ ......... ~-,*!-~*.............:==*!~--~;~,. .........~-.   ~!-..:#".ToCharArray(),
-          " ... ,!!  -;; . -$:,.,,,,,.,;;,,,,,,,.,---,,~~,.,,,,,...,-,~~ ,,,,,....,,..:~......,,.-;=;;:. .........;~,!=~-!-..,........  ;*==**!:!*!:.. ...... --,   ~*~-.,!".ToCharArray(),
-          ".... ~!;  ~!; . -=:,.,,,,,.:;~.,,,,,.,~:~,.,;-,,,,,..,.,-.,~- .........-,.,;-....... .-;=~;;- ........,;~.;*~.~!,.,......... ~=$:-~~~:;*$=*:, .... ,--   ~!~-,..".ToCharArray(),
-          ".... ;!~  :!: . -$:,.,,,,,.;:,.,,,,.-~:~,..-;,,,,,.....-- ~~, ........,-..-;,....... ,~;$,~;: .....,..-;-.~-~~,=~..,........ .!#!---..,-~~:~, ......--   -!;,-, ".ToCharArray(),
-          ".... !;,  ;*- . -$:,.,,,,.-;-.,,,,,-~:~,. ,~:,.,..... ,-- :-..........--..~!........ -~;$.,:! .....,..~:-.:-;;.;;- .,........ ~=$~-,     .,,....... --.  .:=,-- ".ToCharArray(),
-          ".....*:. .**, . -$:..-,,..::,.-,,,-~~-. ..-:-,....... ~-,,;-.,........--.-;!..,......~~;=. ~*......,..::,,*!*;,.;;, ........, ,;#~-,.....   ......  ,--   -$,,-,".ToCharArray(),
-          "....-*~  -=!  . -$:..-,. ,!-,...,~~..,,. ,~:..........:-.;:,.,.......,~, ~*;..,.....-~~:*. -!,..,..,..;:,-#*~-;,-;*   .,...... ~$;~,..............  .--   ,$-.~*".ToCharArray(),
-          "....:!-  !$!  . -$;,.,,..~;,..,---..-,.. -~~ .....,..;;-,!,..........-~. :=~..,..,..:-~::  ,;:..,.....=:,~*-,,-~---::,  .,.....,**~...............  .,~.  ,=:,~#".ToCharArray(),
-          ".. .!!- -*=;. . -$*, .. ,~~..,,-,..,-,...::, .......,=~-~;..,...... ,~~ .!$, ......,!,~;~  .-;..,....,=~,--....-::--::-......,..:=~...............   ,~,  .!!-,!".ToCharArray(),
-          "...,*;,.;*!:. ..,==- ...-:,..,,,. .~,...,!;......, ,:$--:~..,....., -~- ~==. ......-!.~;,   .;,......-;~~~..,,,-:;:.-:;~,.......,=:. .............   .--. .~=~.,".ToCharArray(),
-          "..,-=:.,=;!:. ..,!$~ ...-~ .......,~....!=: ,..... ~=*,~;.........,.~:, !$*....., ,::.:;  ..,~,.....,-.~!:.--~~-,~!~.,~;!~.  .,..*;, ..............  .,~.  .*:  ".ToCharArray(),
-          ",,,-=-.-=-!;. ...:$~ . ,~- ......,--. .,=:. ,..., ,;=-~:~ .......,,,:~ -**~,..... -:.,~:.~,,~!,.... ,, ;:. ,-,    -!;~,.,~;;. .. ;!~ ..............  ..~,   *;. ".ToCharArray(),
-          "-,,-=,,:=,!;  .. ,$:.  -~, ......,-.. ,;=-....,...:*!~;~,.......,-.::-.*;~--......-: ,;;,,,:=*,.., .,,-*;,,;~,   ,~~~,. .,-~;:,  ~!~ ..............    ~-.  *!- ".ToCharArray(),
-          "-..~=,~!;.!!  .. .=!-  ~~...... ,-- ..~=;,.,.... ~;;:!;- .......,-,!:,~=-,~-.... -:~ ~!;,-;***,....~:~:!;:!*!:~~:!;,,...-,.,:!;- .;:...............    --.  ;*; ".ToCharArray(),
-          ". .:*,:*- !!  ... *=: ,:- ..... --,  ,;=,....,..-=~-;$:. ,.... ,--~*~-=:.,:-... .;!- !!~,!*=!-,.. -**;;;;*@*=##=#@=~---~:-.  ~*=- :;, .............    .-,  -==,".ToCharArray(),
-          ". ,:!.;!  !!  ... =#; -:- ..... --.. :=*..,.,. -*-.-==,....... --~$:,~!. ,:-... ~;~, ;--$$*-.-~. .;~..,;=$@#$!--=@##**$$:,    :$$-~:~ ........... .     -,  ,!$!".ToCharArray(),
-          ". ,;:,;! .*!  ...,!$!,~:, .... -~,  ,!*- .,.. ~*=--;$:.........-~;$-~:,  ,~-. .-~-,,,~;*=:,,~;- .,-~;*=#####*;;=#@@$;=@#$=!:-.~!==!;~ ........... .     --. ,;!;".ToCharArray(),
-          ". -;-~!; ,*!. ...::;!;:~. .....!~. .;*; .... -*$*;!==,....... ,-;*;-~~ . ,~~..-~,..,-;!;:.-~:~,,-:;*$@@@@@@#======$=*$@####$*,-;$$!;: ...........       ,-, .:!-".ToCharArray(),
-          ". -!,;;~ .*!. ..,!-,:$!-. .. .~=- .~$*- ,...-!!;;!$$; .......,~:*!.~-. . .~~.,~-  ,-:!:, .::-.-:!=@@@@@##$$=$$$;~:;!*==$###@#-,;@=:;!.....,......       .-,  ;!.".ToCharArray(),
-          ". -!,;;, .*!. ..,*-.-=$- ... -=:. -##: .,..-=:.   :;, ..... ,:!==;.:, .. .--,~~   -;;.  .:-  -*=$@@@@#$$!-.::;*!-,,,,,~*@$$@=,.;@$~-;,....,......       .,-  :*-".ToCharArray(),
-          ". ~!,!:. ,*!,  .-*, .-*, .. ,:=..:=#!, . ,:;-..  ,:~ ,..   ~!=!~-~:,. ..  ,;~,.  ,;!.  ...  .:!*=$#$=!;!:,-*!;;$:,.,,..:#@#=, .:##~,~-. ..,......        ,-. ~!;".ToCharArray(),
-          "..~!-!~..,**,  .~!. .-!, .. ~;:,:=#=-. .-::-  .  ~~, . ..,~!*;-.,~~. ...  .:-.  .:;~ .....  ,;!*===!;;;!*!!==!;=*- ..  -#@*-  .:##~,~~. .,,......        ,-, -!*".ToCharArray(),
-          " .~!-!~.,.**-  ,:;. ,~!, ...;!-~;$#;..,~:~,  . .,:-. .,,--:;~.  -:,  .... .-.   -:~..,.. . .-!!***!::!*!;;;:;;:!=: ..  ,=*~  .,:#$~,::. .,,......        .-~ ,;*".ToCharArray(),
-          " .~!~!~.,.!*~  -;~..,~!,.. -;!;;~!=..-:!~.  .  ,:-..-:;;:-.    .~:   ......    .:, .,,. .. ,:**;:!*;!=;-.   ,--,;:. ...-!-  ..,:$$~,:;. ..-......        .,:.,:=".ToCharArray(),
-          " ,~!~!~.,.!=~  ~;,..,~!,.. ~*=;.;!~ ;*;. .   .-~~.-!=$$$=*;~,  ,~~ .......... .~~..,,....  -!!;::=*!;~.  .~.   .--, ..,:~. .,,.-*$-,:;. .,-......         .:..~$".ToCharArray(),
-          " ,:!:!~.,.!=: .:; ,..-!, . *=;,,!;-!!:,   .,~;!;,.,-~-----,,.  ,-- ......... .,~..,,,...  .-:~:~~$*:-, .:=$, .. .,, ..,-,...-..:$$-,:;.  ,-......         .:,.-$".ToCharArray(),
-          " ,~!:!-.,.;=; ,;; ,..-!, .~=!-.;!;;;~---.-:!;*=*:::::~~--,,,.. ,-, ......... .-~ .,,,..   .,-.-,-$!-., .!#=,.,, .,,..... ..,,.-!#$-,:;.  ,-......         .~-.-$".ToCharArray(),
-          " .:!;;-.- ;=; -;: -..-!, ,**-,~=;*=. ,;*:*$$!=$$#$$$$$==*!:~--.... ......... ..-. .,,.    ..  ..,=:..,. ~!~..-- .,,....  .,, ,-;$$-,:;.  --......          -~,-=".ToCharArray(),
-          " ,:!;;-., !$; ::, -..-!, -$,,;$:-!$.  ~$=##$##$#@@@@@@@@@#$*;:~.  ...........  .~. .-.       ...,;-..,-.    .. .,-,  ,-. ...,-,~#=-,:;. .--......          ,:,,*".ToCharArray(),
-          ".,~!!;-..-*$; -~~,-. -!,.:*.:;-.-*$- ~*!;*##=:!$######@#$$=*!;;;~,  ........... ,-, ...       ...,,...    ..    ,,.,--, ....:..:#$~-!;.  --......           ~,,!".ToCharArray(),
-          ",.-!*;-.~~:**.~;;-.  ,*,,::.,-  ~=#!;=$=*=$##*=$$$$$$$$==$=*!;;;:~,............ .,-,  ..    .  ...-.           ,::-:~,. ...-- .:#$~-!:. .--. ...            ~,,;".ToCharArray(),
-          ",.~*=;--!--;=.:!:,.  .*,-:~     ~*@#$##=$$#$=$$=*====*;!*==*!;:~~~-.. .......... .,-.  ..  .   ...,,. ..,. ,--,:;:-:-. ...,-. .:#$~-!;. .~~. ...            --,~".ToCharArray(),
-          "..:$=~-:*.,!=,!;~,   .!-~;,  .. ,!@@@#$$##$*~!!;-!!!!;-:!~**!::,  ............... .,~.  ...    ....-~-~;:~,:;;;!-.   ... ,-,  .:#$~-*!, .;~. ...            --,-".ToCharArray(),
-          " .;$*;*!. .;=-!;-,   .!:::.     ;#@####@#!:--!!:!$=;~,:*=*!*;....   ..............  ,~,  .....   ..:!==;~~:-..,.       .,-, . .~$$~~==, .:~. ...            ,--,".ToCharArray(),
-          " ~;!=$!-  .:=;;~,,   .;!;-   -;*$@@@###$;~~~-**!=!~,..,-~:~*!. ... ................. ,--    ..   ..,---,..,.       .,,,--,... .~$$~~=$, .:~. ...             --,".ToCharArray(),
-          ".;;~$$:... ~==;-,,    ~*;,   -*#@@####=:---,-*=!:-.,:;-..-.:;- ... .................  ,--.        .            ..,,,--,,..... .~$=~~=#- .:~. ...             -~,".ToCharArray(),
-          "-;~-@*- ,. -*@:--.    -=!,   .~*#@###=:,~-, .=*-   ~$@:. , ,~~ ... ...........   ..    .~-.                ...,,----,,.  .... .~$=~~*#~ .:~. ...             -~-".ToCharArray(),
-          ":~,-@$~ .. ,!@~~~      **- .    !#@#=;--,,. .*:  ,.,:$- .,.  . .. .........      ..      -~,          ...,------,.    ..... . .~==:~!#:..~~. ....            ,-~".ToCharArray(),
-          ";-,:@#:  . ,;=~:;   ., !*~ .  . ~*=*=!~,.....:- .,,..,   .  .,..........         ..       .,,,..,,,,,,,,,,,.....  ........  . .~==:~!#;,.~~, ....            .,~".ToCharArray(),
-          ";,-;;#;. , ,;:~;;   .- :!;    ..:!;-!*;......-,..,.       .~:~.  .....                     .,,,,,,,......   ...  .........  . .~==;~;$*-.-:, . ..             ,~".ToCharArray(),
-          ":~:; =*- . ~*,~!;  .,-.-::    ..!*~ ~*! .... .,. .    .,--~!!~   ...                         .....         ............... .. .:==;:;*=~ ,:, . ..             .-".ToCharArray(),
-          ",:;~ *=;  .:= :!:  ,-,-..,..  ..!*:  ;!. .....,,     .-!=*=;- .....                                      ...............  ... .:=*;:;!=~ ,~,.. .              .~".ToCharArray(),
-          ",:~  ~**  -!* ;!~ .,-,-,. ..  ..!*:  ~*; .... .,~;;:;*=;-,,.  ...                                       ............... ..... ,:=*;;;;$:  ~,..                ,!".ToCharArray(),
-          "::- ..!=- ;*~ !!~ .--,-,........**~  -;=..,-,,,~;!**:~~,.                                              ...................... ,:=!!;;!#;  ~,..                .:".ToCharArray(),
-          "*~... ~*!.!!. !!- ,-,,-,........**~  .:$, .-,,-~~-;:,                                                 ....................... ,:*!!;;*#!. ~-...               .-".ToCharArray(),
-          "*, ., ,;$~!:  !!- ,-,,-,........**~ . -=~. ...,.  ..   ...                                          ......................... ,;*!!!**=!- --,..                .".ToCharArray(),
-          "~. ... -=#!,  !!- ,,,,-,.......,**- . ,!=-      ..  ......                                        ........................... -;*!!*$:;!: --, .                 ".ToCharArray(),
-          "...... .:#:   !!~ ,,,,-,.......,*!, ...-=-  .  .............                   .                 ............................ -!=:!*!,;*; ,-, .                 ".ToCharArray(),
-          " ..... .~$~   ;!~ ,,,,-,...... ,*!, ,. .*:, .................                 .,.             ............................... -!=:**;,:*! .-- .                 ".ToCharArray(),
-          " ..... ,;!,   ;!: ,,,,-,...... ,=!. ,,  :!~ ......................            .:~.          ................................. -!=!=*;,~*! .--...                ".ToCharArray(),
-          "...... -$~.   :!: ,,,,-,...... -=!. ,,. .!: ................ ..........     . ,!*,       .................................... -*@#=*;--!*  --...                ".ToCharArray(),
-          "..... .:$,    -;: ,,,,-,....,. ,*;. ,,.  ;!, ................................ .~;,   ........................................ ~=$~!=!--!*. ,-,..                ".ToCharArray(),
-          "..... ~*!.    ~!; ,-,.,,...,,. -*;  ,-,  ~!: ...................................,............................................ :*:.!$*~,;*- ,-- ..               ".ToCharArray(),
-          "..... ;*~     !=; ,-,.,,....,. -=;  .--  ,;! ..................................  ...........................................  :*. ;$=~,;=~ .-- ..               ".ToCharArray(),
-          ".... .!!     ,==: ,-,..,....,. ~=; ..--.  ~*,  .............................................................................  ;!  ;$=~,:=: .-~ ..               ".ToCharArray(),
-          ".... :*;    .$@$: .-,.......,. -=; . ,~-  -*!. ............................................................................. .;!  :$$~.:*;. ,~....              ".ToCharArray(),
-          ".... !!-   .:==$* .,,.......,, -*; . ,--  .:$, .....................................................   ..................... -!;  ~=$~.:*!. ,~,...              ".ToCharArray(),
-          "....,*:.   ~*~-*=. ,,.......,, -*: ...-:.  -$~. ..........................................           .-..................... ;*:  ~=#~,~**. .-~...              ".ToCharArray(),
-          "....:*~   ,;*  :=- ,-.......,, -*: .. ,!~. ,=;, ....................................     ......... .-::. ..................  **-  -*#:,~**. .,~....             ".ToCharArray(),
-          "....=;,   ;=:  ~!;.,-.......,,.~*: .. ,!*, .;=: ....................................    ..,,--~~~~-;==,  .................  .=;   ,!#:,~!=.  .:,...             ".ToCharArray(),
-          "...,$~   ,*!.. -!*.,-,.........~*: ....-*-  .=:  ...............................    .,,-------,,-!$#*, ................... .*=~ . .;#;,-!=.  .~,...           ..".ToCharArray(),
-          ". .~$,   !!- , ,:=..,,.........:!~ .....!-.  *!, ............................   .,,------,,,,.,,:$@*-  ..................  -#;, . .;#!,-;=,.  ~-,.,.          ..".ToCharArray(),
-          ". -!*.  -$:... .~$,.,,.........;!~ ..,. :~.  ;*: ..........................  ..,--~~--,.    ..,~!#*-  ................... ,;#-  .  :#=--;=,.  -~,.,.          ..".ToCharArray(),
-          ". ~*~. ,!=- ... -$~..-.........*!- .,,. ~~,  -*! .........................  .-~::~-.     ...,,,:==,  ...................  :$!,  .. ~#$--;=,.  .~-.,.           .".ToCharArray(),
-          " .:*.  ~$-  ... ,=;,.-.........*!- .,,. -~,  .;*   ..................      .;!:-.   ........   ~;, .. .................. :=*.,.    -*#-.:=,.   ~-..,.          .".ToCharArray(),
-          " -!!  -!*...... ,!*-.-,........=;, .,,. -~, . ;*-  ......................-;*~,..........     ,~~- ..................... .*#=!=*;;;~;=@:~;$,..  -~, ..          .".ToCharArray(),
-          " :!:  :*~...... .~=~.,,.......,=:, .,,. -~, , ~*;  ................. .-::*$@-    ....     .,-~~-...................... .;**;;!!****=#@=*=$,..  ,~- ...         .".ToCharArray(),
-          " !!, ,!! ....... .$:..-.......,=:. .,,. -~, . -!*. ................  .~;*$$#:,..       ..,-~:~,...................... .~#;, ..,--~:;*@=*=$,... .-~ ...         .".ToCharArray(),
-          ",*;  !*: ....... .$!, -,......,=~. .,,. -~, . .:$.  .................   .,~!=*:-..  .,,-~~:-. ......................  ~#=-          ,@~ -$,...  -~. ..         .".ToCharArray(),
-          ";*: .*;. ....,...,==: ,,......,=~...,,..-~,  ..-$,  ...................    .,-~~~~~~~~~--,...,,....................  ~*$-........   ,#;,-$,...  ,~- ...        .".ToCharArray(),
-          "=!-.:*~ ....,-..,-;=; .,,.....,*-..,,,. -~,  . -$~. ....................     .,,,--,,,,,,,...,....................  -*=~ .........  ,#=--$-...  .-:. .,        .".ToCharArray(),
-          "#:.,=;, .. .--..-~~**. .,.....-*-..,,,. -~,  ..,*!, ........................    ....  ...,,,,....................  .!=;  .......... ,$$~-$-...   ,;,  ,.        ".ToCharArray(),
-          "#- -$- ....,~. ,~:,!=: .......-=- .,,,. ~-.  ...:#:. .................................,,........................  .;$:  ,...........-*$:,=-...   .;-. ..        ".ToCharArray(),
-          "=-,!=,... .-- .-~~,;$*  ......-;,..-,,..~-.  .  ,##!.  ........................................................  .:@:. ,............-~=;-*- ..   .~:,  ,.       ".ToCharArray(),
-          ":.~*~.... ,-- .-~~,:*$,.......,~..,-,...:,   .. .*!!*:,  ...................................................... .;=;...............,~.=!~!- ..    .:-  ..       ".ToCharArray(),
-          "..:*..... --, ,~:~--;$:,......-~..,-,..,:,    .. *:~!$;-.  ................................................... .;*!................-~ !*;;-...     ~-.  ..      ".ToCharArray(),
-          " -!! .....--. ,~~~~,:$!-...,..-~..--,..-:.    .. !!-.*=*~,  ................................................. .:$!, ...............-: :*!:~...     -~-  ..      ".ToCharArray(),
-          " !*- ... ,~-  -~~,,.:#*-,..,..~-..--,..:~.    .. ~$!  .!#=,   .............................................. .:@#: ...............,~~ -!*:~. .      ~~  ...     ".ToCharArray(),
-          " !;..... -~-  ,--:*=$=$;-, ..,~,.,-,..,;.     .. -=*.  .~!=;,   ........................................... ,;$;!~ .............. ,~~ .:=*:. .      -~,  ..     ".ToCharArray(),
-          ":!: .....:-. .~;*==!::#*:-...,~,.,-,.,~:      .. .*!-....-:!*:,.  ........................................ ,;*;,;: .............. ,~~  ~=$:. .      ,--  ...    ".ToCharArray(),
-          "=;- ....,:,,-:*=*;~, .$$!~-..-~.,--, -:-      ..  ;;-,...  ~!*!~,.  .................................... .,;=!..!; .............. -~-. -*@;. .       ,:.  ..    ".ToCharArray(),
-          "#~  ... ,--;$#*~.    .!#*:~..-~.,-,..~~       ..  ;;-~..,,. .-=$!-   ..................................  ,;#*- ,*: .............. -~-. .:@!, .       ,:,  .,    ".ToCharArray(),
-          "$-.,.  .;$$=;,.       ~$*;~-,-~.,-, ~~,       ..  ;;,~....... .:*$!-    ..............................  -*#!-. ,!: .............. -~,.. -@*, .       .-:.  ,.   ".ToCharArray(),
-          ";, . .~*$!:-,         -!!;:~~~,.--.,:-        .,  !;.~,.........-;#=!~.    ..........................  ~*=;:,  .!: ...............~~....,==- .        .:,  .,.  ".ToCharArray(),
-          ",. .-;**;-.           -;;;;~::.,-,.:~.        ..  !;.~-,.......  -#***;~,.   .......................  ~*=;~~.  .!: ...............~~.....:$- .         ~~.  ,.  ".ToCharArray(),
-          "  .~=$;,              ~:::!~:~.-,.-;.         ..  !; ~~, ,.......-$-~*$#!~,.  ..................... .-$$;-;-.  .!;...............,~- ... ,=~ .         ,~-  .,. ".ToCharArray(),
-          " -*#=,                :;--*::~.,.~;.          ,-  !; ,~, ,...... -#~..-$##$!,    .................  :#$~-::.    !;. ............ ,~- .....=~            ~~.  ,, ".ToCharArray(),
-          "!=!~, .~!-.          .:!-,!!;-.,~:,          .::  !: .~-........ -#;,  -:!*$=*:,    ............  .;=*~~::,     !;. ............ -:- .....*:            ,~-  .,.".ToCharArray(),
-          "=;-   .-;!~,         .;!,.;!:,.::-           ,;; .!:  ~-........ ,$!-   ,~;!!*=!;~,     ......  .-!*!:-::~. ..  ;!, ............ -~- .... *;.            -~.  .,".ToCharArray(),
-          ":.      .;!:.        .!;,.;!~,~;-.           -;~ ,*:  ~~, .......,=*- . .,~~~;!==*;~,.         .~*=;~-:;:,  .   ;!- ............ ~~, .... !!,            .~~. .,".ToCharArray(),
-          "          ;*;        .=~ .;:~:!,  .          ~:- -*~  ~~- .......,*=~ .. .-;:~--:*$$=;-.      ,!#$~-~:::-. .    :!~ ..........   ~~,  .,. ;*-             ,;,  .".ToCharArray(),
-          "          .:=;.      ,$- .~**:.              ::. :!-  -~~ ........!$~  .. .,:::~~~~;*==*;~,-;*==!~~~::;:,    .-;$*- ...,,.    ,-:===;. .. ~*~             .~:, .".ToCharArray(),
-          "           .~*~. .. .-$- ,*$;,               ;~  !;,  ,~~ ........:$:       ,:;;:~~::;!*=*!*=!;;:~:::~~,   -;!=$@=~ .,.   ,-:;!*!!::!!,.. -*:              .:~. ".ToCharArray(),
-          "            .;;- .. ,;!.,:$!,               ,;-  *:. ..~:......,..:#*~-,.    ,~~~~~~--~:;!==!:~--~~~~~-,-~:*$@@#@$; ....-~;!*!;:-,..-*;,  ,!;               -:- ".ToCharArray(),
-          "              !:. . -*,,;=*.  .            .:;- .=~ .. -:, .......~#@#$!:~-,...,----~~--,-;;:;;~---~:::;=#@@@@#$#@*  .-:*=*:-.       .=:.. !!                :;,".ToCharArray(),
-          "              -;; ..-!.!=;   .             .!:, ,$~    ,~-       .~###@@@@##$*!;!;;;:::::*;!@#$*;!*$#@@@@@#$######=.~*$*:,            ;!-  ;*.             . ,:!".ToCharArray(),
-          "             ..:*-..:*!!~.                 ,*- .~*-,;*!*=*;;;:~-,,;#######@@@#######$$$$$#*!!!#####@@###########@@#**:-,.             -*:  :*,                ,~".ToCharArray(),
-          "            .. -;;.~==;-.  .              .-*, ,!::;=!;;;!!!!!!!;!=@@############@@@@#@@@@*:--!#@@@@###########@$=!:-.                .!;  ~*~              .  .".ToCharArray(),
-          "          ......-!~*$!.  ..               ,:!. -=:!*~.   ..,,-~:;!*==$$#@@#####$$#####@@##!-..~*#=@#########@@#=;-.                    ;!  ,!;               .  ".ToCharArray(),
-          "         .....,. -$=~   .        .      . -!~. ~==:.                .-~!=#@@@@@#####$@@$;*;-..;*;.=@@$#@@@@@#$!.                       ;*  .:=                . ".ToCharArray(),
-          ".       ......  -=!-. ..        .         ~!. .;#!,                    ..,-:*$#@@@@@#@!-,$#*~;$#*-,*@@@@$!:-,,.  ..                    ;* . ~=.                .".ToCharArray(),
-          "!~.   ....... ,:!;,.  ..    ..         . ,:;  ~=#~.                        .,~;*###@@*--!=;!=$!!=*~:*#;:~,.       .....                ;* . -=-                 ".ToCharArray(),
-          "!;~. ........-;!:.   .  .  . .           :;-  ;=*-                            .-;!!*$:~;$:.-*!-~!**;*$~.        .......                ;* . ,!:.                ".ToCharArray(),
-          " ;!~ ....,..-==~  ... . ..  .       .   .;:  ,!;~;.                       .,,..    .!;*=;. ,~,,:!-*##$*~.      .--,                    ;* . .:*,                ".ToCharArray(),
-          "  :*~..,,  ~$!,  ...  ..       ..    .  :!~  !;,,=-                         ..,,,  -##@=-;;:;:-~:;=*~-;=!~.. .~;;-.                   .!* ...-$-  . .           ".ToCharArray(),
-          "  ,~!,.. .;*:,  ...         ...     .  .*:. .=: .=~               ..         ..,.,:=$==$*:--:!,.,~$;, .!=;.~::~-,.                    -*! ...,=~  .             ".ToCharArray(),
-          "   .:~,.-;!~.  ...        . ....    . .~*- .;!-  *;.            ...... ....   .. :!;:~~;#-..,~.  .;!:-~**:~::-,                       :*: .,..*;. .             ".ToCharArray(),
-          "..  .~~~*=-   ..         ........  .. -*;, -#-.  :*-           ........,--,,,,..,=!.  ,:*.        .!$*==;~:-.                         !!, .,..:*-               ".ToCharArray(),
-          "*:-, .!#;.   ...    ..  ............  ~=. ,!=,.. ,*:               ..  ,---~~~~:;$=:  !=.         ,;**=---                            *;. ... ,*:           .   ".ToCharArray(),
-          "@##$==*~.  ..   ...... ............. ~!:  :=,.....;;                        ...-~-;==:*$~   .!~, ,*:~!~.                              !:  .... *;     .  .      ".ToCharArray(),
-          "##@@#!-.  ..  .. ............... .. ,;!. ~!: .... :*,                          ...,~**;;=;,,:=*;:;:,-=;,                              !;,...   :!, ..           ".ToCharArray(),
-          "###$!,   ....~,. .................  :!~ ,*;. .... ~!~                              .-=;-:!;;*~:*=!..:#$;~--,.                         !=!:~~---:*:          .   ".ToCharArray(),
-          "@@$;     . .-=-  ................  .*: .!=~ ,,,,. ,:: .                            . ;!-  *$!  ;$: -*@#$$$$;-.                        !#@##$$$=$#*              ".ToCharArray()
-        };
-        public readonly char[][] Vinette = {
-        "~~---,,,,            .,,~,                         .           .    ,           ".ToCharArray(),
-        ",-~;~~----,..   ..,,.  -,                                     -     .           ".ToCharArray(),
-        "-,-,,.,-,,..,,,,,,.   .,                          .           ~  .              ".ToCharArray(),
-        ",,~,,,-,,...,,,.,.    -                           .          ,-  .              ".ToCharArray(),
-        ",,~-,,-.,..,,....    ,                           .          .,,                 ".ToCharArray(),
-        "--~-,,-...,,...     .,                    .      .         ..,  .               ".ToCharArray(),
-        "---~,-,,..,,....    ,                    .      ..        ., -  .               ".ToCharArray(),
-        "~--~.~,,.,,....  .  .                    .      ,         , .,                  ".ToCharArray(),
-        "-~-~,~-........    .                           .         -  ,  .                ".ToCharArray(),
-        ",:-~-:,.......  .  .                    .     ..       .,   ,                   ".ToCharArray(),
-        ":~-~-;........ .. .                    ,      ,       .-      ,      ,.         ".ToCharArray(),
-        ",!--~-.......  ..                     ..     ,       ,.    . .       ~          ".ToCharArray(),
-        ":~-,~ .......  .                     .~     ,       -.    .. .       ~          ".ToCharArray(),
-        "-!-:,........ ..                     -     ,      ,,.     . .       ..          ".ToCharArray(),
-        "-:~~.....  .  ..       .....        ~.    .     .~...    . .        ,.          ".ToCharArray(),
-        "--: .. .  -.. ..            .,-,   -.   ,.    ,-.,       ..        .,,          ".ToCharArray(),
-        "~!.. .. .,. . .                .,,~. .,.   .,,,.-.      ..         - ,          ".ToCharArray(),
-        "!   .  ,~, .  .                 .-~~-.  .,-, ...,      .,          - ,          ".ToCharArray(),
-        ".    ,~--. . ..                ,,-..,~-.., ... -      .,          ,  ,          ".ToCharArray(),
-        "   .-~,,-... ..          .    ,.,    .-~, .   -.     .,           -  ,          ".ToCharArray(),
-        ".~;~.-,-- .  ...        .   -,,,  ... -,~,   ..     ,.           -   ,         .".ToCharArray(),
-        "!,-~,---,    ...     ...  .-,..     .-.  -. .-     .        .,,,--,,,.  .      ,".ToCharArray(),
-        "~ -:,-,-.     .    ...  .~,..-.    --       -            .-~-.  -   , ..,      ,".ToCharArray(),
-        "~.-:----.     ,  ...  ,~~,,--    ,-.       ,.          ,-,.    .,   ,   .     ,.".ToCharArray(),
-        "~.-.~--,..    - .  .-~~..,,,   .~.        .,          .,       ,   ,.         -.".ToCharArray(),
-        "-,~ :~-..     ,.,~~~~-~!$:. .-*~..,.     .,                   ,    -   ,     ,,,".ToCharArray(),
-        "--.;;~,...    ;;!;::;;;~ .-:*==#=:,.,   .,  ,                .,   ..   -     -..".ToCharArray(),
-        ";:,.;~-. ,    ;:;;;;*!;**=*==.:*!:,-.,.~.  -.                ,    ,   ,,    -,.,".ToCharArray(),
-        ";,:-~:-..,    ;~;;;!!;;!**==$$*=-~;~-,~. .~~                ,    ..   -    .-.,~".ToCharArray(),
-        ".=,-,:,-...  .: ::;--!;!***.:**=;=*=-, .:,:                ,~:~~,-    ,    , -;~".ToCharArray(),
-        " ,*;~.~.,.,  .: .;;-,*!!****;***.;==::-,,-,               ,~,  .:.. ~;    ,.-:~,".ToCharArray(),
-        " -,,;,;.-.-  .:   ;: *******!=$;,-!:=:-,,-          .... ,:;!-~=.,.:,,    -~*~. ".ToCharArray(),
-        " ~-..::~ - . .;   .;.!!;!:!;!!=.,,,- ~..:          ...,.:;!!!!*~ ,*:;..  ,:-:,.-".ToCharArray(),
-        ".~,,.  -,,,,  ;    ..-=;;!;*;;  ,.,,...:          ...,-!;!!*!!~.:!!=,   ,;~~..,:".ToCharArray(),
-        ".~,,....;.~-. ~.      :;~:~:!:........-. ..       ...~!!***~=:***!*-,. ~;-~.-:;.".ToCharArray(),
-        ",-,,.....~-,~ :.      .-;:!!, ...... -. ..         .~,!***=:!!*;~!~...:~:;~;;~.,".ToCharArray(),
-        "-,,,..,. ,:,..-       ,!,.      .   ,, ,...       ~, -=**==!**$:.~  -$ *-:,~-,;.".ToCharArray(),
-        "~.,,.,,. .-~..~         ,-,.     ,--,.,.....   .~-   -==*=!*!=~.: ,;~!~;!~ :~-~,".ToCharArray(),
-        "~ ,,.,,, ..~. ,.              .~-,,,.,......,~:,  .  .=!::;;:=.~.:*.;!,.: -~,---".ToCharArray(),
-        "~ .-,..,  ,-,  ,                .~,,-,----,,-.  .,... ;:!:::*;--::.-!*.-, :-,.-~".ToCharArray(),
-        "~ .-,.,,  .,,   .              .-,-.      ,~~,,-., ....=~~:*: .,~ ,!~ -: ,--~ .~".ToCharArray(),
-        "~. -,.,,   ,-   ..           .~~.      . ,:~    -,......-:~.,;~...-~ .~~-:~,-, ,".ToCharArray(),
-        "~, -,,,,   .-    ..         .,          -;-     ,,,.      .~:,....,  .-:-.~~,-  ".ToCharArray(),
-        "-- ,,,,,    ~      .                   ,~.       -,      ..  .... ,  - !:, ~,,, ".ToCharArray(),
-        "-~ .,.,,.   -        ....             ,           -       .....   .,. ~ ~:, -,,,".ToCharArray(),
-        "-~  ,.,,.   ..           ....,...   ..            ,.       ...    ,~.-.. -:, ~~-".ToCharArray(),
-        "-~. . ,.,    ,                   ...               ,     .       , :.-  ..~-~.,:".ToCharArray(),
-        ",~, . ,,,    -                                     .,..         -. .~    .-,--.,".ToCharArray(),
-        ",--   .,,    ~                                        ..........,,,~-.    .-.,-.".ToCharArray(),
-        ",,~    ,,.   ,-                                                --.  ~     .,...,".ToCharArray(),
-        ",-~.   ...    :                                                ~    -      .,   ".ToCharArray(),
-        ",--:    ,.    -~                                              .~.   ,.      ,.  ".ToCharArray(),
-        ",-,~.   .,    .~-                                             ;,,.  .-.      .  ".ToCharArray(),
-        ",--,~    ,.    ~:~                                           -,.,,   -..     ...".ToCharArray(),
-        ",-----   ,,    ,~*,                                         .:., -,  ,..      ,.".ToCharArray(),
-        ",---,~.  .!     ;,:-               .~-,                    .:,:., ,, - .       ,".ToCharArray(),
-        ",,---,~   ~-    ,- :-                .......,,.           .-,~.~., ,.-.        .".ToCharArray(),
-        ",,,-,,,~   ~,    ~. ;~                                   .-.,,~--., .: .        ".ToCharArray(),
-        "-,.-,,,-~  -,,    -. -;                                 -,.,,,-,~,,,..~.        ".ToCharArray(),
-        "-- --,,,--  ~,-    ~. .;.                             .~,,,,,,,-.~.,,, ~-       ".ToCharArray(),
-        "-,. -,,,,-, ,,.,-   -,  :~                           --.,,,,,,,,-,-..--..~.     ".ToCharArray(),
-        "-,. ,-,,,,-~ ~,*;-,. .,. ~:.                        ~-.,,,,,,,,,-.-..,--,.--.   ".ToCharArray(),
-        ",,.  -,,,,,~- !=~..-~- .,..!~,                    -: .-,,,,..,,,,,.,.,,----.--. ".ToCharArray(),
-        ".-,   -,,,,~.--=-,,...,.,,,.-;,                 ,-.:,  .,,,...,,,,.,..,,,,--,,--".ToCharArray(),
-        " -,   .-,,--~!#;;,,.....      ;;              .~.   ;    ,,......., , .,,,,,,,--".ToCharArray(),
-        " -,.   .-,,,~#**$ ,.......     ,::          ,~,     ,:    .. . ,,.. ,..,,,,,,,,,".ToCharArray(),
-        " ,,,    ,-,,,$**=;.,........     ,;~.     .:~        ~-     .. .,,,,. .~~-,,,,,-".ToCharArray(),
-        "..,,.    .--,!***=~.,..........    .::  .;-           ~.     .. .-,,..  .,-~~~-.".ToCharArray(),
-        "- ,,.     .--,$**!=:................ ,~-*,             ;.     ,  ,-,,,  ......  ".ToCharArray(),
-        "~ .,.       ,-:!**!=* ................  !               ;         ~-,,  ...,... ".ToCharArray(),
-        "~  ,,.         !***=!=~ ...............,;               ~:        .---.  ...,.. ".ToCharArray(),
-        "-. .,.          =!;=*;!=..,.....,......:~                ,-        --,-  ...,...".ToCharArray(),
-        ".-  ...         .$~=**!:**, .-..-......*!                 .,       .-,~  .......".ToCharArray(),
-        ":* ....          -~$****;:=*,..,.-...,.$*-             ,   .-       ---  ....,..".ToCharArray(),
-        "*#-  ..         ,~~,*$***==,-#~- -...,,$;#            :,    .:      .~-   ....,.".ToCharArray(),
-        "!=* . .         ~-,  .~;;~  *:=. ,.,,.:=**:          ;.-     .:.    .~-.  ......".ToCharArray(),
-        "*=#. . ..      :.!        .;*!;. -; ,.!**~#         ,: -       :    .~--   .....".ToCharArray(),
-        "$$$$.        .-.:.      ..:*!*,  ,$=.,#*!=*~        ;~ ,.      .:   .-,~    ....".ToCharArray(),
-        "####;. ,....,,.:,      ..!*!=.-  ,==$,$!===*,      ,;-  ,        -  ..,-.   ....".ToCharArray(),
-        ",####-,,.....,~,     .~*=*!*,-, ,,**=***=**$$$;    ~~~  ,   .    ~. - -~,.   ...".ToCharArray(),
-        };
-
-        public readonly char[][] Sumire = {
-        "@@@@@##@@@@===$$=$$$=#==***!!!*!;:=$$===**=====$**!!:*!=;;*=::::-,,.,,,.*~::;#.~".ToCharArray(),
-        "@@@@@@#@@@#!$#=$$$$=@$==*=***!**:$$=$========$=*;=*;!*!=;;:$::~::,,.,,---!::*$.-".ToCharArray(),
-        "@@@@@@@@#=*##==$$$=#$=$=====*=*!$$;=;!*****!!$!!$=*!!*!=;;:;*~~:--,.,----:~;==,-".ToCharArray(),
-        "@@@@@@@=!=@#*$$$$$##=$===$==$=*#=!=**********=*!$*=!**!$;;;~=~~:-~,,-~~.~-!:=!~~".ToCharArray(),
-        "@@@@$*!==@$=$$$$$=#=$$=$$$$$$$$====!********=*=$===*=*!$;;:~;!~~~---,,-;.~!*;:::".ToCharArray(),
-        "#$*!!!$*@$*$$$$==#$$$$$$$$$$$$===$!*******=====$====**!#;;:~-!--~--. . .. ~*~;,~".ToCharArray(),
-        "!!!!=$*@=*$=====$#=$$$=$$$$$$===$$===*==*====$=$==*=**!#;;:~-!,~;--, .. ,  ;*:*-".ToCharArray(),
-        "!!*=$!#=*=======@=$=====$$$$===$$$=$=$$===$$$=$===$**=*#!;~~~::---.-... :=:~;:~;".ToCharArray(),
-        "==$#!@=!=======@$======$==#===$=$=$=$$$$$$$=$=$==$*****!!:~~~~*..,.,....;-!:~~;,".ToCharArray(),
-        "@@#!#$;==*====##========$$===$=====$$$$$====$$*$$*=*=*=;!-::~;$.,..,,..;~~~::~.;".ToCharArray(),
-        "#$*##;!!====*##===***===$===$==============$=*#$===**!$~!~:..-=-,..., ;-~~~~;  ;".ToCharArray(),
-        "$**@!!!!**=*=#$*******=$===$=============$===#====***!$-!~.,,.!:...,.;~~~-:;; .!".ToCharArray(),
-        "=!#!!!!!!!:=#$==*****==$*=$============$===$#$===****;;~~!.,,,-!.,,.;-~~~;:~;,:;".ToCharArray(),
-        "!#=;!!!*!*=#=$;******=#*$======*=========$$=$*==**!=~-~,.;,,,, * ,.:-~~~~---~:!;".ToCharArray(),
-        "*#!!!!**==$$==!;;!***=:==*!!***==$$$====$$==$*=**!*~*.~~.-,,,,.:..:-~~~~---:;!;!".ToCharArray(),
-        "#!!!!!==*=#==***!!!**$$****=**=*****==$$$*=$=!=!~-=;;.,*.--,,,,~,:--~~--,:!;:;;!".ToCharArray(),
-        "=*******!#*=$******=$$*******=*====$$$===*=$*!;,,!.! ..=,--,,,-,!---~--:!;;!!!!;".ToCharArray(),
-        "!*******#$!=$****!=*#!=*****=********=*=*!#$~!--:-$-...!~,-,,-.;.-~~,:*!;!$: ,*-".ToCharArray(),
-        "********#**==***!*$$!******=********#**!!=!;,~---:~   .;;,-,,,!---~;!;!;*:,.,.! ".ToCharArray(),
-        "******!$#**=*****#=!=************=*=***;$.:------!    .~;-,,.:,--;*!!==~:.-,,-, ".ToCharArray(),
-        "******=##!!$!!*!$=!=****!*=!***!=**$$*-#~,;,----=.     .!:-,~-:!!!==;-:*~,-,.~  ".ToCharArray(),
-        "*****!#==!!$!!*$*!***!!;!=!!!*!*=!$:;,$!,:~----*        !;,~;!=!$=;--~~=---,;.. ".ToCharArray(),
-        "****!$==!!*=!=#;*=!*!;:=$!!!*!!#!*:, =#,-!-,-,=         :~~,::-,$$:~~-:*,-,~. . ".ToCharArray(),
-        "*****#*=!!#=$=!=*!;;;:=$;!!*!*=~;!.,*$,-~:,,~*.        .~:;.,,,-*$;~~~;!--,: ..,".ToCharArray(),
-        "====$=!*!!@$*==:;;;!-!#;!!***!.,;.~=@-~,*.,~*          ..=*----,*$!~~~;~--;,.. !".ToCharArray(),
-        "===*$;!!*===*;:;;;;:=#**!!**;,---!~*--,;;,~;             ***,---!$!~~-!,~--....=".ToCharArray(),
-        "=====:*$$=*;:;;;~,:#$;!!=$$$-,~;!.!:--:*-,;              ,!#~,--;$*~~-;,-:;,  ~*".ToCharArray(),
-        "$==$$==;~~---,-~;$!=-:~!==:-=$:. ~!!;;~;,!                ;==~--!$*;~::-~--;;.=!".ToCharArray(),
-        "$*=#$~****===$*!$.;~::!!;!;!~  ,:=:~:!$,! .---,,.        .-**=--=$*!:!~~~~--~!!;".ToCharArray(),
-        "$*=$#:!=;;#=!#-@@!::!;~;$*~ .:**, -==-:! ~$$$$==$##=!-     !:=!~$$*=:*-;~~-~.*;-".ToCharArray(),
-        "$=$$#!;$:;#!~!==:-~::*$=- ~==!::!!~, ;;,         .,--~::--..$:#!$#*=!;::~~;-~*;~".ToCharArray(),
-        "$=$!#$:=!:$;;@$=*=$@$*=#@:  ~      .,=.                  .-. *,$=#=*=,*-:~;,!!;;".ToCharArray(),
-        "*=$:$$;!#;*!~#@*;*!=*!=#$:! ..     -*.     ,~---,. .*       ..!-##==!*!~~*~~$!;!".ToCharArray(),
-        "!#=:=$=~#*=!~##!;!~$,~==$#$:      ..      ,,   ...-$,    ,   . -$$=$~#~:=~~:$=;!".ToCharArray(),
-        ":#*~#*=*:!;=~#$!;~;~,  =;=#@~    ..      .  .!$###*@#*!!*, . ...@=#:=;:$:~-*!=!!".ToCharArray(),
-        "!**=;-==!;@$;==;;:*.;  ~~~$!=    .         ,!==##@;$####$:--,. :@$=!*!$*~~~#=*=!".ToCharArray(),
-        "$-$!-~.!=$:#*!=:;:!,.  -~ :@~-             :$$@$#$=@#@#-*@@$   *$$;*!$=~:~==!=$$".ToCharArray(),
-        "=#!!-~,;@@#$@$*:::!;.:~ =,-.,-            -~,, !**#*=,$$$**!=-.#=**=$$:::~*;*=*;".ToCharArray(),
-        "*=#*;.-@@@@@#*$::~=!,-:, =,.!                  -*-@**$~$:;**  $=*=$=$;~:~=$=~!$#".ToCharArray(),
-        "#:=!~~$@@@@@==:::-=* .-~:!**.                  -.-,=$.-#~=-  -=!#=$$!~:;!!.~-*$=".ToCharArray(),
-        "$=;$,*@@@@@#!!::~~*=.   -                      -~.-  .::-   .=:$=$=!~:!-*,,,~!=*".ToCharArray(),
-        "*#=:=@@@=@@=*;::~!!$.                        ~:.-!...*=,    **@==*!~~#~!-.,,=!:=".ToCharArray(),
-        "=~!=!#@@@@@*=;::~$;=.                         -~.:!!$:  ,- ;=;$*!;-:$;:!,: !;;*;".ToCharArray(),
-        "=~-=$*#@@@#*!;:::=:!.                           ,         =; *:*:,*$=,*.- -$;;!;".ToCharArray(),
-        "*~:@@$##@@!*;;:~!::;.                                   ,~, ;*!~~=$$:!~  .!!=;;*".ToCharArray(),
-        "!-=@@@@@@#!!;;:-*~~;,                                      -=~~*#==*:!  .=,!*;;:".ToCharArray(),
-        ":;@@@@@@@==!;::~;!,;-       ,                             :!;======-! .;*~!-=!;;".ToCharArray(),
-        ":$@@@@@@@**!;:~*:!,:;       -.                        .-:=$==*$===:=-:!~~~!~~*;;".ToCharArray(),
-        ":#@@@@@@=*!!;:~!:-,;*                              :*$$=*!;;*#==*~=!-.,,.~,:~;*;".ToCharArray(),
-        "!@@@@@@@!!!!;:;-;,,;*,                              .,~:;;*#$=**;=*=;!;;!!;;:~!;".ToCharArray(),
-        "=@@@@@@$!!!!;~!:~--:~!                              ...   *$=!*:=**:-~,     ,~;#".ToCharArray(),
-        "#@@@@@@**!!;;;;*--~-.*                               . , *$***:=$!;::;!**!!!;:~~".ToCharArray(),
-        "@@@@@@$!*!!;:!~:--~.-;-                             ~;~.;$!**;$$!$*=*!;~----~~~~".ToCharArray(),
-        "@@@ @#***!!;::;,-.:;~.$.       -.                 .!-!-~$=!=*$$~;;:::::::::::::~".ToCharArray(),
-        "@@@@@$****!;!;;~~!:,.,.!       ,*:.:-            :!-*;!~,;==$;~-*:;;::::::::::~~".ToCharArray(),
-        "#@@@@#=**!;;;;;!!:--,.!*!          .;          .=,;!:::~:~.;=$,!::;;;::::::::~~~".ToCharArray(),
-        "#@#~.     ......,--,:!~ :~                .::;*!~;;::~--,,-.-;;;;;;;;:::::::::::".ToCharArray(),
-        "@@@@#*;:  ..,,.,,-:*;  ~##,               *!.~;~!;:-,,....,.**:;;;;;;;;;;;;:::::".ToCharArray(),
-        "@@##=* ;:, .,,~:!:~, -*=:,!-            .!!,;!$;,,;===*=*!;*;:;;;;;;;;;;;;;;;;::".ToCharArray(),
-        "@@$#!!. =**~~!;-~,,.!=*~-~-*-          .-:$$;$-,!$#==*=**!;:;;;;;;;;;;;;;;;;;:!$".ToCharArray(),
-        "@$#;*;. ,$;;;--~~:-=*!-~~~~-;~        .-!!*;=$=$$$======!;;;;;;;;;;;;;;;;;;!*$*;".ToCharArray(),
-        "##*!*~.  *=~~~-;-:=*:-~~~~~~-!-       -=-=!;$*=$$=====*!;;;;;;;;;;;;;;;;!*$$=!;;".ToCharArray(),
-        "$$!!*~   ~;~~~--=;=-~~~~~~~~~,=     :$#~,*;$$$=====*!!!;;;;;;;;;;;;;!*=##==*;;;;".ToCharArray(),
-        "#!!!*-   --:~-;$!$~~~~~~~~~~~~~$~:*==$,--**#===========*********===$$#$===!;;;;;".ToCharArray(),
-        "=!!!*-   ~ !,!=!=,~~~~~~~~~~-,;$#=**@~~-~!$=========$$$$$==$$$$$=$##$*===!;;;;;;".ToCharArray(),
-        "!!!!*,   ~ ~*=*$:~~~~~~~~--:=$=***==*.;-;=$============$$$$$$=$##$*;!=**;;;;;;;;".ToCharArray(),
-        "!!!!*,   - -$$!!-~~~~~---;$$*!*!!*;$-.!-*#==*=========$$$$$$$##*;;;!=**;;;;;;;;;".ToCharArray(),
-        "!!!!*,   - .**#!==***=$$#**********$,,!~=#=****=======$$$=$#$!;;!;***!!;;;;;;;;;".ToCharArray(),
-        "!!!;#    ~  *;:!!!!!*=**!*********==.,!;$==***=========$$#=!;;!!;***!!;!;;;;;;;;".ToCharArray(),
-        "!!;#$    ~  !;;;;;;==*************$*-,!!#===*=========#@=:;!!!!;***!!!!!;;;;;;;;".ToCharArray(),
-        "!;$$*    ~  *;;;!*****************$*;-:!#=**=======$##*;;!!!!!!**!!!!!!;;;;;;;;;".ToCharArray(),
-        ";$$#:    ~  !====*********==*******=;~~$$=*====**=##*:;!!!!!;!**!!!!!;;;;;;;;;;;".ToCharArray(),
-        "==#=-    :  ~=**********====*******=!~:$#=*=*=*=#$!;;!!!!;;!**!!!!!!;;;;;;;;;;;!".ToCharArray(),
-        "$#$~,    ~  ~;$======**==========***#;~:#=====##*;!!!!!!!!***!;!!!;;!!!!!!!!!!!*".ToCharArray(),
-        "$#!;..   ~  ~~**=========*==========*$!~;#==##!;!!!!;;!*===*;;!!!!!!!!!!!****==*".ToCharArray(),
-        "#@;;..   -  ~-$$*=====================$*:!#$*;!!!!!**====*!;;;;;!!!!!!!!!!***==$".ToCharArray(),
-        "#=!; .   ,  ,=~$======================$$#!!:!!;!==$$=====***!!!;!!!!!!!!!!;!$=, ".ToCharArray(),
-        "=$*~ .  .,  ,*;!#!=================$$=$$!!*$*==$$$===========***!!!!!!;;!*!~.   ".ToCharArray(),
-        "~**~ .  .,  ,=;$@$**=============$$==#*;**==$===================****!;!=;.      ".ToCharArray(),
-        ";~$, .  ,.  ,$;;!$#=**======$$$$$=$#$*$$$$=$$#===========*********!=$!-.        ".ToCharArray(),
-        };
     }
 }
