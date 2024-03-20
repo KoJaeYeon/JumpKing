@@ -19,7 +19,7 @@ namespace Project_jUMPKING
             Player player = new Player();
             string[] save = new string[10];
 
-            Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
+            Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
             ConsoleKeyInfo key = Console.ReadKey(true);
 
             while (true)
@@ -33,7 +33,7 @@ namespace Project_jUMPKING
                 {
                     Console.Clear();
                     Console.ResetColor();
-                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
+                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
                     key = Console.ReadKey(true);
                     continue;
                 }
@@ -180,7 +180,7 @@ namespace Project_jUMPKING
                 {
                     Console.Clear();
                     Console.ResetColor();
-                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
+                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
                     key = Console.ReadKey(true);
                     continue;
                 }
@@ -203,7 +203,7 @@ namespace Project_jUMPKING
                 {
                     Console.Clear();
                     Console.ResetColor();
-                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
+                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
                     key = Console.ReadKey(true);
                     continue;
                 }

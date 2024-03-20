@@ -200,6 +200,8 @@ namespace Project_jUMPKING
                 Platform(26, 224, 6, s);
                 Platform(29, 224, -6, s);
 
+                Platform(1, 290, 80,x,0,'▤');
+
                 //Snow
                 for (int i = 0; i < 20; i++) _background[40 + i, height - 252] = '▒';
                 for (int i = 0; i < 20; i++) _background[40 + i, height - 251] = '□';
@@ -687,13 +689,19 @@ namespace Project_jUMPKING
                     else if (_background[i, j] == '▒')
                     {
                         Console.SetCursorPosition(i, j);
-                        Console.Write("▒");
+                        Console.Write('▒');
                         continue;
                     }
                     else if (_background[i, j] == '□')
                     {
                         Console.SetCursorPosition(i, j);
-                        Console.Write("▒");
+                        Console.Write('▒');
+                        continue;
+                    }
+                    else if (_background[i, j] == '▤')
+                    {
+                        Console.SetCursorPosition(i, j);
+                        Console.Write('▤');
                         continue;
                     }
                 }
@@ -978,6 +986,10 @@ namespace Project_jUMPKING
                 else if (_background[x, y] == '□')
                 {
                     return 4;
+                }
+                else if (_background[x, y] == '▤')
+                {
+                    return 5;
                 }
                 else if (_background[x, y] == '0')
                 {
