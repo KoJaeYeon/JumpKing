@@ -1,4 +1,5 @@
-﻿using System.Runtime.Intrinsics.X86;
+﻿using System.Numerics;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -7,22 +8,22 @@ namespace Project_jUMPKING
     class Background
     {
         public static readonly int width = 162;
-        public static readonly int height = 241;
+        public static readonly int height = 481;
 
         BackgroundImage back_Image = new BackgroundImage();
-        Princess princess = new Princess(110,17);
+        Princess princess = new Princess(110, 17);
 
         public Princess Princess { get { return princess; } }
 
         private int prePosX = 45;
         private int prePosY = 99;
         private int jumpPosY = 10;
-        private int save_posX = 0,save_posY = 0;
+        private int save_posX = 0, save_posY = 0;
 
         private char[,] _background = new char[width, height];
         private char[] save_Char = new char[4];
         char[][][] Image80 = { };
-        char[][] Image160 = { };
+        char[][][] Image160 = { };
 
         StringBuilder sb = new StringBuilder();
         StringBuilder sb2 = new StringBuilder();
@@ -30,6 +31,14 @@ namespace Project_jUMPKING
         public Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
         private int item_Dic_Count;
 
+        public void Load(string[] save)
+        {
+            int posY = int.Parse(save[1].Split(' ')[1]);
+            if (save[3].Split(' ')[1] == "True") Get_Item(0, posY);
+            if (save[4].Split(' ')[1] == "True") Get_Item(1, posY);
+            if (save[5].Split(' ')[1] == "True") Get_Item(2, posY);
+            if (save[6].Split(' ')[1] == "True") Get_Item(3, posY);
+        }
         public Background(int map = 1)
         {
             for (int i = 0; i < _background.GetLength(0); i++)
@@ -60,7 +69,7 @@ namespace Project_jUMPKING
             }
             for (int i = 0; i < _background.GetLength(0); i++)
             {
-                _background[i, _background.GetLength(1)-1] = '▣';
+                _background[i, _background.GetLength(1) - 1] = '▣';
             }
         }
         public void Save_Wall()
@@ -81,9 +90,16 @@ namespace Project_jUMPKING
             {
                 for (int i = 0; i < 160; i++)
                 {
+                    for (int j = 0; j < 112; j++)
+                    {
+                        _background[i + 1, height - 352 + j] = Image160[1][j][i];
+                    }
+                }
+                for (int i = 0; i < 160; i++)
+                {
                     for (int j = 0; j < 160; j++)
                     {
-                        _background[i + 1, height - 240 + j] = Image160[j][i];
+                        _background[i + 1, height - 240 + j] = Image160[0][j][i];
                     }
                 }
                 for (int i = 0; i < 80; i++)
@@ -107,17 +123,18 @@ namespace Project_jUMPKING
                 {
                     for (int j = 0; j < 160; j++)
                     {
-                        _background[i + 1, height - 160 + j] = Image160[j][i];
+                        _background[i + 1, height - 160 + j] = Image160[0][j][i];
                     }
                 }
             }
         }
         public void Save_Plattform(int map = 1)
         {
+            char x = 'x';
             char y = 'y';
             char z = 'z';
             char s = 's';
-            if(map == 1)
+            if (map == 1)
             {
                 //Row 2 ~ 160
                 // height ~62
@@ -128,7 +145,7 @@ namespace Project_jUMPKING
                 Platform(1, 35, 30);
                 Platform(80, 35, -30);
 
-                Platform(37, 50, 8);
+                Platform(38, 50, 7);
                 Platform(70, 55, 3);
 
                 Platform(67, 75, 3);
@@ -162,21 +179,70 @@ namespace Project_jUMPKING
                 Platform(35, 146, 2);
 
                 Platform(5, 153, 5);
+                //
+                Platform(13, 173, 10);
+                Platform(35, 178, 5);
 
+                Platform(50, 195, 7);
+                Platform(57, 195, 6,y);
 
+                Platform(20, 195, 16,z,-3);
+                Platform(50, 212, 8,z,-5);
+                Platform(50, 228, 8, z,6);
+
+                Platform(70, 195, 4, z, 25);
+
+                Platform(74, 224, -3, s);
+                Platform(80, 190, 3, s);
+
+                Platform(21, 218, 14);
+                Platform(27, 225, 2);
+                Platform(26, 224, 6, s);
+                Platform(29, 224, -6, s);
+
+                //Snow
+                for (int i = 0; i < 20; i++) _background[40 + i, height - 252] = '▒';
+                for (int i = 0; i < 20; i++) _background[40 + i, height - 251] = '□';
+
+                for (int i = 0; i < 20; i++) _background[100 + i, height - 262] = '▒';
+                for (int i = 0; i < 20; i++) _background[100 + i, height - 261] = '□';
+
+                for (int i = 0; i < 20; i++) _background[140 + i, height - 272] = '▒';
+                for (int i = 0; i < 20; i++) _background[140 + i, height - 271] = '□';
+
+                for (int i = 0; i < 20; i++) _background[76 + i, height - 282] = '▒';
+                for (int i = 0; i < 20; i++) _background[76 + i, height - 281] = '□';
+                Platform(48, 280, -3, s);
+
+                //ending
                 for (int i = 0; i < 41; i++) _background[20 * 2 + 2 * i, 20] = '▣';
                 for (int i = 0; i < 6; i++) _background[120, 14 + i] = '▣';
+                for (int i = 0; i < 2; i++) _background[10 * 2 + 2 * i, 21] = '▣';
+                for (int i = 0; i < 6; i++) _background[40, 21 + i] = '▣';
+                for (int i = 0; i < 2; i++) _background[10 * 2 + 2 * i, 40] = '▣';
+                for (int i = 0; i < 30; i++) _background[20 * 2 + 2 * i, 27] = '▣';
+
+                for (int i = 0; i < 6; i++) _background[20 * 2 + 2 * i, 41] = '▣';
+                for (int i = 0; i < 19; i++) _background[40, 41 + i] = '▣';
+                for (int i = 0; i < 19; i++) _background[52, 41 + i] = '▣';
+
+                for (int i = 0; i < 20; i++) _background[100, 27 + i] = '▣';
+                for (int i = 0; i < 26; i++) _background[110, 21 + i] = '▣';
+
+                for (int i = 0; i < 6; i++) _background[50 * 2 + 2 * i, 47] = '▣';
+                for (int i = 0; i < 7; i++) _background[20 * 2 + 2 * i, 60] = '▣';
+
                 //Column
 
                 // height ~62
             }
-            else if(map == 0)
+            else if (map == 0)
             {
                 Platform(1, 10, 50);
                 Platform(20, 25, 50);
                 Platform(1, 40, 50);
 
-                Platform(65, 43, -10,s);
+                Platform(65, 43, -10, s);
                 Platform(64, 33, 11, y);
                 Platform(64, 33, 11);
 
@@ -185,9 +251,9 @@ namespace Project_jUMPKING
 
                 Platform(60, 70, -55);
 
-                Platform(1, 70, 10,z);
+                Platform(1, 70, 10, z);
 
-                Platform(80,110, -47);
+                Platform(80, 110, -47);
                 for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 112] = '※';
                 for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 113] = '※';
                 for (int i = 0; i < 5; i++) _background[75 * 2 + 2 * i, height - 114] = '※';
@@ -197,41 +263,41 @@ namespace Project_jUMPKING
             }
 
         }
-        private void Platform(int startX, int startY, int length, char dir = 'x', int h = 0)
+        private void Platform(int startX, int startY, int length, char dir = 'x', int h = 0 , char block = '▣')
         {
             if (dir == 'x')
             {
                 if (length > 0)
-                    for (int i = 0; i < length; i++) _background[startX*2 + 2 * i, height - startY] = '▣';
+                    for (int i = 0; i < length; i++) _background[startX * 2 + 2 * i, height - startY] = block;
                 else
-                    for (int i = 0; i < length * -1; i++) _background[startX*2 - 2 * i, height - startY] = '▣';
+                    for (int i = 0; i < length * -1; i++) _background[startX * 2 - 2 * i, height - startY] = block;
             }
             else if (dir == 'y')
             {
                 if (length > 0)
-                    for (int i = 0; i < length; i++) _background[startX*2, height - startY - i] = '▣';
+                    for (int i = 0; i < length; i++) _background[startX * 2, height - startY - i] = block;
                 else
-                    for (int i = 0; i < length * -1; i++) _background[startX*2 - 2, height - startY + i] = '▣';
+                    for (int i = 0; i < length * -1; i++) _background[startX * 2 - 2, height - startY + i] = block;
             }
             else if (dir == 'z')
             {
-                for (int i = 0; i < length; i++) _background[startX*2 + 2 * i, height - startY] = '▣';
-                for (int i = 0; i < length + h; i++) _background[startX*2, height - startY - i] = '▣';
-                for (int i = 0; i < length + h; i++) _background[startX*2 + (length-1) * 2, height - startY - i] = '▣';
-                for (int i = 0; i < length; i++) _background[startX*2 + 2 * i, height - startY - length - h] = '▣';
+                for (int i = 0; i < length; i++) _background[startX * 2 + 2 * i, height - startY] = block;
+                for (int i = 0; i < length + h; i++) _background[startX * 2, height - startY - i] = block;
+                for (int i = 0; i < length + h; i++) _background[startX * 2 + (length - 1) * 2, height - startY - i] = block;
+                for (int i = 0; i < length; i++) _background[startX * 2 + 2 * i, height - startY - length - h] = block;
             }
             else if (dir == 's')
             {
                 if (length > 0)
-                    for (int i = 0; i < length; i++) _background[startX*2 - 2 * i, height - startY + i] = '↙';
+                    for (int i = 0; i < length; i++) _background[startX * 2 - 2 * i, height - startY + i] = '↙';
                 else
-                    for (int i = 0; i < length * -1; i++) _background[startX*2 + 2 * i, height - startY + i] = '↘';
+                    for (int i = 0; i < length * -1; i++) _background[startX * 2 + 2 * i, height - startY + i] = '↘';
             }
         }
 
         public void Save_Item(int map = 1)
         {
-            if(map == 1)
+            if (map == 1)
             {
                 int x, y;
                 // 0번 아이템(세이브 로드)
@@ -250,7 +316,7 @@ namespace Project_jUMPKING
                 _background[x, y] = item_Dic[2].get_Char;
 
                 // 3번 아이템
-                x = 132; y = height - 30;
+                x = 144; y = height - 228;
                 item_Dic.Add(3, new Longer(x, y, _background[x, y]));
                 _background[x, y] = item_Dic[3].get_Char;
 
@@ -287,14 +353,14 @@ namespace Project_jUMPKING
         {
             save_posX = saveX;
             save_posY = saveY;
-            if(preSaveX != 0)
+            if (preSaveX != 0)
             {
                 //이전 세이브 위치 배경 복원
                 _background[preSaveX - 1, preSaveY] = save_Char[0];
                 _background[preSaveX, preSaveY] = save_Char[1];
-                _background[preSaveX-1, preSaveY+1] = save_Char[2];
+                _background[preSaveX - 1, preSaveY + 1] = save_Char[2];
                 _background[preSaveX, preSaveY + 1] = save_Char[3];
-                
+
                 //이전 세이브 위치 배경 출력
                 Console.SetCursorPosition(preSaveX, preSaveY);
                 Console.Write("{0}{1}", _background[preSaveX - 1, preSaveY], _background[preSaveX, preSaveY]);
@@ -323,7 +389,7 @@ namespace Project_jUMPKING
             for (int i = 0; i < 6; i++)
             {
                 sb2.Append(_background[prePosX - 3 + i, prePosY - 2]);
-               
+
             }
             Console.Write(sb2);
 
@@ -351,9 +417,9 @@ namespace Project_jUMPKING
             }
             Console.Write(sb2);
 
-            if(save_posX != 0)
+            if (save_posX != 0)
             {
-                if(save_posX >= prePosX - 3 && save_posX <= prePosX + 3)
+                if (save_posX >= prePosX - 3 && save_posX <= prePosX + 3)
                 {
                     if (save_posY >= prePosY - 2 && save_posY <= prePosY + 1)
                     {
@@ -389,7 +455,7 @@ namespace Project_jUMPKING
                 Console.Write('▤');
             }
 
-            
+
             { //다리
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.SetCursorPosition(positionX - 2, positionY);
@@ -409,7 +475,7 @@ namespace Project_jUMPKING
 
         }
 
-            public void DrawChar_charging(int positionX, int positionY, int direction_right)
+        public void DrawChar_charging(int positionX, int positionY, int direction_right)
         {
             sb2.Clear();
             Console.SetCursorPosition(prePosX - 2, prePosY - 2);
@@ -440,7 +506,7 @@ namespace Project_jUMPKING
             Console.Write('▤');
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.Write('▤');
-            
+
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.SetCursorPosition(positionX - 2, positionY + 1);
@@ -473,7 +539,14 @@ namespace Project_jUMPKING
                     {
                         for (int j = 0; j < 160; j++)
                         {
-                            sb.Append(Image160[i - (height - 240)][j]);
+                            sb.Append(Image160[0][i - (height - 240)][j]);
+                        }
+                    }
+                    else if (i > height - 353)
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(Image160[1][i - (height - 352)][j]);
                         }
                     }
                     else
@@ -489,7 +562,7 @@ namespace Project_jUMPKING
                 for (int j = 0; j < 82; j++)
                 {
                     sb.Append('▣');
-                }                
+                }
                 for (int i = 0; i < 40; i++)
                 {
                     sb.AppendLine();
@@ -516,7 +589,7 @@ namespace Project_jUMPKING
                     {
                         for (int j = 0; j < 160; j++)
                         {
-                            sb.Append(Image160[i - (height - 160)][j]);
+                            sb.Append(Image160[0][i - (height - 160)][j]);
                         }
                     }
                     else if (i > height - 241)
@@ -562,10 +635,10 @@ namespace Project_jUMPKING
         {
             Console.ResetColor();
             Console.SetCursorPosition(0, 0);
-            Console.Write(sb);            
-            for (int i = 1; i < _background.GetLength(0)-1; i++)
+            Console.Write(sb);
+            for (int i = 1; i < _background.GetLength(0) - 1; i++)
             {
-                for (int j = 1; j < _background.GetLength(1)-1; j++)
+                for (int j = 1; j < _background.GetLength(1) - 1; j++)
                 {
                     if (j > height - 62)
                     {
@@ -577,7 +650,15 @@ namespace Project_jUMPKING
                     }
                     else if (j > height - 62 * 3)
                     {
-                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    }
+                    else if (j > height - 62 * 4)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    }
+                    else if (j > height - 62 * 5)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
                     }
                     if (_background[i, j] == '▣')
                     {
@@ -603,6 +684,18 @@ namespace Project_jUMPKING
                         Console.Write('※');
                         continue;
                     }
+                    else if (_background[i, j] == '▒')
+                    {
+                        Console.SetCursorPosition(i, j);
+                        Console.Write("▒");
+                        continue;
+                    }
+                    else if (_background[i, j] == '□')
+                    {
+                        Console.SetCursorPosition(i, j);
+                        Console.Write("▒");
+                        continue;
+                    }
                 }
             }
             Console.ResetColor();
@@ -616,7 +709,7 @@ namespace Project_jUMPKING
                 if (item_Dic[i] != null && !item_Dic[i].getItem)
                 {
                     if (item_Dic[i].get_posY <= max_height && item_Dic[i].get_posY >= min_height)
-                    item_Dic[i].PrintItem(time);
+                        item_Dic[i].PrintItem(time);
                 }
             }
         }
@@ -628,21 +721,21 @@ namespace Project_jUMPKING
             int y = item.get_posY;
             char tempChar = item.get_tempChar;
             item.getItem = true;
-            _background[x,y] = tempChar;
+            _background[x, y] = tempChar;
 
             sb2.Clear(); // 아이템 위치 배경 초기화
-            Console.SetCursorPosition(x-2,y-2);
-            for(int i = 0; i < 5; i++)
+            Console.SetCursorPosition(x - 2, y - 2);
+            for (int i = 0; i < 5; i++)
             {
                 sb2.Append(_background[x - 2 + i, y - 2]);
             }
             Console.Write(sb2);
 
             sb2.Clear();
-            Console.SetCursorPosition(x - 2, y-1);
+            Console.SetCursorPosition(x - 2, y - 1);
             for (int i = 0; i < 5; i++)
             {
-                sb2.Append(_background[x - 2 + i, y-1]);
+                sb2.Append(_background[x - 2 + i, y - 1]);
             }
             Console.Write(sb2);
 
@@ -655,18 +748,18 @@ namespace Project_jUMPKING
             Console.Write(sb2);
 
             sb2.Clear();
-            Console.SetCursorPosition(x - 2, y+1);
+            Console.SetCursorPosition(x - 2, y + 1);
             for (int i = 0; i < 5; i++)
             {
-                sb2.Append(_background[x - 2 + i, y+1]);
+                sb2.Append(_background[x - 2 + i, y + 1]);
             }
             Console.Write(sb2);
 
             sb2.Clear();
-            Console.SetCursorPosition(x - 2, y+2);
+            Console.SetCursorPosition(x - 2, y + 2);
             for (int i = 0; i < 5; i++)
             {
-                sb2.Append(_background[x - 2 + i, y+2]);
+                sb2.Append(_background[x - 2 + i, y + 2]);
             }
             Console.Write(sb2);
 
@@ -678,8 +771,8 @@ namespace Project_jUMPKING
                 height -= 62;
                 continue;
             }
-                if (height < 0) { item_Dic[itemNum].Set_posY(49); }
-                else { item_Dic[itemNum].Set_posY(height + 49); }
+            if (height < 0) { item_Dic[itemNum].Set_posY(49); }
+            else { item_Dic[itemNum].Set_posY(height + 49); }
             item_Dic[itemNum].OffItem();
         }
 
@@ -759,12 +852,12 @@ namespace Project_jUMPKING
                 }
                 continue;
             }
-            if(power == 1 || power == 52)
+            if (power == 1 || power == 52)
             {
                 Console.BackgroundColor = color;
-                for(int i = 0; i < 11; i++)
+                for (int i = 0; i < 11; i++)
                 {
-                    if(height < 0)
+                    if (height < 0)
                     {
                         Console.SetCursorPosition(198, 41 - i * 2);
                         Console.Write("         ");
@@ -817,7 +910,7 @@ namespace Project_jUMPKING
                         break;
                 }
                 Console.BackgroundColor = color;
-                if(height < 0 && power!= 0)
+                if (height < 0 && power != 0)
                 {
                     Console.SetCursorPosition(200, 42 - (power / 5) * 2);
                     Console.Write("     ");
@@ -847,7 +940,7 @@ namespace Project_jUMPKING
                 for (int i = 0; i < 7; i++)
                 {
                     num = check(positionX + (i - 3), positionY);
-                    if(num > 0)
+                    if (num > 0)
                         return num;
                 }
             }
@@ -857,7 +950,7 @@ namespace Project_jUMPKING
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        num = check(positionX - i +3 * direction_right, positionY - 2 + j);
+                        num = check(positionX - i + 3 * direction_right, positionY - 2 + j);
                         if (num > 0)
                             return num;
                     }
@@ -882,13 +975,17 @@ namespace Project_jUMPKING
                 {
                     return 3;
                 }
+                else if (_background[x, y] == '□')
+                {
+                    return 4;
+                }
                 else if (_background[x, y] == '0')
                 {
-                    Get_Item(0,y);
+                    Get_Item(0, y);
                 }
                 else if (_background[x, y] == '★')
-                {                    
-                    Get_Item(1,y);
+                {
+                    Get_Item(1, y);
                 }
                 else if (_background[x, y] == '☆')
                 {
@@ -903,7 +1000,7 @@ namespace Project_jUMPKING
                     Program.TutorialClear();
                     Console.Clear();
                     return 10;
-                    
+
                 }
                 return 0;
             }
@@ -914,15 +1011,39 @@ namespace Project_jUMPKING
 
         }
 
-        public void Ending()
+        public void Ending(Player player)
         {
+            while (true)
+            {
+                if (princess.Y + 1 - player.positionY != 0)
+                {
+                    player.positionY += princess.Y + 1 - player.positionY;
+                    DrawChar(player.positionX, player.positionY, player.direction_right);
+                    Thread.Sleep(100);
+                }
+                else if (princess.X - 30 - player.positionX != 0)
+                {
+                    player.positionX += -1;
+                    princess.Print_Princess();
+                    DrawChar(player.positionX, player.positionY, -1);
+                    Thread.Sleep(125);
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                    DrawChar(player.positionX, player.positionY, 1);
+                    Thread.Sleep(400);
+                    break;
+                }
+
+            }
             string[] text = princess.Text();
             Console.ForegroundColor = ConsoleColor.Yellow;
-            for(int i = 0; i < text.Length; i++)
+            for (int i = 0; i < text.Length; i++)
             {
                 Console.SetCursorPosition(110 - text[i].Length / 2, 12);
                 sb2.Clear();
-                for(int j = 0; j < text[i].Length + 2; j++)
+                for (int j = 0; j < text[i].Length + 2; j++)
                 {
                     sb2.Append(' ');
                 }
@@ -934,9 +1055,67 @@ namespace Project_jUMPKING
                     Thread.Sleep(100);
                 }
                 Thread.Sleep(1500);
-                Console.SetCursorPosition(111 - text[i].Length / 2,12);
+                if (i == text.Length - 1)
+                {
+                    Console.SetCursorPosition(111 - text[i].Length / 2, 12);
+                    Console.Write("I love you.");
+                    Thread.Sleep(1500);
+                }
+                Console.SetCursorPosition(111 - text[i].Length / 2, 12);
                 Console.Write(sb2);
             }
+
+            for (int i = 0; i < 15; i++)
+            {
+                player.positionX += 1;
+                princess.moveleft();
+                princess.Print_Princess();
+                DrawChar(player.positionX, player.positionY, 1);
+                if (i == 14)
+                {
+                    Console.SetCursorPosition(98, 16);
+                    Console.Write("  ");
+                }
+                Thread.Sleep(250);
+                if (i > 5) Thread.Sleep(150);
+                if (i > 8) Thread.Sleep(100);
+                if (i > 11)
+                {
+                    Thread.Sleep(100);
+                }
+                if (i > 13)
+                {
+                    Thread.Sleep(100);
+                }
+            }
+            Console.ForegroundColor = ConsoleColor.Red;
+            Thread.Sleep(1000);
+            Console.SetCursorPosition(95, 13);
+            Console.Write("♥");
+            Thread.Sleep(1500);
+            Console.Clear();
+            princess.Print_Princess();
+            DrawChar(player.positionX, player.positionY, 1);
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(95, 13);
+            Console.Write("♥");
+            Console.SetCursorPosition(93, 11);
+            Console.Write("♥  ♥");
+            Thread.Sleep(2000);
+            Console.Clear();
+            Console.SetCursorPosition(95, 13);
+            Console.Write("♥");
+            Console.SetCursorPosition(93, 11);
+            Console.Write("♥  ♥");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(91, 9);
+            Console.Write("♥  ♥  ♥");
+            Thread.Sleep(3000);
+            Console.SetCursorPosition(0, 0);
+            Console.ResetColor();
+
+
+
         }
     }
 }

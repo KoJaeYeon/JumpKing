@@ -53,14 +53,14 @@
 
         public bool check(int x, int y)
         {
-            if ((x >= this.x - 3 && x <= this.x + 3) && (y >= this.y - 1 && y <= this.y + 2))
+            if ((x >= this.x - 6 && x <= this.x + 6) && (y >= this.y -3 && y <= this.y + 2))
                 return true;
             return false;
         }
 
         private readonly string[] text =
 {
-            "Knight",
+            "Knight?",
             "Knight ,Is...... is it really you?",
             "You were alive!",
             "oh......",

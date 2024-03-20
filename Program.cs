@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 
 namespace Project_jUMPKING
 {
@@ -10,11 +11,13 @@ namespace Project_jUMPKING
             return Btutorial;
         }
         static void Main(string[] args)
-        {
-            Background tutorial = new Background(0);
+        {            
             Background background = new Background();
+            Background tutorial = new Background(0);
             Princess princess = background.Princess;
             Player tutoplayer = new Player();
+            Player player = new Player();
+            string[] save = new string[10];
 
             Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.");
             ConsoleKeyInfo key = Console.ReadKey(true);
@@ -127,6 +130,38 @@ namespace Project_jUMPKING
                 case 25:
                     break;
                 case 27:
+                    try
+                    {
+                        string line;
+                        string CurrentDirectory = Directory.GetCurrentDirectory();
+                        CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("bin"));
+                        string path = CurrentDirectory + "SaveData.txt";
+                        //Pass the file path and file name to the StreamReader constructor
+                        StreamReader sr = new StreamReader(path);
+                        //Read the first line of text
+                        int index = 0;                        
+                        line = sr.ReadLine();
+                        save[index] = line;
+                        //Continue to read until you reach end of file
+                        while (line != null)
+                        {
+                            //Read the next line
+                            index++;
+                            line = sr.ReadLine();
+                            save[index] = line;
+                        }
+                        //close the file
+                        sr.Close();
+                        player.positionX = int.Parse(save[0].Split(' ')[1]);
+                        player.positionY = int.Parse(save[1].Split(' ')[1]);
+                        player.direction_right = int.Parse(save[2].Split(' ')[1]);
+                        background.Load(save);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("세이브 데이터가 없거나 관리자모드가 아닙니다.");
+                        Console.WriteLine("Exception: " + e.Message);
+                    }
                     break;
                 case 29:
                     Environment.Exit(0);
@@ -153,14 +188,8 @@ namespace Project_jUMPKING
             while (Btutorial)
             {
                 tutoplayer.Move(tutorial);
-                int powerData = tutoplayer.power;
-                if (powerData > 2)
-                {
-                    tutoplayer.CalPos(tutorial);
-                }
+                tutoplayer.CalPos(tutorial);
             }
-
-            Player player = new Player();
             while (true)
             {
                 try
@@ -180,86 +209,18 @@ namespace Project_jUMPKING
                 }
             }
             while (true)
-            {               
+            {
                 player.Move(background);
-                int powerData = player.power;
-                if (powerData > 2)
+                player.CalPos(background);
+                if (player.positionY < 25)
                 {
-                    player.CalPos(background);
-                }
-                if(princess.check(player.positionX, player.positionY))
-                {
-                    bool goEnding = false;
-                    while (true)
+                    if (princess.check(player.positionX, player.positionY))
                     {
-                        if (princess.Y + 1 - player.positionY != 0)
-                        {
-                            player.positionY += princess.Y + 1 - player.positionY;
-                            background.DrawChar(player.positionX, player.positionY, player.direction_right);
-                            Thread.Sleep(100);
-                        }
-                        else if (princess.X - 30 - player.positionX != 0)
-                        {
-                            player.positionX += -1;
-                            princess.Print_Princess();
-                            background.DrawChar(player.positionX, player.positionY, -1);
-                            Thread.Sleep(125);
-                        }
-                        else
-                        {
-                            Thread.Sleep(1000);
-                            background.DrawChar(player.positionX, player.positionY, 1);
-                            Thread.Sleep(400);
-                            goEnding = true;
-                            break;
-                        }
-
-                    }
-                    if(goEnding)
-                    {
-                    background.Ending();
-                        for (int i = 0; i < 15; i ++)
-                        {
-                            player.positionX += 1;
-                            princess.moveleft();
-                            princess.Print_Princess();
-                            background.DrawChar(player.positionX, player.positionY, 1);
-                            if (i == 14)
-                            {
-                                Console.SetCursorPosition(98, 16);
-                                Console.Write("  ");
-                            }
-                            Thread.Sleep(250);
-                            if (i > 5) Thread.Sleep(150);
-                            if (i > 8) Thread.Sleep(100);
-                            if (i > 11)
-                            {
-                                Thread.Sleep(100);
-                            }
-                            if (i > 13)
-                            {
-                                Thread.Sleep(100);
-                            }
-                        }
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Thread.Sleep(1000);
-                        Console.SetCursorPosition(95, 13);
-                        Console.Write("♥");
-                        Thread.Sleep(1500);
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.SetCursorPosition(93, 11);
-                        Console.Write("♥  ♥");
-                        Thread.Sleep(2000);
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.SetCursorPosition(91, 9);
-                        Console.Write("♥  ♥  ♥");
-                        Thread.Sleep(3000);
-                        Console.SetCursorPosition(0,0);
-                        Console.ResetColor();
+                        background.Ending(player);
                         break;
                     }
                 }
+
             }
         }
         public static void TutorialClear()
@@ -278,4 +239,4 @@ namespace Project_jUMPKING
 //아래키 점프 제자리 ######
 //유사
 //마찰
-//튜토리얼
+//튜토리얼 ######
