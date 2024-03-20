@@ -274,10 +274,6 @@ namespace Project_jUMPKING
                 Console.WriteLine("관리자 권한으로 실행해주세요.");
                 Console.WriteLine("Exception: " + e.Message);
             }
-            finally
-            {
-                
-            }
 
         }
         private void UseItem(Background background, int num)
