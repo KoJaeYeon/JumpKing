@@ -8,7 +8,7 @@ namespace Project_jUMPKING
     class Background
     {
         public static readonly int width = 162;
-        public static readonly int height = 541;
+        public static readonly int height = 611;
 
         BackgroundImage back_Image = new BackgroundImage();
         Princess princess = new Princess(110, 17);
@@ -90,6 +90,13 @@ namespace Project_jUMPKING
         {
             if (map == 1)
             {
+                for (int i = 0; i < 160; i++)
+                {
+                    for (int j = 0; j < 128; j++)
+                    {
+                        _background[i + 1, height - 500 + j] = Image160[2][j][i];
+                    }
+                }
                 for (int i = 0; i < 160; i++)
                 {
                     for (int j = 0; j < 112; j++)
@@ -252,10 +259,45 @@ namespace Project_jUMPKING
                 Platform(32, 420, 12, b, 4, '▩');
                 Platform(60, 415, 5, b, -2, '▩');
 
+                Platform(70, 405, 8);
+
+                //desert 2
+                Platform(13, 440, 12, b, -6, '▩');
+                Platform(53, 444, 12, b, -7, '▩');
+
+                Platform(6, 453, 8);
+
+                Platform(21, 457, 13, b, -8, '▩');
+
+                Platform(41, 464, 6);
+                Platform(47, 463, -4, s);
+
+                Platform(28, 470, 13, b, -4, '▩');
+                Platform(16, 469, 7, b, 8, '▩');
+
+                Platform(48, 480, 7, b, -2, '▩');
+
+                Platform(63, 469, 6, b, 10, '▩');
+                Platform(34, 490, 10, b, -4, '▩');
+
+                Platform(80, 487, -4);
+                Platform(76, 493, 5, b, 8, '▩');
+
+                //end
+                Platform(1, 505, 75);
+
+                Platform(20, 526, 7, z, 8);
+                Platform(50, 539, 7, z, 10);
+                Platform(50, 512, 7, z, 10);
+
+                Platform(20, 505, 7, z, 4);
+
+
+
                 //ending
                 for (int i = 0; i < 41; i++) _background[20 * 2 + 2 * i, 20] = '▣';
                 for (int i = 0; i < 6; i++) _background[120, 14 + i] = '▣';
-                for (int i = 0; i < 2; i++) _background[10 * 2 + 2 * i, 21] = '▣';
+                for (int i = 0; i < 2; i++) _background[10 * 2 + 2 * i, 20] = '▣';
                 for (int i = 0; i < 6; i++) _background[40, 21 + i] = '▣';
                 for (int i = 0; i < 2; i++) _background[10 * 2 + 2 * i, 40] = '▣';
                 for (int i = 0; i < 30; i++) _background[20 * 2 + 2 * i, 27] = '▣';
@@ -480,6 +522,23 @@ namespace Project_jUMPKING
                     }
                 }
             }
+            if(prePosY < 240 && prePosY > 130 )
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                for (int i = 0; i < 10;i++)
+                {
+                    for(int j = 0; j < 8;j++)
+                    {
+                        if (_background[prePosX - 4 + i, positionY - 4 + j] == '▩')
+                        {
+                            Console.SetCursorPosition(prePosX -4 + i, positionY - 4 + j);
+                            Console.Write('▩');
+                        }
+                    }
+                }
+                Console.ResetColor();
+
+            }
 
             prePosX = positionX;
             prePosY = positionY;
@@ -595,6 +654,20 @@ namespace Project_jUMPKING
                         for (int j = 0; j < 160; j++)
                         {
                             sb.Append(Image160[1][i - (height - 352)][j]);
+                        }
+                    }
+                    else if (i > height - 373)
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(' ');
+                        }
+                    }
+                    else if (i > height - 501)
+                    {
+                        for (int j = 0; j < 160; j++)
+                        {
+                            sb.Append(Image160[2][i - (height - 500)][j]);
                         }
                     }
                     else
@@ -714,7 +787,7 @@ namespace Project_jUMPKING
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
                     }
-                    else if (j > height - 62 * 7 )
+                    else if (j > height - 62 *  8 )
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
                     }
@@ -782,6 +855,79 @@ namespace Project_jUMPKING
                         item_Dic[i].PrintItem(time);
                 }
             }
+        }
+
+        public void Draw_Storm(int sequence) //모래바람
+        {
+            int[] x = new int[] { 70, 80, -36, 45, 30, 40, -28, -20, -30 , 0, 40 , 30 , 60 ,44}; //+ 40 ~ 80
+            int[] y = new int[] { 146, 147, 114, 155, 157, 159, 124, 148, 163 , 173 , 168, 123, 117, 135};
+            if (sequence < 20)
+            {
+                if (sequence == 0)
+                {
+                    for (int i = 0; i < x.Length; i++)
+                    {
+                        Console.SetCursorPosition(x[i] + 38, y[i]);
+                        Console.Write("{0}{1}", _background[x[i] + 35 + 2 - sequence * 2, y[i]], _background[x[i] + 35 + 3 - sequence * 2, y[i]]);
+                        Console.SetCursorPosition(x[i] + 38, y[i]+1);
+                        Console.Write("{0}{1}", _background[x[i] + 35 + 2 - sequence * 2, y[i]+1], _background[x[i] + 35 + 3 - sequence * 2, y[i] + 1]);
+                    }
+                }
+            }
+            else if (sequence < 40)
+            {
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Console.SetCursorPosition(x[i] - 1 + sequence * 2, y[i]);
+                    Console.Write("{0}{1}", _background[x[i] - 2 + sequence * 2, y[i]], _background[x[i] - 1 + sequence * 2, y[i]]);
+                    Console.SetCursorPosition(x[i] - 1 + sequence * 2, y[i]+1);
+                    Console.Write("{0}{1}", _background[x[i] - 2 + sequence * 2, y[i] + 1], _background[x[i] - 1 + sequence * 2, y[i] +1]);
+                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                //speedX += 0.01;
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Console.SetCursorPosition(x[i] + 1 + sequence * 2, y[i]);
+                    Console.Write("{0}{1}", _background[x[i] + sequence * 2, y[i]], _background[x[i] + 1 + sequence * 2, y[i]]);
+                    Console.SetCursorPosition(x[i] + 1 + sequence * 2, y[i]+1);
+                    Console.Write("{0}{1}", _background[x[i] + sequence * 2, y[i] + 1], _background[x[i] + 1 + sequence * 2, y[i] + 1]);
+                }
+            }
+            else if (sequence < 60)
+            {
+                if(sequence == 40)
+                {
+                    for (int i = 0; i < x.Length; i++)
+                    {
+                        Console.SetCursorPosition(x[i] - 1 + sequence * 2, y[i]);
+                        Console.Write("{0}{1}", _background[x[i] - 2 + sequence * 2, y[i]], _background[x[i] - 1 + sequence * 2, y[i]]);
+                        Console.SetCursorPosition(x[i] - 1 + sequence * 2, y[i] + 1);
+                        Console.Write("{0}{1}", _background[x[i] - 2 + sequence * 2, y[i] + 1], _background[x[i] - 1 + sequence * 2, y[i] + 1]);
+                    }
+                }
+
+            }
+            else
+            {
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Console.SetCursorPosition(x[i] + 195 + 3  - sequence * 2, y[i]);
+                    Console.Write("{0}{1}", _background[x[i]+ 195 + 2 - sequence * 2, y[i]], _background[x[i] + 195 + 3 - sequence * 2, y[i]]);
+                    Console.SetCursorPosition(x[i] + 195 + 3 - sequence * 2, y[i] + 1);
+                    Console.Write("{0}{1}", _background[x[i] + 195 + 2 - sequence * 2, y[i] + 1], _background[x[i] + 195 + 3 - sequence * 2, y[i] + 1]);
+                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                //speedX += 0.01;
+                for (int i = 0; i < x.Length; i++)
+                {
+                    Console.SetCursorPosition(x[i] + 196 - sequence * 2, y[i]);
+                    Console.Write("{0}{1}", _background[x[i] + 195 - sequence * 2, y[i]], _background[x[i] + 195 + 1 - sequence * 2, y[i]]);
+                    Console.SetCursorPosition(x[i] + 196 - sequence * 2, y[i] + 1);
+                    Console.Write("{0}{1}", _background[x[i] + 195 - sequence * 2, y[i] + 1], _background[x[i] + 195 + 1 - sequence * 2, y[i] + 1]);
+                }
+                //speedX -= 0.01;
+            }
+            Console.ResetColor();
         }
 
         public void Get_Item(int itemNum, int posy)

@@ -1,7 +1,0 @@
-_positionX 14
-_positionY 166
-_direction_right 1
-itemcheck[0] True
-itemcheck[1] True
-itemcheck[2] True
-itemcheck[3] True

@@ -22,7 +22,7 @@ namespace Project_jUMPKING
         private int now_Item = 0;
         private bool whilein = false;
         private bool snowy = false;
-        private int time = 0;
+        private int time = 150;
         private int sand = 0;
         int calbuffer = 0;
 
@@ -37,12 +37,18 @@ namespace Project_jUMPKING
 
         private int buffer;
         private int delay_buffer;
-        public Player(int positionX = 60 * 2, int positionY = 541 - 320)
+
+        public Player(int positionX = 40 * 2, int positionY = 611 - 3)
         {
             _positionX = positionX;
             _positionY = positionY;
             Array.Clear(itemcheck);
             Array.Clear(itemUse);
+        }
+
+        public static void ItemClear()
+        {
+            Array.Clear(itemcheck);
         }
 
         public void Move(Background background)
@@ -77,7 +83,7 @@ namespace Project_jUMPKING
                         background.DrawChar(_positionX, _positionY, _direction_right);
                         CameraTest(background);
                         break;
-                    case ConsoleKey.F1:
+                    case ConsoleKey.Delete:
                         while (true)
                         {
                             key = Console.ReadKey(true);
@@ -87,7 +93,7 @@ namespace Project_jUMPKING
                                     _positionY -= 1;
                                     background.DrawChar(_positionX, _positionY, _direction_right);
                                     break;
-                                case ConsoleKey.F1:
+                                case ConsoleKey.Delete:
                                     return;
                                 case ConsoleKey.LeftArrow:
                                     _positionX -= 1;
@@ -103,13 +109,14 @@ namespace Project_jUMPKING
                                     break;
                             }
                         }
-                    case ConsoleKey.F3:
+                    case ConsoleKey.PageDown:
                         if (glacier) glacier = false;
                         else glacier = true;
                         break;
                     case ConsoleKey.S:
                         if (!itemcheck[0]) break;
                         if (glacier) break;
+                        if (bSand) break;
                         background.Save_Position(_saveX, _saveY, _positionX, _positionY);
                         _saveX = _positionX;
                         _saveY = _positionY;
@@ -142,7 +149,7 @@ namespace Project_jUMPKING
                         Console.SetCursorPosition(0, height + 62);
                         menu(height, background);
                         break;
-                    case ConsoleKey.F2:
+                    case ConsoleKey.End:
                         _positionX = 90;
                         _positionY = 15;
                         break;
@@ -437,26 +444,49 @@ namespace Project_jUMPKING
             SetPower(temp);
             double gravity = -0.03;
             while (colisionGround != 1)
-            {
-                time++;
+            {                
                 //Console.SetCursorPosition(_positionX, _positionY - 4);
                 //Console.Write(time);
-                if (time == 10000)
+                if (positionY <= 176 && positionY >= 114)
                 {
-                    time = 0;
-                }
-                if (positionY < 80 && positionY > 20)
-                {
+                    time++;
                     int seqeunce;
+                    int sequence2;
                     int term = 20;
+                    int term2 = 10;
+                    if (time == 40 * term) time = 0;
                     seqeunce = time / term;
+                    sequence2 = time / term2;
+                    background.Draw_Storm(sequence2);
+                    if(seqeunce < 10)
+                    {
+
+                    }
+                    else if(seqeunce < 20) 
+                    {
+                        speedX += 0.01;
+                    }
+                    else if (seqeunce < 30)
+                    {
+
+                    }
+                    else
+                    {
+                        speedX -= 0.01;
+                    }
+                    //Console.SetCursorPosition(_positionX, _positionY - 4);
+                    //Console.Write(seqeunce);
+                    if(direction_right == 0)
+                    {
+                        if(speedY > 0)
+                        {
+                            if (speedX > 0) { direction_right = 1; }
+                            else if (speedX < 0) { direction_right = -1; }
+                        }
+
+                    }
 
                 }
-
-
-
-
-
 
                 background.Draw_Item(max_height, min_height, 2);
                 if (power == 0)

@@ -190,6 +190,10 @@ namespace Project_jUMPKING
                 tutoplayer.Move(tutorial);
                 tutoplayer.CalPos(tutorial);
             }
+
+            tutorial = null;
+            tutoplayer = null;
+
             while (true)
             {
                 try
@@ -228,27 +232,42 @@ namespace Project_jUMPKING
                     if (player.positionY <= 40)
                     {
                         player.positionX = 90;
-                        player.positionY = 541 - 15;
+                        player.positionY = Background.height - 15;
                     }
-                    else if(player.positionY <= 541 - 318)
+                    else if (player.positionY <= 110)
                     {
                         player.positionX = 80;
-                        player.positionY = 541 - 317;
+                        player.positionY = 104;
                     }
-                    else if (player.positionY <= 541 - 285)
+                    else if (player.positionY <= 170)
+                    {
+                        player.positionX = 80;
+                        player.positionY = 156;
+                    }
+                    else if (player.positionY <= 238)
+                    {
+                        player.positionX = 20;
+                        player.positionY = 236;
+                    }
+                    else if(player.positionY <= Background.height - 318)
+                    {
+                        player.positionX = 80;
+                        player.positionY = Background.height - 317;
+                    }
+                    else if (player.positionY <= Background.height - 285)
                     {
                         player.positionX = 105;
-                        player.positionY = 541 - 284;
+                        player.positionY = Background.height - 284;
                     }
-                    else if (player.positionY <= 541 - 231)
+                    else if (player.positionY <= Background.height - 231)
                     {
                         player.positionX = 50;
-                        player.positionY = 541 - 230;
+                        player.positionY = Background.height - 230;
                     }
                     else
                     {
                         player.positionX = 80;
-                        player.positionY = 541 - 3;
+                        player.positionY = Background.height - 3;
                     }
                     background.ErrorPosSet(player.positionX, player.positionY);
                     Console.Clear();
@@ -262,6 +281,7 @@ namespace Project_jUMPKING
         public static void TutorialClear()
         {
             Btutorial = false;
+            Player.ItemClear();
         }
     }
 }
