@@ -8,7 +8,7 @@ namespace Project_jUMPKING
     class Background
     {
         public static readonly int width = 162;
-        public static readonly int height = 481;
+        public static readonly int height = 541;
 
         BackgroundImage back_Image = new BackgroundImage();
         Princess princess = new Princess(110, 17);
@@ -30,6 +30,8 @@ namespace Project_jUMPKING
 
         public Dictionary<int, Item> item_Dic = new Dictionary<int, Item>();
         private int item_Dic_Count;
+
+
 
         public void Load(string[] save)
         {
@@ -134,6 +136,7 @@ namespace Project_jUMPKING
             char y = 'y';
             char z = 'z';
             char s = 's';
+            char b = 'b';
             if (map == 1)
             {
                 //Row 2 ~ 160
@@ -199,8 +202,7 @@ namespace Project_jUMPKING
                 Platform(27, 225, 2);
                 Platform(26, 224, 6, s);
                 Platform(29, 224, -6, s);
-
-                Platform(1, 290, 80,x,0,'▤');
+                
 
                 //Snow
                 for (int i = 0; i < 20; i++) _background[40 + i, height - 252] = '▒';
@@ -215,6 +217,40 @@ namespace Project_jUMPKING
                 for (int i = 0; i < 20; i++) _background[76 + i, height - 282] = '▒';
                 for (int i = 0; i < 20; i++) _background[76 + i, height - 281] = '□';
                 Platform(48, 280, -3, s);
+
+                for (int i = 0; i < 30; i++) _background[14 + i, height - 291] = '▒';
+                for (int i = 0; i < 30; i++) _background[14 + i, height - 290] = '□';
+                Platform(22, 289, -3, s);
+
+                for (int i = 0; i < 14; i++) _background[2 + i, height - 298] = '▒';
+                for (int i = 0; i < 14; i++) _background[2 + i, height - 297] = '□';
+
+
+                //glacier
+                for (int i = 0; i < 14; i++) _background[2 + i, height - 315] = '▒';
+                for (int i = 0; i < 14; i++) _background[2 + i, height - 314] = '□';
+                for (int i = 0; i < 122; i++) _background[40 + i, height - 315] = '▒';
+                for (int i = 0; i < 122; i++) _background[40 + i, height - 314] = '□';
+
+                Platform(13, 340, -10, s);
+                Platform(10, 339,-8, y);
+                Platform(9, 340, 4, x, 0, '▤');
+
+                Platform(40, 325, 35,x,0,'▤');
+                Platform(30, 335, 40, x, 0, '▤');
+
+                Platform(40, 350, 35, x, 0, '▤');
+                Platform(30, 360, 40, x, 0, '▤');
+                Platform(29, 359, 3, s);
+
+                //desert
+                Platform(1, 373, 15);
+                Platform(13, 385, 20, b,-8, '▩');
+                Platform(40, 382, 5, b, -2, '▩');
+                Platform(50, 390, 10, b, -4, '▩');
+                Platform(70, 410, 4, b, 6, '▩');
+                Platform(32, 420, 12, b, 4, '▩');
+                Platform(60, 415, 5, b, -2, '▩');
 
                 //ending
                 for (int i = 0; i < 41; i++) _background[20 * 2 + 2 * i, 20] = '▣';
@@ -294,6 +330,16 @@ namespace Project_jUMPKING
                     for (int i = 0; i < length; i++) _background[startX * 2 - 2 * i, height - startY + i] = '↙';
                 else
                     for (int i = 0; i < length * -1; i++) _background[startX * 2 + 2 * i, height - startY + i] = '↘';
+            }
+            else if (dir == 'b')
+            {
+                for (int i = 0; i < length; i++)
+                {
+                    for(int j = 0; j < length + h; j++)
+                    {
+                    _background[startX * 2 + 2 * i, height - startY - j] = block;
+                    }
+                }
             }
         }
 
@@ -579,6 +625,8 @@ namespace Project_jUMPKING
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                      3. 게임종료                                       │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      4. 배경 다시그리기                                     │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
             }
@@ -662,6 +710,14 @@ namespace Project_jUMPKING
                     {
                         Console.ForegroundColor = ConsoleColor.DarkBlue;
                     }
+                    else if (j > height - 62 * 6)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                    }
+                    else if (j > height - 62 * 7 )
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    }
                     if (_background[i, j] == '▣')
                     {
                         Console.SetCursorPosition(i, j);
@@ -702,6 +758,12 @@ namespace Project_jUMPKING
                     {
                         Console.SetCursorPosition(i, j);
                         Console.Write('▤');
+                        continue;
+                    }
+                    else if (_background[i, j] == '▩')
+                    {
+                        Console.SetCursorPosition(i, j);
+                        Console.Write('▩');
                         continue;
                     }
                 }
@@ -991,6 +1053,10 @@ namespace Project_jUMPKING
                 {
                     return 5;
                 }
+                else if (_background[x, y] == '▩')
+                {
+                    return 6;
+                }
                 else if (_background[x, y] == '0')
                 {
                     Get_Item(0, y);
@@ -1016,11 +1082,16 @@ namespace Project_jUMPKING
                 }
                 return 0;
             }
-            catch (Exception e)
+            catch
             {
                 return 1;
             }
 
+        }
+        public void ErrorPosSet(int x, int y)
+        {
+            prePosX = x;
+            prePosY = y;
         }
 
         public void Ending(Player player)

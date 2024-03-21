@@ -9,7 +9,7 @@ namespace Project_jUMPKING
     class Player
     {
         private double doubleX, doubleY;
-        private double speedX = 2, speedY = 0;        
+        private double speedX = 2, speedY = 0;
         private int _positionX, _positionY; // 캐릭터의 현재 위치
         private int prePosX, prePosY; // 렌더링을 위한 이전 좌표 확인용 위치
         private int _direction_right = 1; // 진행방향
@@ -23,9 +23,11 @@ namespace Project_jUMPKING
         private bool whilein = false;
         private bool snowy = false;
         private int time = 0;
+        private int sand = 0;
         int calbuffer = 0;
 
-        private bool testbool = false;
+        private bool glacier = false;
+        private bool bSand = false;
 
         private int _saveX = 0, _saveY = 0, _saveDir = 0;
         public int positionX { get { return _positionX; } set { _positionX = value; } }
@@ -35,8 +37,8 @@ namespace Project_jUMPKING
 
         private int buffer;
         private int delay_buffer;
-        public Player(int positionX = 40 * 2, int positionY = 481 - 300)
-        {            
+        public Player(int positionX = 60 * 2, int positionY = 541 - 320)
+        {
             _positionX = positionX;
             _positionY = positionY;
             Array.Clear(itemcheck);
@@ -50,8 +52,7 @@ namespace Project_jUMPKING
                 while (Console.KeyAvailable == false)
                 {
                     PlayerCamera(_positionY, background);
-                    background.Draw_Item(max_height, min_height, 2);
-                    Thread.Sleep(1);               
+                    Thread.Sleep(1);
                     return;
                 }
                 ConsoleKeyInfo key = Console.ReadKey(true);
@@ -103,11 +104,12 @@ namespace Project_jUMPKING
                             }
                         }
                     case ConsoleKey.F3:
-                        if(testbool) testbool = false;
-                        else testbool = true;
+                        if (glacier) glacier = false;
+                        else glacier = true;
                         break;
                     case ConsoleKey.S:
                         if (!itemcheck[0]) break;
+                        if (glacier) break;
                         background.Save_Position(_saveX, _saveY, _positionX, _positionY);
                         _saveX = _positionX;
                         _saveY = _positionY;
@@ -117,6 +119,7 @@ namespace Project_jUMPKING
                         break;
                     case ConsoleKey.R:
                         if (!itemUse[0]) break;
+                        if (glacier) break;
                         _positionX = _saveX;
                         _positionY = _saveY;
                         _direction_right = _saveDir;
@@ -137,7 +140,7 @@ namespace Project_jUMPKING
 
                         Console.SetCursorPosition(0, height);
                         Console.SetCursorPosition(0, height + 62);
-                        menu(height);
+                        menu(height, background);
                         break;
                     case ConsoleKey.F2:
                         _positionX = 90;
@@ -149,7 +152,7 @@ namespace Project_jUMPKING
 
             }
         }
-        public void menu(int height)
+        public void menu(int height, Background background)
         {
             int cursorx = 106;
             int cursor = height + 29;
@@ -196,6 +199,8 @@ namespace Project_jUMPKING
                         Console.Write("  ");
                         Console.SetCursorPosition(cursorx, height + 33);
                         Console.Write("  ");
+                        Console.SetCursorPosition(cursorx, height + 35);
+                        Console.Write("  ");
                         Console.SetCursorPosition(180, height + 31);
                         Console.Write("                    ");
                         cursor = height + 29;
@@ -210,6 +215,8 @@ namespace Project_jUMPKING
                         Console.Write('▶');
                         Console.SetCursorPosition(cursorx, height + 33);
                         Console.Write("  ");
+                        Console.SetCursorPosition(cursorx, height + 35);
+                        Console.Write("  ");
                         cursor = height + 31;
                         Console.SetCursorPosition(cursorx, cursor);
                         break;
@@ -222,7 +229,24 @@ namespace Project_jUMPKING
                         Console.Write("  ");
                         Console.SetCursorPosition(cursorx, height + 33);
                         Console.Write('▶');
+                        Console.SetCursorPosition(cursorx, height + 35);
+                        Console.Write("  ");
                         cursor = height + 33;
+                        break;
+                    case ConsoleKey.D4:
+                    case ConsoleKey.NumPad4:
+                        whilein = false;
+                        Console.SetCursorPosition(cursorx, height + 29);
+                        Console.Write("  ");
+                        Console.SetCursorPosition(cursorx, height + 31);
+                        Console.Write("  ");
+                        Console.SetCursorPosition(cursorx, height + 33);
+                        Console.Write("  ");
+                        Console.SetCursorPosition(cursorx, height + 35);
+                        Console.Write('▶');
+                        Console.SetCursorPosition(180, height + 31);
+                        Console.Write("                    ");
+                        cursor = height + 35;
                         break;
                     case ConsoleKey.Enter:
                     case ConsoleKey.Spacebar:
@@ -238,12 +262,18 @@ namespace Project_jUMPKING
             {
                 Save(height + 31);
                 whilein = true;
-                menu(height);
+                menu(height, background);
             }
             else if (cursor == height + 33)
             {
                 Console.SetCursorPosition(0, height);
                 Environment.Exit(0);
+            }
+            else if (cursor == height + 35)
+            {
+                Console.Clear();
+                background.Print_Back();
+                background.DrawChar(_positionX, _positionY, _direction_right);
             }
         }
         public void Save(int height)
@@ -285,9 +315,9 @@ namespace Project_jUMPKING
                 background.item_Dic[now_Item].OffItem();
                 return;
             }
-            if(now_Item != 0)
+            if (now_Item != 0)
             {
-            itemUse[now_Item] = false;
+                itemUse[now_Item] = false;
             }
             background.item_Dic[now_Item].OffItem();
             now_Item = num;
@@ -304,13 +334,13 @@ namespace Project_jUMPKING
             }
             if (background.Collide((int)_positionX, (int)_positionY, _direction_right) != 1) // 벽과 충돌 하지 않았을 때
             {
-                if (testbool)
+                if (glacier)
                 {
                     speedX += (0.03 * direction_right);
                 }
                 else
                 {
-                _positionX += 1 * direction_right;
+                    _positionX += 1 * direction_right;
                 }
                 background.DrawChar(_positionX, _positionY, _direction_right);
             }
@@ -322,14 +352,12 @@ namespace Project_jUMPKING
         {
             int buffer = 0;
             int power = 0;
-            bool keyEnter = false;            
+            bool keyEnter = false;
             while (true)
             {
-                background.Draw_Item(max_height, min_height, 0);
                 while (Console.KeyAvailable == false)
                 {
                     CalPos(background);
-                    background.Draw_Item(max_height, min_height, 0);
                     Thread.Sleep(2);
                     buffer++; // 0. while문을 돌면서 입력을 놓칠경우 발생하는 횟수를 담아놓기 위한 변수
                     if (buffer > 5) // 3. buffer가 일정 횟수 이상 담기면 검사 (1 == Thred.Sleep 속도에 따른 임의의 수)
@@ -348,14 +376,22 @@ namespace Project_jUMPKING
                         }
                     }
                 }
-                if (power == 1)
+
+                if (glacier)
                 {
-                    background.DrawChar_charging(_positionX, _positionY, direction_right);
+                    calbuffer++;
+                    if (calbuffer % 2 == 0)
+                    {
+                        CalPos(background);
+                        calbuffer += -2;
+                    }
                 }
-                if (calbuffer % 2 == 0)
+                else
                 {
-                    CalPos(background);
-                    calbuffer += -2;
+                    if (power >= 1)
+                    {
+                        background.DrawChar_charging(_positionX, _positionY, direction_right);
+                    }
                 }
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 switch (key.Key)
@@ -365,7 +401,6 @@ namespace Project_jUMPKING
                         background.UIBar(_positionY, power);
                         break;
                 }
-                calbuffer++;
                 buffer = 0; // 1. 입력이 있으면 buffer를 0으로 초기화
                 keyEnter = true; // 2. 입력 대기상태로 변할 때 KeyUp이 발생하도록 변수 조절
             }
@@ -376,24 +411,53 @@ namespace Project_jUMPKING
             int temp = _power;
             int colisionGround = 0;
             bool istouched = false;
+
             prePosX = _positionX;
             prePosY = _positionY;
             double acc = 0.00;
-            if (testbool)
+            if (glacier)
             {
             }
             else
             {
                 doubleX = _positionX;
             }
-                doubleY = _positionY;
+            doubleY = _positionY;
+
+            if (bSand)
+            {
+                sand++;
+                if (sand >= 25)
+                {
+                    _positionY++;
+                    sand = 0;
+                    background.DrawChar(_positionX, _positionY, _direction_right);
+                }
+            }
             SetPower(temp);
             double gravity = -0.03;
             while (colisionGround != 1)
             {
                 time++;
-                //Console.SetCursorPosition(_positionX, _positionY-4);
+                //Console.SetCursorPosition(_positionX, _positionY - 4);
                 //Console.Write(time);
+                if (time == 10000)
+                {
+                    time = 0;
+                }
+                if (positionY < 80 && positionY > 20)
+                {
+                    int seqeunce;
+                    int term = 20;
+                    seqeunce = time / term;
+
+                }
+
+
+
+
+
+
                 background.Draw_Item(max_height, min_height, 2);
                 if (power == 0)
                 {
@@ -403,11 +467,14 @@ namespace Project_jUMPKING
                 {
                     Thread.Sleep(10);
                 }
-                if (testbool)
-                {                    
-                    doubleX += speedX + (acc * direction_right);
-                    if (speedX > 1) speedX = 1;
-                    if (speedX < -1) speedX = -1;
+                if (glacier)
+                {
+                    if (speedX > 0.2 || speedX < -0.2)
+                    {
+                        doubleX += speedX + (acc * direction_right);
+                    }
+                    if (speedX > 0.7) speedX = 0.7;
+                    else if (speedX < -0.7) speedX = -0.7;
                 }
                 else
                 {
@@ -432,109 +499,110 @@ namespace Project_jUMPKING
                     background.DrawChar(_positionX, _positionY, _direction_right);
                     PlayerCamera(_positionY, background);
                 }
-                try
+
+                //충돌 검사
+                switch (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right)) //좌우 벽과 충돌 했을 때
                 {
-                    //충돌 검사
-                    switch (background.Collide((int)_positionX + direction_right, (int)_positionY, _direction_right)) //좌우 벽과 충돌 했을 때
+                    case 1:
+                        _direction_right *= -1;
+                        if (glacier)
+                        {
+                            speedX *= -0.8;
+                        }
+                        else
+                        {
+                            speedX = 0.8 * _direction_right;
+                        }
+                        break;
+                    case 2:
+                        _direction_right = -1;
+                        if (glacier)
+                        {
+                            speedX *= -0.5;
+                        }
+                        else
+                        {
+                            speedX = 0.5;
+                        }
+                        break;
+                    case 3:
+                        _direction_right = 1;
+                        if (glacier)
+                        {
+                            speedX *= -0.5;
+                        }
+                        else
+                        {
+                            speedX = 0.5;
+                        }
+                        break;
+                    case 4:
+                        _direction_right *= -1;
+                        speedX *= 0.8;
+                        break;
+                    case 5:
+                        _direction_right *= -1;
+                        if (glacier)
+                        {
+                            speedX *= -0.8;
+                        }
+                        else
+                        {
+                            speedX = 0.8 * _direction_right;
+                        }
+                        break;
+                }
+                int collisiontop = background.Collide((int)_positionX, (int)_positionY, 3);
+                if (collisiontop > 0 && collisiontop != 6) // 천장과 충돌했을 때
+                {
+                    if (!istouched) // 속도변환 한번만 일어나게 해주는 체크 bool, 해당 체크가 없으면 순식간에 가속됨
+                    {
+                        istouched = true;
+                        speedY *= -1;
+                    }
+                }
+
+                snowy = false;
+                glacier = false;
+                bSand = false;
+                if (speedY <= 0)
+                {
+                    switch (background.Collide((int)_positionX, (int)_positionY, 4)) // 바닥과 충돌했을때
                     {
                         case 1:
-                            _direction_right *= -1;
-                            if (testbool)
-                            {
-                                speedX *= -0.8;
-                            }
-                            else
-                            {
-                                speedX = 0.8 * _direction_right;
-                            }
-                            break;
+                            speedY = 0;
+                            _power = 0;
+                            return;
                         case 2:
                             _direction_right = -1;
                             speedX = 0.5;
+                            speedY = 0;
                             break;
                         case 3:
                             _direction_right = 1;
                             speedX = 0.5;
+                            speedY = 0;
                             break;
                         case 4:
-                            _direction_right *= -1;
-                            speedX *= 0.8;
-                            break;
+                            snowy = true;
+                            speedY = 0;
+                            _power = 0;
+                            return;
                         case 5:
-                            _direction_right *= -1;                            
-                            speedX *= 0.8;
-                            break;
+                            glacier = true;
+                            speedY = 0;
+                            _power = 53;
+                            return;
+                        case 6:
+                            snowy = true;
+                            bSand = true;
+                            speedY = 0;
+                            _power = 0;
+                            return;
                     }
-
-                    if(background.Collide((int)_positionX, (int)_positionY, 3)>0)
-                    {
-                        if (!istouched) // 속도변환 한번만 일어나게 해주는 체크 bool, 해당 체크가 없으면 순식간에 가속됨
-                        {
-                            istouched = true;
-                            speedY *= -1;
-                        }
-                    }
-                    //switch (background.Collide((int)_positionX, (int)_positionY, 3)) // 천장과 충돌 했을 때
-                    //{
-                    //    case 1:
-                    //    case 2:
-                    //    case 3:
-                    //    case 4:
-                    //    case 5:
-                    //        if (!istouched) // 속도변환 한번만 일어나게 해주는 체크 bool, 해당 체크가 없으면 순식간에 가속됨
-                    //        {
-                    //            istouched = true;
-                    //            speedY *= -1;
-                    //        }
-                    //        break;
-                    //}
-
-                    snowy = false;
-                    testbool = false;
-                    if (speedY <= 0)
-                    {
-                        switch (background.Collide((int)_positionX, (int)_positionY, 4)) // 바닥과 충돌했을때
-                        {
-                            case 1:
-                                testbool = false;
-                                speedY = 0;
-                                _power = 0;
-                                return;
-                            case 2:
-                                _direction_right = -1;
-                                speedX = 0.5;
-                                speedY = 0;
-                                break;
-                            case 3:
-                                _direction_right = 1;
-                                speedX = 0.5;
-                                speedY = 0;
-                                break;
-                            case 4:
-                                snowy = true;
-                                speedY = 0;
-                                _power = 0;
-                                return;
-                            case 5:
-                                testbool = true;
-                                speedY = 0;
-                                _power = 53;
-                                return;
-                        }
-                    }
-
                 }
-                catch (IndexOutOfRangeException e) // 맵뚫 버그 발생시 맵 및 캐릭터 초기화
-                {
-                    _positionX = 80;
-                    _positionY = 3;
-                    Console.Clear();
-                    background.Print_Back();
-                    background.DrawChar(_positionX, _positionY, _direction_right);
-                    speedY = 0;
-                    _power = 0;
-                    return;
-                }
+
+
             }
         }
 
@@ -595,16 +663,16 @@ namespace Project_jUMPKING
                 speedX += 0.8 * _direction_right;
                 speedY = 1.1;
             }
-            if (itemUse[1]) speedX += 0.6;
+            if (itemUse[1]) speedX += 0.6 * direction_right;
             else if (itemUse[2]) speedY += 0.4;
             if (power == 0)
             {
                 speedX = 0;
                 speedY = 0;
             }
-            else if(power == 53)
+            else if (power == 53)
             {
-                if (!testbool)
+                if (!glacier)
                 {
                     speedX = 0;
                 }

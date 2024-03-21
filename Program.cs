@@ -29,7 +29,7 @@ namespace Project_jUMPKING
                     Console.SetCursorPosition(213, 0);
                     break;
                 }
-                catch (Exception e)
+                catch
                 {
                     Console.Clear();
                     Console.ResetColor();
@@ -176,7 +176,7 @@ namespace Project_jUMPKING
                     tutorial.DrawChar(tutoplayer.positionX, tutoplayer.positionY, tutoplayer.direction_right);
                     break;
                 }
-                catch (Exception e)
+                catch
                 {
                     Console.Clear();
                     Console.ResetColor();
@@ -199,7 +199,7 @@ namespace Project_jUMPKING
                     background.DrawChar(player.positionX, player.positionY, player.direction_right);
                     break;
                 }
-                catch (Exception e)
+                catch
                 {
                     Console.Clear();
                     Console.ResetColor();
@@ -210,16 +210,52 @@ namespace Project_jUMPKING
             }
             while (true)
             {
-                player.Move(background);
-                player.CalPos(background);
-                if (player.positionY < 25)
+                try
                 {
-                    if (princess.check(player.positionX, player.positionY))
+                    player.Move(background);
+                    player.CalPos(background);
+                    if (player.positionY < 25)
                     {
-                        background.Ending(player);
-                        break;
+                        if (princess.check(player.positionX, player.positionY))
+                        {
+                            background.Ending(player);
+                            break;
+                        }
                     }
                 }
+                catch
+                {
+                    if (player.positionY <= 40)
+                    {
+                        player.positionX = 90;
+                        player.positionY = 541 - 15;
+                    }
+                    else if(player.positionY <= 541 - 318)
+                    {
+                        player.positionX = 80;
+                        player.positionY = 541 - 317;
+                    }
+                    else if (player.positionY <= 541 - 285)
+                    {
+                        player.positionX = 105;
+                        player.positionY = 541 - 284;
+                    }
+                    else if (player.positionY <= 541 - 231)
+                    {
+                        player.positionX = 50;
+                        player.positionY = 541 - 230;
+                    }
+                    else
+                    {
+                        player.positionX = 80;
+                        player.positionY = 541 - 3;
+                    }
+                    background.ErrorPosSet(player.positionX, player.positionY);
+                    Console.Clear();
+                    background.Print_Back();
+                    background.DrawChar(player.positionX, player.positionY, player.direction_right);
+                }
+
 
             }
         }
