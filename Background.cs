@@ -146,8 +146,7 @@ namespace Project_jUMPKING
             char b = 'b';
             if (map == 1)
             {
-                //Row 2 ~ 160
-                // height ~62
+                //Row 1 ~ 80
                 Platform(1, 18, 20);
                 Platform(37, 20, 10);
                 Platform(61, 18, 20);
@@ -291,8 +290,7 @@ namespace Project_jUMPKING
                 Platform(50, 512, 7, z, 10);
 
                 Platform(20, 505, 7, z, 4);
-
-
+                Platform(1, height, 79);
 
                 //ending
                 for (int i = 0; i < 41; i++) _background[20 * 2 + 2 * i, 20] = '▣';
@@ -311,10 +309,6 @@ namespace Project_jUMPKING
 
                 for (int i = 0; i < 6; i++) _background[50 * 2 + 2 * i, 47] = '▣';
                 for (int i = 0; i < 7; i++) _background[20 * 2 + 2 * i, 60] = '▣';
-
-                //Column
-
-                // height ~62
             }
             else if (map == 0)
             {
@@ -345,35 +339,35 @@ namespace Project_jUMPKING
         }
         private void Platform(int startX, int startY, int length, char dir = 'x', int h = 0 , char block = '▣')
         {
-            if (dir == 'x')
+            if (dir == 'x') // 가로
             {
                 if (length > 0)
                     for (int i = 0; i < length; i++) _background[startX * 2 + 2 * i, height - startY] = block;
                 else
                     for (int i = 0; i < length * -1; i++) _background[startX * 2 - 2 * i, height - startY] = block;
             }
-            else if (dir == 'y')
+            else if (dir == 'y') // 세로
             {
                 if (length > 0)
                     for (int i = 0; i < length; i++) _background[startX * 2, height - startY - i] = block;
                 else
                     for (int i = 0; i < length * -1; i++) _background[startX * 2 - 2, height - startY + i] = block;
             }
-            else if (dir == 'z')
+            else if (dir == 'z') // 빈 블럭
             {
                 for (int i = 0; i < length; i++) _background[startX * 2 + 2 * i, height - startY] = block;
                 for (int i = 0; i < length + h; i++) _background[startX * 2, height - startY - i] = block;
                 for (int i = 0; i < length + h; i++) _background[startX * 2 + (length - 1) * 2, height - startY - i] = block;
                 for (int i = 0; i < length; i++) _background[startX * 2 + 2 * i, height - startY - length - h] = block;
             }
-            else if (dir == 's')
+            else if (dir == 's') // 경사
             {
                 if (length > 0)
                     for (int i = 0; i < length; i++) _background[startX * 2 - 2 * i, height - startY + i] = '↙';
                 else
                     for (int i = 0; i < length * -1; i++) _background[startX * 2 + 2 * i, height - startY + i] = '↘';
             }
-            else if (dir == 'b')
+            else if (dir == 'b') // 채워진 블럭
             {
                 for (int i = 0; i < length; i++)
                 {
@@ -474,7 +468,7 @@ namespace Project_jUMPKING
 
         public void DrawChar(int positionX, int positionY, int direction_right, bool knockbacked = false, bool knockdowned = false)
         {
-            if(direction_right == 2)
+            if(direction_right == 2) // 낙하 시 출력 보정
             {
                 direction_right = 1;
                 Console.SetCursorPosition(positionX + 4, positionY + 1);
@@ -687,6 +681,15 @@ namespace Project_jUMPKING
         public void DrawChar_charging(int positionX, int positionY, int direction_right)
         {
             sb2.Clear();
+            Console.SetCursorPosition(prePosX - 2, prePosY - 3);
+            for (int i = 0; i < 6; i++)
+            {
+                sb2.Append(_background[prePosX - 3 + i, prePosY - 3]);
+
+            }
+            Console.Write(sb2);
+
+            sb2.Clear();
             Console.SetCursorPosition(prePosX - 2, prePosY - 2);
             for (int i = 0; i < 6; i++)
             {
@@ -702,6 +705,9 @@ namespace Project_jUMPKING
                 sb2.Append(_background[prePosX - 3 + i, prePosY - 1]);
             }
             Console.Write(sb2);
+
+            prePosX = positionX;
+            prePosY = positionY;
 
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.SetCursorPosition(positionX, positionY - 1);
@@ -732,8 +738,8 @@ namespace Project_jUMPKING
             {
                 for (int i = 0; i < height - 1; i++)
                 {
-                    sb.Append('▣');
-                    if (i > height - 81)
+                    sb.Append('▣'); // 좌측 벽
+                    if (i > height - 81) // 배경
                     {
                         for (int j = 0; j < 80; j++)
                         {
@@ -779,14 +785,14 @@ namespace Project_jUMPKING
                             sb.Append(' ');
                         }
                     }
-                    sb.Append('▣');
+                    sb.Append('▣'); // 우측벽
                     sb.AppendLine();
                 }
-                for (int j = 0; j < 82; j++)
+                for (int j = 0; j < 82; j++) // 바닥
                 {
                     sb.Append('▣');
                 }
-                for (int i = 0; i < 40; i++)
+                for (int i = 0; i < 40; i++) // 메뉴
                 {
                     sb.AppendLine();
                 }
@@ -805,7 +811,8 @@ namespace Project_jUMPKING
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
             }
-            else if (map == 0)
+
+            else if (map == 0) // 튜토리얼
             {
                 for (int i = 0; i < height - 1; i++)
                 {
@@ -865,7 +872,7 @@ namespace Project_jUMPKING
             {
                 for (int j = 1; j < _background.GetLength(1) - 1; j++)
                 {
-                    if (j > height - 62)
+                    if (j > height - 62) // 구간 설정
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
@@ -893,7 +900,7 @@ namespace Project_jUMPKING
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
                     }
-                    if (_background[i, j] == '▣')
+                    if (_background[i, j] == '▣') // 장애물 그리기
                     {
                         Console.SetCursorPosition(i, j);
                         Console.Write('▣');
@@ -963,7 +970,7 @@ namespace Project_jUMPKING
         {
             int[] x = new int[] { 70, 80, -36, 45, 30, 40, -28, -20, -30 , 0, 40 , 30 , 60 ,44}; //+ 40 ~ 80
             int[] y = new int[] { 146, 147, 114, 155, 157, 159, 124, 148, 163 , 173 , 168, 123, 117, 135};
-            if (sequence < 20)
+            if (sequence < 20) // % 20 써서 나머지 구하면 더 깔끔해짐
             {
                 if (sequence == 0)
                 {
@@ -1103,12 +1110,12 @@ namespace Project_jUMPKING
             {
 
                 height -= 62;
-                if (power == 0)
+                if (power == 0) // 최초 생성
                 {
                     Console.BackgroundColor = color;
                     if (height < 0)
                     {
-                        for (int i = 0; i < 11; i++)
+                        for (int i = 0; i < 11; i++) // 에너지 바 그리기
                         {
                             Console.SetCursorPosition(198, 41 - i * 2);
                             Console.Write("         ");
@@ -1116,7 +1123,7 @@ namespace Project_jUMPKING
                             Console.Write("         ");
                         }
                         Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.ForegroundColor = ConsoleColor.Yellow; // 스킬 그리기
                         Console.SetCursorPosition(185, 45);
                         Console.Write("┌──────────┬──────────┬──────────┐ ");
                         Console.SetCursorPosition(185, 46);
@@ -1170,7 +1177,7 @@ namespace Project_jUMPKING
                 }
                 continue;
             }
-            if (power == 1 || power == 52)
+            if (power == 1 || power == 52) // 에니지 바 초기화
             {
                 Console.BackgroundColor = color;
                 for (int i = 0; i < 11; i++)
@@ -1281,7 +1288,11 @@ namespace Project_jUMPKING
         {
             try
             {
-                if (_background[x, y] == '▣')
+                if (_background[x, y] == ' ')
+                {
+                    return 0;
+                }
+                else if (_background[x, y] == '▣')
                 {
                     return 1;
                 }

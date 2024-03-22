@@ -7,10 +7,7 @@ namespace Project_jUMPKING
     internal class Program
     {
         private static bool Btutorial = false;
-        public static bool get_Btutorial()
-        {
-            return Btutorial;
-        }
+
         static void Main(string[] args)
         {            
             Background background = new Background();
@@ -116,6 +113,10 @@ namespace Project_jUMPKING
 
             }
         } // Program End
+        public static bool get_Btutorial()
+        {
+            return Btutorial;
+        }
         private static bool LoadGame(Background background, Player player)
         {
             try
@@ -134,6 +135,7 @@ namespace Project_jUMPKING
                 return false;
             }
         }
+
         private static void MainMenu(bool whilein,int cursorx ,int cursor,Background background ,Player player)
         {
             string[] save = new string[10];
@@ -242,6 +244,7 @@ namespace Project_jUMPKING
                     break;
             }
         }
+
         public static void TutorialClear()
         {
             Btutorial = false;

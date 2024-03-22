@@ -127,29 +127,54 @@ namespace Project_jUMPKING
                             switch (key.Key)
                             {
                                 case ConsoleKey.UpArrow:
-                                    _positionY -= 1;
-                                    background.DrawChar(_positionX, _positionY, _direction_right);
+                                    _positionY -= 1;                                    
                                     break;
                                 case ConsoleKey.Delete:
                                     return;
                                 case ConsoleKey.LeftArrow:
                                     _positionX -= 1;
-                                    background.DrawChar(_positionX, _positionY, _direction_right);
                                     break;
                                 case ConsoleKey.RightArrow:
                                     _positionX += 1;
-                                    background.DrawChar(_positionX, _positionY, _direction_right);
                                     break;
                                 case ConsoleKey.DownArrow:
                                     _positionY += 1;
-                                    background.DrawChar(_positionX, _positionY, _direction_right);
+                                    break;
+                                case ConsoleKey.F1:
+                                    _positionX = 80;
+                                    _positionY = Background.height - 3;
+                                    break;
+                                case ConsoleKey.F2:
+                                    _positionX = 106;
+                                    _positionY = Background.height - 197;
+                                    break;
+                                case ConsoleKey.F3:
+                                    _positionX = 50;
+                                    _positionY = Background.height - 254;
+                                    break;
+                                case ConsoleKey.F4:
+                                    _positionX = 80;
+                                    _positionY = Background.height - 317;
+                                    break;
+                                case ConsoleKey.F5:
+                                    _positionX = 20;
+                                    _positionY = 236;
+                                    break;
+                                case ConsoleKey.F6:
+                                    _positionX = 90;
+                                    _positionY = 145;
+                                    break;
+                                case ConsoleKey.F7:
+                                    _positionX = 80;
+                                    _positionY = 104;
+                                    break;
+                                case ConsoleKey.F8:
+                                    _positionX = 70;
+                                    _positionY = 18;
                                     break;
                             }
+                            background.DrawChar(_positionX, _positionY, _direction_right);
                         }
-                    case ConsoleKey.End:
-                        _positionX = 90;
-                        _positionY = 15;
-                        break;
 
                 }
 
@@ -363,7 +388,7 @@ namespace Project_jUMPKING
             {
                 while (Console.KeyAvailable == false)
                 {
-                    CalPos(background);
+                    CalPos(background, true);
                     Thread.Sleep(2);
                     buffer++; // 0. while문을 돌면서 입력을 놓칠경우 발생하는 횟수를 담아놓기 위한 변수
                     if (buffer > 5) // 3. buffer가 일정 횟수 이상 담기면 검사 (1 == Thred.Sleep 속도에 따른 임의의 수)
@@ -414,7 +439,7 @@ namespace Project_jUMPKING
             }
         }
 
-        public void CalPos(Background background)
+        public void CalPos(Background background , bool charging = false)
         {
             int temp = _power;
             int collisionGround = 0;
@@ -423,7 +448,16 @@ namespace Project_jUMPKING
             bool istouched = false;
             bool knockbacked = false;
 
-            while(falltime >= 20)
+            prePosX = _positionX;
+            prePosY = _positionY;
+            double acc = 0.00;
+            if (!glacier) // 빙판길 제외 평상 시
+            {
+                doubleX = _positionX;
+            }
+            doubleY = _positionY;
+
+            while(falltime >= 20) // 낙하타이머
             {
                 falltime -= 5;
                 Thread.Sleep(100);
@@ -431,26 +465,16 @@ namespace Project_jUMPKING
                 else background.DrawChar(_positionX, _positionY, _direction_right * 2);
 
             }
-            prePosX = _positionX;
-            prePosY = _positionY;
-            double acc = 0.00;
-            if (glacier)
-            {
-            }
-            else
-            {
-                doubleX = _positionX;
-            }
-            doubleY = _positionY;
 
-            if (bSand)
+            if (bSand) // 유사 타이머
             {
                 sand++;
                 if (sand >= 25)
                 {
                     _positionY++;
                     sand = 0;
-                    background.DrawChar(_positionX, _positionY, _direction_right);
+                    if (charging == false) background.DrawChar(_positionX, _positionY, _direction_right, knockbacked);
+
                 }
             }
             SetPower(temp);
@@ -462,48 +486,7 @@ namespace Project_jUMPKING
                 falltime++;                    
                 }
                 background.Draw_Item(max_height, min_height, 2);
-                Console.SetCursorPosition(_positionX, _positionY - 4);
-                Console.Write(falltime);
-                if (positionY <= 176 && positionY >= 114)
-                {
-                    time++;
-                    int seqeunce;
-                    int sequence2;
-                    int term = 20;
-                    int term2 = 10;
-                    if (time == 40 * term) time = 0;
-                    seqeunce = time / term;
-                    sequence2 = time / term2;
-                    background.Draw_Storm(sequence2);
-                    if(seqeunce < 10)
-                    {
-
-                    }
-                    else if(seqeunce < 20) 
-                    {
-                        speedX += 0.01;
-                    }
-                    else if (seqeunce < 30)
-                    {
-
-                    }
-                    else
-                    {
-                        speedX -= 0.01;
-                    }
-                    //Console.SetCursorPosition(_positionX, _positionY - 4);
-                    //Console.Write(seqeunce);
-                    if(direction_right == 0)
-                    {
-                        if(speedY > 0)
-                        {
-                            if (speedX > 0) { direction_right = 1; }
-                            else if (speedX < 0) { direction_right = -1; }
-                        }
-
-                    }
-
-                }                
+                Cal_Storm(background);
                 if (power == 0)
                 {
                     Thread.Sleep(3);
@@ -512,6 +495,7 @@ namespace Project_jUMPKING
                 {
                     Thread.Sleep(10);
                 }
+
                 if (glacier)
                 {
                     if (speedX > 0.2 || speedX < -0.2)
@@ -541,7 +525,7 @@ namespace Project_jUMPKING
                 {
                     _positionY = (int)doubleY;
                     prePosY = (int)doubleY;
-                    background.DrawChar(_positionX, _positionY, _direction_right, knockbacked);
+                    if (charging == false) background.DrawChar(_positionX, _positionY, _direction_right, knockbacked);
                     PlayerCamera(_positionY, background);
                 }
 
@@ -552,14 +536,7 @@ namespace Project_jUMPKING
                 {
                     case 1:
                         _direction_right *= -1;
-                        if (glacier)
-                        {
-                            speedX *= -0.8;
-                        }
-                        else
-                        {
-                            speedX = 0.8 * _direction_right;
-                        }
+                        speedX *= -0.8;
                         break;
                     case 2:
                         _direction_right = -1;
@@ -613,7 +590,7 @@ namespace Project_jUMPKING
                 collisionGround = background.Collide((int)_positionX, (int)_positionY, 4);
                 if(collisionGround > 0)
                 {
-                    if(knockbacked)
+                    if(knockbacked && !bSand)
                     {
                     background.DrawChar(_positionX, _positionY, _direction_right);
                     knockbacked = false;
@@ -673,11 +650,6 @@ namespace Project_jUMPKING
 
         public void SetPower(int power)
         {
-            //if (power == 0)
-            //{
-            //    speedX = 0;
-            //    speedY = 0;
-            //}
             if (power < 10)
             {
                 speedX += 0.3 * _direction_right;
@@ -747,6 +719,47 @@ namespace Project_jUMPKING
 
         }
 
+        public void Cal_Storm(Background background)
+        {
+            if (positionY <= 176 && positionY >= 114)
+            {
+                time++;
+                int seqeunce;
+                int sequence2;
+                int term = 20;
+                int term2 = 10;
+                if (time == 40 * term) time = 0;
+                seqeunce = time / term;
+                sequence2 = time / term2;
+                background.Draw_Storm(sequence2);
+                if (seqeunce < 10)
+                {
+
+                }
+                else if (seqeunce < 20)
+                {
+                    speedX += 0.01;
+                }
+                else if (seqeunce < 30)
+                {
+
+                }
+                else
+                {
+                    speedX -= 0.01;
+                }
+                if (direction_right == 0)
+                {
+                    if (speedY > 0)
+                    {
+                        if (speedX > 0) { direction_right = 1; }
+                        else if (speedX < 0) { direction_right = -1; }
+                    }
+
+                }
+
+            }
+        }
         public static void Get_item(int itemNum)
         {
             itemcheck[itemNum] = true;
@@ -754,19 +767,19 @@ namespace Project_jUMPKING
 
         public void PlayerCamera(int positionY, Background background)
         {
-            int height = Background.height - 1;
-            while (positionY < height)
+            int height = Background.height - 1; //맵 크기
+            while (positionY < height) // 카메라 위치조절
             {
                 height -= 62;
                 continue;
             }
-            if (min_height != height)
+            if (min_height != height) // 변경 시 최신화
             {
                 min_height = height;
                 max_height = height + 62;
                 for (int i = 0; i < 10; i++)
                 {
-                    if (itemcheck[i])
+                    if (itemcheck[i]) // 아이템 최신화
                     {
                         if (i == 0) { continue; }
                         if (height < 0) { background.item_Dic[i].Set_posY(49); }
@@ -776,12 +789,12 @@ namespace Project_jUMPKING
                         else background.item_Dic[i].OffItem();
                     }
                 }
-                if (height < 0)
+                if (height < 0) // 공주출력
                 {
                     background.Princess.Print_Princess();
                 }
             }
-            if (height < 0)
+            if (height < 0) // 최하위치 최신화
             {
                 min_height = 0;
                 max_height = 62;
@@ -881,6 +894,8 @@ namespace Project_jUMPKING
                 _positionX = 80;
                 _positionY = Background.height - 3;
             }
+            doubleX = _positionX;
+            doubleY = _positionY;
             speedX = 0;
             speedY = 0;
         }

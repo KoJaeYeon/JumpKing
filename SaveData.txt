@@ -1,6 +1,6 @@
-_positionX 80
-_positionY 608
-_direction_right 1
+_positionX 125
+_positionY 249
+_direction_right 0
 itemcheck[0] False
 itemcheck[1] False
 itemcheck[2] False
