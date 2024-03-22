@@ -1,0 +1,8 @@
+_positionX 80
+_positionY 608
+_direction_right 1
+itemcheck[0] False
+itemcheck[1] False
+itemcheck[2] False
+itemcheck[3] False
+_saveJump 0

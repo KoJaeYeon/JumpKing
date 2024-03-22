@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Numerics;
 using System.Threading;
 
 namespace Project_jUMPKING
@@ -16,29 +17,27 @@ namespace Project_jUMPKING
             Background tutorial = new Background(0);
             Princess princess = background.Princess;
             Player tutoplayer = new Player();
-            Player player = new Player();
-            string[] save = new string[10];
+            Player player = new Player();            
 
-            Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
-            ConsoleKeyInfo key = Console.ReadKey(true);
-
+            ConsoleKeyInfo key;
+            Console.SetWindowSize(237, 63);           
             while (true)
             {
                 try
                 {
                     Console.SetCursorPosition(213, 0);
                     break;
+                    
                 }
                 catch
                 {
                     Console.Clear();
                     Console.ResetColor();
-                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
+                    Console.WriteLine("콘솔창을 휠로 축소하고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 이상 해상도 권장)");
                     key = Console.ReadKey(true);
                     continue;
                 }
-            }
-            
+            }            
                 Console.Clear();
                 Console.SetCursorPosition(70, 20);
                 Console.WriteLine("┌────────────────────────────────────────────────────────────────────────────────────────┐");
@@ -69,9 +68,78 @@ namespace Project_jUMPKING
             Console.SetCursorPosition(cursorx, cursor);
             Console.Write('▶');
             bool whilein = true;
+            MainMenu(whilein,cursorx, cursor, background, player);
+            while (Btutorial)
+            {
+                if (LoadGame(tutorial, tutoplayer)) break;
+            }
+            while (Btutorial)
+            {
+                tutoplayer.Move(tutorial);
+                tutoplayer.CalPos(tutorial);
+            }
+
+            tutorial = null;
+            tutoplayer = null;
+
+            while (true)
+            {
+                if (LoadGame(background, player)) break;
+            }
+            while (true)
+            {
+                try
+                {
+                    player.Move(background);
+                    player.CalPos(background);
+
+                    if (player.positionY < 25)
+                    {
+                        if (princess.check(player.positionX, player.positionY)) // 엔딩조건체크
+                        {
+                            background.Ending(player);
+                            break;
+                        }
+                    }
+                }
+                catch
+                {
+                    //물리 재설정
+                    player.ErrorPosSet();
+                    background.ErrorPosSet(player.positionX, player.positionY);
+
+                    //배경 재설정
+                    Console.Clear();
+                    background.Print_Back();
+                    background.DrawChar(player.positionX, player.positionY, player.direction_right);
+                }
+
+            }
+        } // Program End
+        private static bool LoadGame(Background background, Player player)
+        {
+            try
+            {
+                Console.Clear();
+                background.Print_Back();
+                background.DrawChar(player.positionX, player.positionY, player.direction_right);
+                return true;
+            }
+            catch
+            {
+                Console.Clear();
+                Console.ResetColor();
+                Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 이상 해상도 권장)");
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                return false;
+            }
+        }
+        private static void MainMenu(bool whilein,int cursorx ,int cursor,Background background ,Player player)
+        {
+            string[] save = new string[10];
             while (whilein)
             {
-                key = Console.ReadKey(true);
+                ConsoleKeyInfo key = Console.ReadKey(true);
                 switch (key.Key)
                 {
                     case ConsoleKey.W:
@@ -139,7 +207,7 @@ namespace Project_jUMPKING
                         //Pass the file path and file name to the StreamReader constructor
                         StreamReader sr = new StreamReader(path);
                         //Read the first line of text
-                        int index = 0;                        
+                        int index = 0;
                         line = sr.ReadLine();
                         save[index] = line;
                         //Continue to read until you reach end of file
@@ -156,126 +224,22 @@ namespace Project_jUMPKING
                         player.positionY = int.Parse(save[1].Split(' ')[1]);
                         player.direction_right = int.Parse(save[2].Split(' ')[1]);
                         background.Load(save);
+                        player.saveJump = int.Parse(save[7].Split(' ')[1]);
                     }
                     catch (Exception e)
                     {
+                        Console.SetCursorPosition(162, cursor);
                         Console.WriteLine("세이브 데이터가 없거나 관리자모드가 아닙니다.");
+                        Console.SetCursorPosition(162, cursor + 1);
                         Console.WriteLine("Exception: " + e.Message);
+                        whilein = true;
+                        MainMenu(whilein, cursorx, cursor, background, player);
                     }
                     break;
                 case 29:
+                    Console.SetCursorPosition(0, 0);
                     Environment.Exit(0);
                     break;
-            }
-            while (Btutorial)
-            {
-                try
-                {
-                    Console.Clear();
-                    tutorial.Print_Back();
-                    tutorial.DrawChar(tutoplayer.positionX, tutoplayer.positionY, tutoplayer.direction_right);
-                    break;
-                }
-                catch
-                {
-                    Console.Clear();
-                    Console.ResetColor();
-                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
-                    key = Console.ReadKey(true);
-                    continue;
-                }
-            }
-            while (Btutorial)
-            {
-                tutoplayer.Move(tutorial);
-                tutoplayer.CalPos(tutorial);
-            }
-
-            tutorial = null;
-            tutoplayer = null;
-
-            while (true)
-            {
-                try
-                {
-                    Console.Clear();
-                    background.Print_Back();
-                    background.DrawChar(player.positionX, player.positionY, player.direction_right);
-                    break;
-                }
-                catch
-                {
-                    Console.Clear();
-                    Console.ResetColor();
-                    Console.WriteLine("콘솔창을 최대로 키우고, 시작하려면 아무키나 눌러주세요.\n(1920 x 1080 해상도 권장)");
-                    key = Console.ReadKey(true);
-                    continue;
-                }
-            }
-            while (true)
-            {
-                try
-                {
-                    player.Move(background);
-                    player.CalPos(background);
-                    if (player.positionY < 25)
-                    {
-                        if (princess.check(player.positionX, player.positionY))
-                        {
-                            background.Ending(player);
-                            break;
-                        }
-                    }
-                }
-                catch
-                {
-                    if (player.positionY <= 40)
-                    {
-                        player.positionX = 90;
-                        player.positionY = Background.height - 15;
-                    }
-                    else if (player.positionY <= 110)
-                    {
-                        player.positionX = 80;
-                        player.positionY = 104;
-                    }
-                    else if (player.positionY <= 170)
-                    {
-                        player.positionX = 80;
-                        player.positionY = 156;
-                    }
-                    else if (player.positionY <= 238)
-                    {
-                        player.positionX = 20;
-                        player.positionY = 236;
-                    }
-                    else if(player.positionY <= Background.height - 318)
-                    {
-                        player.positionX = 80;
-                        player.positionY = Background.height - 317;
-                    }
-                    else if (player.positionY <= Background.height - 285)
-                    {
-                        player.positionX = 105;
-                        player.positionY = Background.height - 284;
-                    }
-                    else if (player.positionY <= Background.height - 231)
-                    {
-                        player.positionX = 50;
-                        player.positionY = Background.height - 230;
-                    }
-                    else
-                    {
-                        player.positionX = 80;
-                        player.positionY = Background.height - 3;
-                    }
-                    background.ErrorPosSet(player.positionX, player.positionY);
-                    Console.Clear();
-                    background.Print_Back();
-                    background.DrawChar(player.positionX, player.positionY, player.direction_right);
-                }
-
-
             }
         }
         public static void TutorialClear()

@@ -284,7 +284,7 @@ namespace Project_jUMPKING
                 Platform(76, 493, 5, b, 8, '▩');
 
                 //end
-                Platform(1, 505, 75);
+                Platform(1, 505, 73);
 
                 Platform(20, 526, 7, z, 8);
                 Platform(50, 539, 7, z, 10);
@@ -472,8 +472,20 @@ namespace Project_jUMPKING
             Console.ResetColor();
         }
 
-        public void DrawChar(int positionX, int positionY, int direction_right)
+        public void DrawChar(int positionX, int positionY, int direction_right, bool knockbacked = false, bool knockdowned = false)
         {
+            if(direction_right == 2)
+            {
+                direction_right = 1;
+                Console.SetCursorPosition(positionX + 4, positionY + 1);
+                Console.Write("{0}{1}",_background[positionX + 3, positionY + 1], _background[positionX + 2, positionY + 1]);
+            }
+            else if(direction_right == -2)
+            {
+                direction_right = -1;
+                Console.SetCursorPosition(positionX - 4, positionY + 1);
+                Console.Write("{0}{1}",_background[positionX - 5, positionY + 1],_background[positionX - 4, positionY + 1]);
+            }
             sb2.Clear();
             Console.SetCursorPosition(prePosX - 2, prePosY - 2);
             for (int i = 0; i < 6; i++)
@@ -522,62 +534,152 @@ namespace Project_jUMPKING
                     }
                 }
             }
-            if(prePosY < 240 && prePosY > 130 )
+            if(prePosY < 240 && prePosY > height - 505) // 유사 유사 보정
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                for (int i = 0; i < 10;i++)
+                for (int i = 0; i < 6;i++)
                 {
                     for(int j = 0; j < 8;j++)
                     {
-                        if (_background[prePosX - 4 + i, positionY - 4 + j] == '▩')
+                        if (_background[prePosX - 2 + i, positionY - 4 + j] == '▩')
                         {
-                            Console.SetCursorPosition(prePosX -4 + i, positionY - 4 + j);
+                            Console.SetCursorPosition(prePosX -2 + i, positionY - 4 + j);
                             Console.Write('▩');
                         }
                     }
                 }
                 Console.ResetColor();
-
+            }
+            else if (prePosY < height - 248 && prePosY > height - 303) // 눈맵 눈 보정
+            {
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                for (int i = 0; i < 6; i++)
+                {
+                    for (int j = 0; j < 8; j++)
+                    {
+                        if (_background[prePosX - 2 + i, positionY - 4 + j] == '▒')
+                        {
+                            Console.SetCursorPosition(prePosX - 2 + i, positionY - 4 + j);
+                            Console.Write('▒');
+                        }
+                    }
+                }
+                Console.ResetColor();
+            }
+            else if (prePosY < height - 310 && prePosY > height - 320) // 빙하 눈 보정
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                for (int i = 0; i < 6; i++)
+                {
+                    for (int j = 0; j < 3; j++)
+                    {
+                        if (_background[prePosX - 2 + i, positionY + j] == '▒')
+                        {
+                            Console.SetCursorPosition(prePosX - 2 + i, positionY + j);
+                            Console.Write('▒');
+                        }
+                    }
+                }
+                Console.ResetColor();
             }
 
             prePosX = positionX;
             prePosY = positionY;
 
-            { // 머리
-                Console.SetCursorPosition(positionX, positionY - 2);
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                if (direction_right == 1) Console.Write("→");
-                else if (direction_right == -1) Console.Write("←");
-                else Console.Write("↑");
+            if(!knockdowned)
+            {
+                { // 머리
+                    Console.SetCursorPosition(positionX, positionY - 2);
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    if (direction_right == 1) Console.Write("→");
+                    else if (direction_right == -1) Console.Write("←");
+                    else Console.Write("↑");
+                }
+
+
+                { //몸통
+                    Console.SetCursorPosition(positionX - 2, positionY - 1);
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write('▤');
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write('▤');
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write('▤');
+                }
+
+
+                { //다리
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.SetCursorPosition(positionX - 2, positionY);
+                    Console.Write('▥');
+                    Console.SetCursorPosition(positionX + 2, positionY);
+                    Console.Write('▥');
+                }
+
+                { //발
+                    if (!knockbacked)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.SetCursorPosition(positionX - 2, positionY + 1);
+                        Console.Write('▥');
+                        Console.SetCursorPosition(positionX + 2, positionY + 1);
+                        Console.Write('▥');
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkYellow;
+                        Console.SetCursorPosition(positionX - 1 - direction_right, positionY + 1);
+                        Console.Write("▥▥");
+                    }
+
+                }
+            }
+            else // 기절했을 때
+            {
+                if (direction_right == 1)
+                {
+                    { //윗부분
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.SetCursorPosition(positionX, positionY);
+                        Console.Write("▥▥");
+                    }
+                    //아랫부분
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.SetCursorPosition(positionX - 2, positionY + 1);
+                    Console.Write('▥');
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.SetCursorPosition(positionX, positionY + 1);
+                    Console.Write('▥');
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.SetCursorPosition(positionX+ 2, positionY + 1);
+                    Console.Write('▥');
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.SetCursorPosition(positionX + 4, positionY + 1);
+                    Console.Write('↓');
+                }
+                else
+                {
+                    { //윗부분
+                        Console.ForegroundColor = ConsoleColor.DarkRed;
+                        Console.SetCursorPosition(positionX - 2, positionY);
+                        Console.Write("▥▥");
+                    }
+                    //아랫부분
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.SetCursorPosition(positionX + 2, positionY + 1);
+                    Console.Write('▥');
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.SetCursorPosition(positionX, positionY + 1);
+                    Console.Write('▥');
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.SetCursorPosition(positionX - 2, positionY + 1);
+                    Console.Write('▥');
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.SetCursorPosition(positionX - 4, positionY + 1);
+                    Console.Write('↓');
+                }
             }
 
-
-            { //몸통
-                Console.SetCursorPosition(positionX - 2, positionY - 1);
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.Write('▤');
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                Console.Write('▤');
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.Write('▤');
-            }
-
-
-            { //다리
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.SetCursorPosition(positionX - 2, positionY);
-                Console.Write('▥');
-                Console.SetCursorPosition(positionX + 2, positionY);
-                Console.Write('▥');
-            }
-
-            { //발
-                Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.SetCursorPosition(positionX - 2, positionY + 1);
-                Console.Write('▥');
-                Console.SetCursorPosition(positionX + 2, positionY + 1);
-                Console.Write('▥');
-            }
             Console.ResetColor();
 
         }
@@ -698,7 +800,7 @@ namespace Project_jUMPKING
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                      3. 게임종료                                       │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
-                sb.Append("\t\t\t\t\t\t\t\t\t│                                      4. 배경 다시그리기                                     │"); sb.AppendLine();
+                sb.Append("\t\t\t\t\t\t\t\t\t│                                      4. 배경 다시그리기                                │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t│                                                                                        │"); sb.AppendLine();
                 sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
@@ -787,7 +889,7 @@ namespace Project_jUMPKING
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
                     }
-                    else if (j > height - 62 *  8 )
+                    else if (j > height - 62 *  8 -9 )
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
                     }
@@ -1340,8 +1442,12 @@ namespace Project_jUMPKING
             Console.SetCursorPosition(91, 9);
             Console.Write("♥  ♥  ♥");
             Thread.Sleep(3000);
-            Console.SetCursorPosition(0, 0);
+
             Console.ResetColor();
+            Console.SetCursorPosition(88, 16);
+            Console.Write("총 점프 횟수 : {0}",player.saveJump);
+            Thread.Sleep(1500);
+            Console.SetCursorPosition(0, 0);
 
 
 
