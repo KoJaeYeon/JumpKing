@@ -68,7 +68,7 @@ namespace Project_jUMPKING
             MainMenu(whilein,cursorx, cursor, background, player);
             while (Btutorial)
             {
-                if (LoadGame(tutorial, tutoplayer)) break;
+                if (LoadGame(tutorial, tutoplayer, 0)) break;
             }
             while (Btutorial)
             {
@@ -107,7 +107,7 @@ namespace Project_jUMPKING
 
                     //배경 재설정
                     Console.Clear();
-                    background.Print_Back();
+                    background.Print_Back(0);
                     background.DrawChar(player.positionX, player.positionY, player.direction_right);
                 }
 
@@ -117,12 +117,12 @@ namespace Project_jUMPKING
         {
             return Btutorial;
         }
-        private static bool LoadGame(Background background, Player player)
+        private static bool LoadGame(Background background, Player player, int map = 1)
         {
             try
             {
                 Console.Clear();
-                background.Print_Back();
+                background.Print_Back(map);
                 background.DrawChar(player.positionX, player.positionY, player.direction_right);
                 return true;
             }

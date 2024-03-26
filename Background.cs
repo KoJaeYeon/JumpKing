@@ -863,15 +863,19 @@ namespace Project_jUMPKING
                 sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
             }
         }
-        public void Print_Back()
+        public void Print_Back(int map = 1)
         {
             Console.ResetColor();
             Console.SetCursorPosition(0, 0);
             Console.Write(sb);
-            for (int i = 1; i < _background.GetLength(0) - 1; i++)
+            for (int j = 1; j < _background.GetLength(1) - 1; j++)
             {
-                for (int j = 1; j < _background.GetLength(1) - 1; j++)
+                for (int i = 1; i < _background.GetLength(0) - 1; i++)
                 {
+                    if(j < 490 && map == 0)
+                    {
+                        j = 490;
+                    }
                     if (j > height - 62) // 구간 설정
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -899,6 +903,10 @@ namespace Project_jUMPKING
                     else if (j > height - 62 *  8 -9 )
                     {
                         Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
                     }
                     if (_background[i, j] == '▣') // 장애물 그리기
                     {
@@ -1459,9 +1467,8 @@ namespace Project_jUMPKING
             Console.Write("총 점프 횟수 : {0}",player.saveJump);
             Thread.Sleep(1500);
             Console.SetCursorPosition(0, 0);
-
-
-
+            while (Console.KeyAvailable)
+                Console.ReadKey(true);
         }
     }
 }

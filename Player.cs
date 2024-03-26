@@ -428,7 +428,7 @@ namespace Project_jUMPKING
                 }
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 switch (key.Key)
-                {
+                {                    
                     case ConsoleKey.Spacebar:
                         if (power <= 50) power++;
                         background.UIBar(_positionY, power);
@@ -841,6 +841,7 @@ namespace Project_jUMPKING
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 switch (key.Key)
                 {
+                    case ConsoleKey.W:
                     case ConsoleKey.UpArrow:
                         PlayerCamera(_positionY - 62, background);
                         power++;
