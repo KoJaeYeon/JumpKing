@@ -301,7 +301,7 @@ namespace Project_jUMPKING
             else if (cursor == height + 35)
             {
                 Console.Clear();
-                background.Print_Back();
+                background.Print_Back(1);
                 background.DrawChar(_positionX, _positionY, _direction_right);
             }
         }

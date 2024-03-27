@@ -68,7 +68,11 @@ namespace Project_jUMPKING
             MainMenu(whilein,cursorx, cursor, background, player);
             while (Btutorial)
             {
+<<<<<<< Updated upstream
                 if (LoadGame(tutorial, tutoplayer, 0)) break;
+=======
+                if (LoadGame(tutorial, tutoplayer, 1)) break;
+>>>>>>> Stashed changes
             }
             while (Btutorial)
             {
@@ -117,7 +121,11 @@ namespace Project_jUMPKING
         {
             return Btutorial;
         }
+<<<<<<< Updated upstream
         private static bool LoadGame(Background background, Player player, int map = 1)
+=======
+        private static bool LoadGame(Background background, Player player, int map = 0)
+>>>>>>> Stashed changes
         {
             try
             {
@@ -204,8 +212,8 @@ namespace Project_jUMPKING
                     {
                         string line;
                         string CurrentDirectory = Directory.GetCurrentDirectory();
-                        CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("bin"));
-                        string path = CurrentDirectory + "SaveData.txt";
+                        CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("JumpKing"));
+                        string path = CurrentDirectory + "JumpKing\\SaveData.txt";
                         //Pass the file path and file name to the StreamReader constructor
                         StreamReader sr = new StreamReader(path);
                         //Read the first line of text
