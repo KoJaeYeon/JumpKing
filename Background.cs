@@ -863,7 +863,11 @@ namespace Project_jUMPKING
                 sb.Append("\t\t\t\t\t\t\t\t\t└────────────────────────────────────────────────────────────────────────────────────────┘"); sb.AppendLine();
             }
         }
+<<<<<<< Updated upstream
         public void Print_Back(int map = 1)
+=======
+        public void Print_Back(int map = 0)
+>>>>>>> Stashed changes
         {
             Console.ResetColor();
             Console.SetCursorPosition(0, 0);
@@ -872,7 +876,11 @@ namespace Project_jUMPKING
             {
                 for (int i = 1; i < _background.GetLength(0) - 1; i++)
                 {
+<<<<<<< Updated upstream
                     if(j < 490 && map == 0)
+=======
+                    if (map == 1 && j < 490)
+>>>>>>> Stashed changes
                     {
                         j = 490;
                     }
@@ -1467,8 +1475,15 @@ namespace Project_jUMPKING
             Console.Write("총 점프 횟수 : {0}",player.saveJump);
             Thread.Sleep(1500);
             Console.SetCursorPosition(0, 0);
+<<<<<<< Updated upstream
             while (Console.KeyAvailable)
                 Console.ReadKey(true);
+=======
+
+            while (Console.KeyAvailable)
+                Console.ReadKey(true);
+
+>>>>>>> Stashed changes
         }
     }
 }
