@@ -204,8 +204,8 @@ namespace Project_jUMPKING
                     {
                         string line;
                         string CurrentDirectory = Directory.GetCurrentDirectory();
-                        CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("bin"));
-                        string path = CurrentDirectory + "SaveData.txt";
+                        CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("JumpKing"));
+                        string path = CurrentDirectory + "JumpKing\\SaveData.txt";
                         //Pass the file path and file name to the StreamReader constructor
                         StreamReader sr = new StreamReader(path);
                         //Read the first line of text

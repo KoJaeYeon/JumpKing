@@ -1,0 +1,17 @@
+﻿HookTimer:60
+KanaModeDisable:True
+HanjaModeDisable:True
+ButtonSize:40
+ShowText:True
+HideNumpad:True
+HideMouseButton:False
+ShowWindow:True
+Color:Red
+Opacity:100
+Location:818.1107
+ActiveTitle:(Active)
+ShowHangul:False
+FontSize:9
+KeyboardTest:False
+HotkeyTestMode:
+HotkeyTestReset:

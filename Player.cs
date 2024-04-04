@@ -312,9 +312,9 @@ namespace Project_jUMPKING
             try
             {
                 string CurrentDirectory = Directory.GetCurrentDirectory();
-                CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("bin"));
+                CurrentDirectory = CurrentDirectory.Substring(0, CurrentDirectory.IndexOf("JumpKing"));
                 //Pass the filepath and filename to the StreamWriter Constructor
-                string path = CurrentDirectory + "SaveData.txt";
+                string path = CurrentDirectory + "JumpKing\\SaveData.txt";
                 StreamWriter sw = new StreamWriter(path);
                 //Write a line of text
                 sw.WriteLine("_positionX {0}", _positionX);

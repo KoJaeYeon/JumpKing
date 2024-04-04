@@ -1,8 +1,8 @@
-_positionX 80
-_positionY 608
+_positionX 16
+_positionY 517
 _direction_right 1
-itemcheck[0] False
-itemcheck[1] False
+itemcheck[0] True
+itemcheck[1] True
 itemcheck[2] False
 itemcheck[3] False
-_saveJump 0
+_saveJump 4
