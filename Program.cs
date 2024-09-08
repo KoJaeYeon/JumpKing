@@ -68,11 +68,7 @@ namespace Project_jUMPKING
             MainMenu(whilein,cursorx, cursor, background, player);
             while (Btutorial)
             {
-<<<<<<< Updated upstream
                 if (LoadGame(tutorial, tutoplayer, 0)) break;
-=======
-                if (LoadGame(tutorial, tutoplayer, 1)) break;
->>>>>>> Stashed changes
             }
             while (Btutorial)
             {
@@ -121,11 +117,7 @@ namespace Project_jUMPKING
         {
             return Btutorial;
         }
-<<<<<<< Updated upstream
         private static bool LoadGame(Background background, Player player, int map = 1)
-=======
-        private static bool LoadGame(Background background, Player player, int map = 0)
->>>>>>> Stashed changes
         {
             try
             {
